@@ -1,5 +1,5 @@
 ---
-name: "\bCustom issue template"
+name: "\bIssue template"
 about: 이슈를 생성해주세요.
 title: 'feat: 이슈내용'
 labels: ''
