@@ -14,7 +14,7 @@ export default function RootLayout({
           href="https://webfontworld.github.io/NexonLv2Gothic/NexonLv2Gothic.css"
         />
       </head>
-      <body>{children}</body>
+      <body suppressHydrationWarning>{children}</body>
     </html>
   );
 }
