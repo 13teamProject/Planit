@@ -1,13 +1,19 @@
-import ColorCircle from '@/components/commons/circle/ColorCircle';
-import ProfileCircle from '@/components/commons/circle/ProfileCircle';
+'use client';
+
+import TextInput from '@/components/commons/input/TextInput';
+import { useForm } from 'react-hook-form';
 
 export default function ComponentTest() {
+  const { register, handleSubmit, watch } = useForm();
+
   return (
-    <>
-      <ColorCircle color="bg-toss-blue" size="sm" />
-      <ProfileCircle color="bg-[#a3c4a2]" size="lg">
-        <span className="font-bold text-white">B</span>
-      </ProfileCircle>
-    </>
+    <form>
+      <label htmlFor="name">test</label>
+      <TextInput
+        id="name"
+        placeholder="test"
+        register={{ ...register('name', { required: true }) }}
+      />
+    </form>
   );
 }
