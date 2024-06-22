@@ -14,8 +14,8 @@ export default function ProfileCircle({ color, size, children }: Props) {
     'rounded-full ring-2 ring-white flex justify-center items-center ',
     color,
     {
-      'size-[34px]': size === 'md',
-      'size-[38px]': size === 'lg',
+      'size-34': size === 'md',
+      'size-38': size === 'lg',
     },
   );
 
