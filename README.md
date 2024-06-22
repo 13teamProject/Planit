@@ -1,36 +1,11 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Planit:
 
-## Getting Started
+## ✨ 프로젝트 소개
 
-First, run the development server:
+바쁘디 바쁜 현대사회 속에서 사용자와 팀원들의 효율적인 일정관리를 돕는 서비스입니다.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🧑‍💻 개발자 소개(Sprint 6기 Part3 13팀)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+| <img src="https://avatars.githubusercontent.com/u/98534731?v=4"> | <img src="https://avatars.githubusercontent.com/u/120254101?v=4"> | <img src="https://avatars.githubusercontent.com/u/50002974?v=4"> | <img src="https://avatars.githubusercontent.com/u/123517278?v=4"> | <img src="https://avatars.githubusercontent.com/u/102004889?v=4"> |
+| :--------------------------------------------------------------: | :---------------------------------------------------------------: | :--------------------------------------------------------------: | :---------------------------------------------------------------: | :---------------------------------------------------------------: |
+|                          FE_6기 고재성                           |                           FE_6기 곽서연                           |                          FE_6기 김혜선                           |                           FE_6기 조현지                           |                           FE_6기 천권희                           |
