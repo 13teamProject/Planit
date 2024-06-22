@@ -1,10 +1,13 @@
 'use client';
 
 import Input from '@/components/commons/input';
+import Textarea from '@/components/commons/input/Textarea';
 import { useForm } from 'react-hook-form';
 
 export default function ComponentTest() {
   const { register, handleSubmit, watch } = useForm();
+
+  console.log(watch());
 
   return (
     <form>
@@ -24,7 +27,7 @@ export default function ComponentTest() {
         register={{ ...register('email', { required: true }) }}
       />
 
-      <label htmlFor="email">비밀번호</label>
+      <label htmlFor="password">비밀번호</label>
       <Input
         id="password"
         type="password"
@@ -32,12 +35,20 @@ export default function ComponentTest() {
         register={{ ...register('password', { required: true }) }}
       />
 
-      <label htmlFor="email">비밀번호 확인</label>
+      <label htmlFor="password-confirm">비밀번호 확인</label>
       <Input
         id="password-confirm"
         type="password"
         placeholder="비밀번호 확인"
         register={{ ...register('password-confirm', { required: true }) }}
+      />
+
+      <label htmlFor="textarea">내용</label>
+      <Textarea
+        id="textarea"
+        size="lg"
+        placeholder="내용"
+        register={{ ...register('textarea', { required: true }) }}
       />
     </form>
   );
