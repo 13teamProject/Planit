@@ -18,7 +18,7 @@ export default function Input({
   ...args
 }: InputProps) {
   const classnames = classNames(
-    'block h-12 w-full rounded-md border px-4 outline-none placeholder:text-gray-300',
+    'block h-48 w-full rounded-md border px-16 outline-none placeholder:text-gray-300',
     {
       'border-red-dashboard focus:border-red-dashboard': error,
       'border-gray-200 focus:border-toss-blue': !error,
