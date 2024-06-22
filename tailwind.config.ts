@@ -1,5 +1,18 @@
 import type { Config } from 'tailwindcss';
 
+const createPxMap = (size: number): Record<string, string> => {
+  return Array.from({ length: size + 1 }, (_, i) => `${i}px`).reduce(
+    (acc, val, i) => {
+      acc[i] = val;
+      return acc;
+    },
+    {} as Record<string, string>,
+  );
+};
+
+const PX_10 = createPxMap(10);
+const PX_100 = createPxMap(100);
+const PX_500 = createPxMap(500);
 const config: Config = {
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
@@ -8,6 +21,13 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      borderWidth: PX_10,
+      borderRadius: PX_100,
+      fontSize: PX_100,
+      lineHeight: PX_100,
+      minWidth: PX_500,
+      minHeight: PX_500,
+      spacing: PX_500,
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':
