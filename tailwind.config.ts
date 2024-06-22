@@ -12,7 +12,7 @@ const createPxMap = (size: number): Record<string, string> => {
 
 const PX_10 = createPxMap(10);
 const PX_100 = createPxMap(100);
-const PX_500 = createPxMap(500);
+const PX_500 = createPxMap(2000);
 const config: Config = {
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
