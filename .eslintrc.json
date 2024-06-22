@@ -30,29 +30,7 @@
     "react/require-default-props": "off",
     "react/jsx-no-useless-fragment": "warn",
     "react-hooks/exhaustive-deps": "off",
-    "import/prefer-default-export": "off",
-    "import/order": [
-      "error",
-      {
-        "groups": [
-          "external",
-          "builtin",
-          "internal",
-          "parent",
-          "sibling",
-          "index",
-          "object"
-        ],
-        "pathGroups": [
-          {
-            "pattern": "react*",
-            "group": "external",
-            "position": "before"
-          }
-        ],
-        "pathGroupsExcludedImportTypes": ["react*"]
-      }
-    ]
+    "import/prefer-default-export": "off"
   },
   "overrides": [
     {
