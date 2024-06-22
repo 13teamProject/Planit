@@ -1,6 +1,7 @@
 'use client';
 
 import Input from '@/components/commons/input';
+import ImageInput from '@/components/commons/input/ImageInput';
 import Textarea from '@/components/commons/input/Textarea';
 import { useForm } from 'react-hook-form';
 
@@ -50,6 +51,9 @@ export default function ComponentTest() {
         placeholder="내용"
         register={{ ...register('textarea', { required: true }) }}
       />
+
+      <label htmlFor="image">이미지</label>
+      <ImageInput id="image" size="lg" register={{ ...register('image') }} />
     </form>
   );
 }

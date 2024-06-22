@@ -2,10 +2,10 @@ import classNames from 'classnames';
 import { TextareaHTMLAttributes } from 'react';
 import { UseFormRegisterReturn } from 'react-hook-form';
 
-interface Props extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+type Props = TextareaHTMLAttributes<HTMLTextAreaElement> & {
   size: 'sm' | 'lg';
   register: UseFormRegisterReturn;
-}
+};
 
 export default function Textarea({ size, register, ...args }: Props) {
   const classnames = classNames(

@@ -5,11 +5,11 @@ import Image from 'next/image';
 import { InputHTMLAttributes, useState } from 'react';
 import { UseFormRegisterReturn } from 'react-hook-form';
 
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+type InputProps = InputHTMLAttributes<HTMLInputElement> & {
   type?: string;
   error?: boolean;
   register: UseFormRegisterReturn;
-}
+};
 
 export default function Input({
   type = 'text',
@@ -34,10 +34,10 @@ export default function Input({
   return <input type={type} className={classnames} {...args} {...register} />;
 }
 
-interface PasswordInputProps extends InputHTMLAttributes<HTMLInputElement> {
+type PasswordInputProps = InputHTMLAttributes<HTMLInputElement> & {
   className: string;
   register: UseFormRegisterReturn;
-}
+};
 
 function PasswordInput({ className, register, ...args }: PasswordInputProps) {
   const [pwClose, setPwClose] = useState(true);
