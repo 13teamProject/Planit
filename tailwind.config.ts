@@ -66,6 +66,11 @@ const config: Config = {
         'purple-chip': '#994EE5',
         'purple-light-chip': '#F0E2FF',
       },
+      screens: {
+        sm: { min: '375px', max: '743px' },
+        md: { min: '744px', max: '1199px' },
+        lg: { min: '1200px' },
+      },
     },
   },
   plugins: [],
