@@ -1,9 +1,12 @@
-import { BadRequest, SignUpProps, SignUpResponse } from '../../../types';
+import {
+  LoginProps,
+  LoginResponse,
+  SignUpProps,
+  SignUpResult,
+} from '../../../types';
 import { API_URL, createFetchRequestOptions } from './base-url';
 
-// 회원가입
-type SignUpResult = SignUpResponse | BadRequest;
-
+// 회원가입 데이터 전송
 export async function signUpUser({
   email,
   password,
@@ -29,17 +32,22 @@ export async function signUpUser({
   }
 }
 
-export async function handleSignUpUser({
+// 로그인 데이터 전송
+export async function loginUser({
   email,
   password,
-  nickname,
-}: SignUpProps): Promise<SignUpResult> {
-  try {
-    return await signUpUser({ email, password, nickname });
-  } catch (error) {
-    if (error instanceof Error) {
-      return { message: error.message };
-    }
-    return { message: '회원가입 중 알 수 없는 오류가 발생했습니다.' };
+}: LoginProps): Promise<LoginResponse> {
+  const obj = createFetchRequestOptions('POST', {
+    email,
+    password,
+  });
+
+  const res = await fetch(`${API_URL}/auth/login`, obj);
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data.message || '로그인에 실패하였습니다.');
   }
+
+  return data;
 }
