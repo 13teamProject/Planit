@@ -21,6 +21,10 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['var(--nexonGothicFont)'],
+        serif: ['var(--nexonGothicFont)'],
+      },
       borderWidth: PX_10,
       borderRadius: PX_100,
       fontSize: PX_100,

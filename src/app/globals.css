@@ -8,7 +8,7 @@
   button,
   textarea {
     font-family:
-      NexonLv2Gothic,
+      var(--nexonGothicFont),
       system-ui,
       -apple-system,
       BlinkMacSystemFont,
