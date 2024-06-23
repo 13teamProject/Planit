@@ -1,12 +1,16 @@
 'use client';
 
+import ProfileCircle from '@/components/commons/circle/ProfileCircle';
 import Input from '@/components/commons/input';
+import DropdownInput from '@/components/commons/input/DropdownInput';
 import ImageInput from '@/components/commons/input/ImageInput';
 import Textarea from '@/components/commons/input/Textarea';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
+
+const DATA = [{ id: 1, nickname: 'goni' }];
 
 export default function ComponentTest() {
-  const { register, handleSubmit, watch } = useForm();
+  const { register, handleSubmit, watch, setValue, control } = useForm();
 
   console.log(watch());
 
@@ -54,6 +58,18 @@ export default function ComponentTest() {
 
       <label htmlFor="image">이미지</label>
       <ImageInput id="image" size="lg" register={{ ...register('image') }} />
+
+      <label htmlFor="dropdown">담당자</label>
+      <DropdownInput
+        name="dropdown"
+        control={control}
+        size="md"
+        placeholder="Select an option"
+      >
+        <DropdownInput.Option id={1}>Option 1</DropdownInput.Option>
+        <DropdownInput.Option id={2}>Option 2</DropdownInput.Option>
+        <DropdownInput.Option id={3}>Option 3</DropdownInput.Option>
+      </DropdownInput>
     </form>
   );
 }
