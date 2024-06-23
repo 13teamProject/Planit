@@ -1,16 +1,14 @@
 'use client';
 
-import ProfileCircle from '@/components/commons/circle/ProfileCircle';
 import Input from '@/components/commons/input';
+import DateInput from '@/components/commons/input/DateInput';
 import DropdownInput from '@/components/commons/input/DropdownInput';
 import ImageInput from '@/components/commons/input/ImageInput';
 import Textarea from '@/components/commons/input/Textarea';
-import { Controller, useForm } from 'react-hook-form';
-
-const DATA = [{ id: 1, nickname: 'goni' }];
+import { useForm } from 'react-hook-form';
 
 export default function ComponentTest() {
-  const { register, handleSubmit, watch, setValue, control } = useForm();
+  const { register, handleSubmit, watch, control } = useForm();
 
   console.log(watch());
 
@@ -70,6 +68,14 @@ export default function ComponentTest() {
         <DropdownInput.Option id={2}>Option 2</DropdownInput.Option>
         <DropdownInput.Option id={3}>Option 3</DropdownInput.Option>
       </DropdownInput>
+
+      <label htmlFor="date">담당자</label>
+      <DateInput
+        size="md"
+        control={control}
+        placeholder="날짜를 입력해 주세요"
+        name="date"
+      />
     </form>
   );
 }

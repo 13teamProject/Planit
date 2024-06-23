@@ -97,7 +97,7 @@ function DropdownInputWrapper({
   });
 
   const listClassnames = classNames(
-    'absolute w-full top-20 border border-gray-200 rounded-md',
+    'absolute z-50 w-full bg-white top-20 border border-gray-200 rounded-md',
     {
       'top-56': size === 'md',
       'top-48': size === 'lg',
