@@ -2,9 +2,9 @@ export const API_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 type BodyType = Record<string, unknown> | string;
 
-export function createFetchRequestOptions(RestMethod: string, body?: BodyType) {
+export function createFetchRequestOptions(RESTMethod: string, body?: BodyType) {
   const obj: RequestInit = {
-    method: RestMethod,
+    method: RESTMethod,
     headers: {
       'Content-Type': 'application/json',
     },

@@ -1,1 +1,1 @@
-export const IS_DOCUMENT = typeof document !== 'undefined';
+export const IS_SERVER = typeof window !== 'undefined';

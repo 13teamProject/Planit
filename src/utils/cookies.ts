@@ -1,4 +1,4 @@
-import { IS_DOCUMENT } from '@/constants/global-constants';
+import { IS_SERVER } from '@/constants/global-constants';
 import { IncomingMessage } from 'http';
 
 type CookieOptions = {
@@ -12,10 +12,9 @@ export function getCookie(
   name: string,
   req?: IncomingMessage,
 ): string | undefined {
-  if (IS_DOCUMENT) {
-    if (!req?.headers?.cookie) {
-      return undefined;
-    }
+  if (IS_SERVER) {
+    if (!req?.headers?.cookie) return undefined;
+
     const matches = req.headers.cookie.match(
       new RegExp(
         `(?:^|; )${name.replace(/([.$*|{}()[\]\\/+^])/g, '\\$1')}=([^;]*)`,
