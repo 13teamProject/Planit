@@ -4,6 +4,7 @@ import Input from '@/components/commons/input';
 import DateInput from '@/components/commons/input/DateInput';
 import DropdownInput from '@/components/commons/input/DropdownInput';
 import ImageInput from '@/components/commons/input/ImageInput';
+import TagInput from '@/components/commons/input/TagInput';
 import Textarea from '@/components/commons/input/Textarea';
 import { useForm } from 'react-hook-form';
 
@@ -13,12 +14,13 @@ export default function ComponentTest() {
   console.log(watch());
 
   return (
-    <form>
+    <form className="w-500">
       <label htmlFor="name">닉네임</label>
       <Input
         id="name"
         type="text"
         placeholder="닉네임"
+        size="md"
         register={{ ...register('name', { required: true }) }}
       />
 
@@ -27,6 +29,7 @@ export default function ComponentTest() {
         id="email"
         type="email"
         placeholder="이메일"
+        size="md"
         register={{ ...register('email', { required: true }) }}
       />
 
@@ -35,6 +38,7 @@ export default function ComponentTest() {
         id="password"
         type="password"
         placeholder="비밀번호"
+        size="md"
         register={{ ...register('password', { required: true }) }}
       />
 
@@ -43,6 +47,7 @@ export default function ComponentTest() {
         id="password-confirm"
         type="password"
         placeholder="비밀번호 확인"
+        size="md"
         register={{ ...register('password-confirm', { required: true }) }}
       />
 
@@ -75,6 +80,15 @@ export default function ComponentTest() {
         control={control}
         placeholder="날짜를 입력해 주세요"
         name="date"
+      />
+
+      <label htmlFor="tag">태그</label>
+      <TagInput
+        size="md"
+        placeholder="입력 후 Enter"
+        name="tag"
+        id="tag"
+        control={control}
       />
     </form>
   );

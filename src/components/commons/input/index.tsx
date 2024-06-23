@@ -5,23 +5,27 @@ import Image from 'next/image';
 import { InputHTMLAttributes, useState } from 'react';
 import { UseFormRegisterReturn } from 'react-hook-form';
 
-type InputProps = InputHTMLAttributes<HTMLInputElement> & {
+type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> & {
   type?: string;
   error?: boolean;
+  size: 'md' | 'lg';
   register: UseFormRegisterReturn;
 };
 
 export default function Input({
   type = 'text',
+  size,
   error,
   register,
   ...args
 }: InputProps) {
   const classnames = classNames(
-    'block h-48 w-full rounded-md border px-16 outline-none placeholder:text-gray-300',
+    'block w-full rounded-md border px-16 outline-none placeholder:text-gray-300',
     {
       'border-red-dashboard focus:border-red-dashboard': error,
       'border-gray-200 focus:border-toss-blue': !error,
+      'h-42': size === 'md',
+      'h-48': size === 'lg',
     },
   );
 

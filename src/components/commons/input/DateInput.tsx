@@ -8,88 +8,82 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { Control, Controller } from 'react-hook-form';
 
-type DateInputProps = {
+type DateInputWrapperProps = {
   size: 'md' | 'lg';
   control: Control;
   placeholder: string;
   name: string;
 };
 
-export default function DateInput({
+export default function DateInputWrapper({
   name,
   placeholder,
   size,
   control,
-}: DateInputProps) {
+}: DateInputWrapperProps) {
   return (
     <Controller
       name={name}
       control={control}
       render={({ field: { onChange } }) => (
-        <DateInputWrapper
-          size={size}
-          placeholder={placeholder}
-          onChange={onChange}
-        />
+        <DateInput size={size} placeholder={placeholder} onChange={onChange} />
       )}
     />
   );
 }
 
-type DateComponentProps = {
+type DateInputProps = {
   size: 'md' | 'lg';
   placeholder: string;
   onChange: (value: Date) => void;
 };
 
-const DateInputWrapper = memo(
-  ({ size, placeholder, onChange }: DateComponentProps) => {
-    const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-    const now = new Date();
-    const isToday =
-      selectedDate && selectedDate.toDateString() === now.toDateString();
+const DateInput = memo(({ size, placeholder, onChange }: DateInputProps) => {
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const now = new Date();
+  const isToday =
+    selectedDate && selectedDate.toDateString() === now.toDateString();
 
-    const handleChange = (date: Date | null) => {
-      if (!date) return;
-      setSelectedDate(date);
-      onChange(date);
-    };
+  const handleChange = (date: Date | null) => {
+    if (!date) return;
+    setSelectedDate(date);
+    onChange(date);
+  };
 
-    const wrapperClassnames = classNames('block w-full', {
-      'h-42': size === 'md',
-      'h-48': size === 'lg',
-    });
+  const wrapperClassnames = classNames('block w-full', {
+    'h-42': size === 'md',
+    'h-48': size === 'lg',
+  });
 
-    return (
-      <div className={wrapperClassnames}>
-        <DatePicker
-          selected={selectedDate}
-          onChange={handleChange}
-          minDate={now}
-          minTime={
-            isToday
-              ? now
-              : new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0)
-          }
-          maxTime={
-            new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59)
-          }
-          dateFormat="yyyy.MM.dd HH:mm"
-          showTimeSelect
-          customInput={
-            <CustomInput
-              placeholderText={placeholder}
-              onClick={() => {}}
-              value={String(selectedDate)}
-            />
-          }
-        />
-      </div>
-    );
-  },
-);
+  return (
+    <div className={wrapperClassnames}>
+      <DatePicker
+        selected={selectedDate}
+        onChange={handleChange}
+        minDate={now}
+        minTime={
+          isToday
+            ? now
+            : new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0)
+        }
+        maxTime={
+          new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59)
+        }
+        dateFormat="yyyy.MM.dd HH:mm"
+        showTimeSelect
+        customInput={
+          <CustomInput
+            placeholderText={placeholder}
+            onClick={() => {}}
+            value={String(selectedDate)}
+          />
+        }
+      />
+    </div>
+  );
+});
 
-DateInputWrapper.displayName = 'DateInputWrapper';
+DateInput.displayName = 'DateInputWrapper';
 
 type CustomInputProps = {
   value: string;

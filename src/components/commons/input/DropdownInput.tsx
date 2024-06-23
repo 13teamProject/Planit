@@ -13,7 +13,7 @@ import {
 } from 'react';
 import { Control, Controller } from 'react-hook-form';
 
-type DropdownInputProps = {
+type DropdownInputWrapperProps = {
   children: ReactNode;
   size: 'md' | 'lg';
   control: Control;
@@ -21,50 +21,57 @@ type DropdownInputProps = {
   name: string;
 };
 
-export default function DropdownInput({
+export default function DropdownInputWrapper({
   children,
   name,
   control,
   size,
   placeholder,
-}: DropdownInputProps) {
+}: DropdownInputWrapperProps) {
   return (
     <Controller
       name={name}
       control={control}
       render={({ field: { onChange } }) => (
-        <DropdownInputWrapper
+        <DropdownInput
           size={size}
           placeholder={placeholder}
           onChange={onChange}
         >
           {children}
-        </DropdownInputWrapper>
+        </DropdownInput>
       )}
     />
   );
 }
 
-const DropdownInputContext = createContext({
+type DropdownInputContextType = {
+  isOpen: boolean;
+  toggle: () => void;
+  selected: JSX.Element;
+  handleSelect: (id: number, element: JSX.Element) => void;
+};
+
+const DropdownInputContext = createContext<DropdownInputContextType>({
   isOpen: false,
   toggle: () => {},
   selected: <></>,
-  handleSelect: (id: number, element: JSX.Element) => {},
+  handleSelect: () => {},
 });
 
-type DropdownInputWrapperProps = {
+type DropdownInputProps = {
   children: ReactNode;
   size: 'md' | 'lg';
   placeholder: string;
   onChange: (value: number) => void;
 };
 
-function DropdownInputWrapper({
+function DropdownInput({
   children,
   size,
   placeholder,
   onChange,
-}: DropdownInputWrapperProps) {
+}: DropdownInputProps) {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState(
@@ -167,4 +174,4 @@ function Option({ id, children }: { id: number; children: ReactNode }) {
   );
 }
 
-DropdownInput.Option = Option;
+DropdownInputWrapper.Option = Option;
