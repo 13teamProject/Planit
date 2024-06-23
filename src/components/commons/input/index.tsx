@@ -20,7 +20,7 @@ export default function Input({
   ...args
 }: InputProps) {
   const classnames = classNames(
-    'block w-full rounded-md border px-16 outline-none placeholder:text-gray-300',
+    'block w-full rounded-md border pl-16 pr-40 outline-none placeholder:text-gray-300',
     {
       'border-red-dashboard focus:border-red-dashboard': error,
       'border-gray-200 focus:border-toss-blue': !error,
@@ -64,7 +64,7 @@ function PasswordInput({ className, register, ...args }: PasswordInputProps) {
         width={24}
         height={24}
         onClick={togglePWEye}
-        className="absolute right-6 top-1/2 -translate-y-1/2 cursor-pointer"
+        className="absolute right-16 top-1/2 -translate-y-1/2 cursor-pointer"
       />
     </div>
   );

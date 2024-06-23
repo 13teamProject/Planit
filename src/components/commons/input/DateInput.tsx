@@ -15,6 +15,10 @@ type DateInputWrapperProps = {
   name: string;
 };
 
+/**
+ * DateInputWrapper 컴포넌트는 react-hook-form의 Controller를 통해\
+ * DateInput 컴포넌트를 렌더링합니다.
+ */
 export default function DateInputWrapper({
   name,
   placeholder,

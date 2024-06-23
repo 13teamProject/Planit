@@ -21,6 +21,10 @@ type DropdownInputWrapperProps = {
   name: string;
 };
 
+/**
+ * DropdownInputWrapper 컴포넌트는 react-hook-form의 Controller를 통해\
+ * DropdownInput 컴포넌트를 렌더링합니다.
+ */
 export default function DropdownInputWrapper({
   children,
   name,
@@ -66,6 +70,10 @@ type DropdownInputProps = {
   onChange: (value: number) => void;
 };
 
+/**
+ * DropdownInput 컴포넌트는 Context를 이용하여 상태를 공유하며,\
+ * 내부의 컴포넌트가 하나의 Dropdown 입력을 구현합니다.
+ */
 function DropdownInput({
   children,
   size,
@@ -158,6 +166,9 @@ function ToggleButton() {
   );
 }
 
+/**
+ * Option 컴포넌트는 DropdownInput에서 사용할 수 있는 선택 옵션을 렌더링합니다.
+ */
 function Option({ id, children }: { id: number; children: ReactNode }) {
   const { handleSelect } = useContext(DropdownInputContext);
 

@@ -18,6 +18,10 @@ type TagInputWrapperProps = Omit<
   size: 'md' | 'lg';
 };
 
+/**
+ * TagInputWrapper 컴포넌트는 react-hook-form의 Controller를 통해\
+ * TagInput 컴포넌트를 렌더링합니다.
+ */
 export default function TagInputWrapper({
   name,
   size,
