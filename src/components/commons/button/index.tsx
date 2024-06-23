@@ -5,20 +5,28 @@ import classNames from 'classnames';
 type ButtonProps = {
   size: 'sm' | 'lg';
   text: string;
-  cancled?: boolean;
+  cancel?: boolean;
   onClick?: () => void;
+  color?: string;
 };
 
-export default function Button({ size, text, cancled, onClick }: ButtonProps) {
+export default function Button({
+  size = 'lg',
+  text,
+  cancel,
+  color,
+  onClick,
+}: ButtonProps) {
   const className = classNames('rounded-8', {
     'text-16 px-46 py-14': size === 'lg',
     'text-14 px-56 py-12': size === 'sm',
-    'bg-white border border-gray-200 text-gray-400 hover:bg-gray-100': cancled,
-    'bg-toss-blue text-white hover:bg-blue-400': !cancled,
+    'bg-white border border-gray-200 text-gray-400 hover:bg-gray-200 hover:text-white':
+      cancel,
+    'bg-toss-blue text-white hover:bg-blue-400': !cancel,
   });
 
   return (
-    <button type="button" className={`${className}`} onClick={onClick}>
+    <button type="button" className={`${className} ${color}`} onClick={onClick}>
       {text}
     </button>
   );
