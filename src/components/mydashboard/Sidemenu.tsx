@@ -30,6 +30,24 @@ export default function Sidemenu() {
             />
           </button>
         </div>
+        <ul className="mt-20 lg:pr-12">
+          <li className="flex h-45 items-center rounded-4 hover:bg-violet-light-dashboard md:pl-34 lg:pl-36">
+            <Link
+              href="/dashboard/{dashboardid}"
+              className="text-18 font-medium text-gray-400 hover:text-black sm:hidden"
+            >
+              비브리지
+            </Link>
+          </li>
+          <li className="flex h-45 items-center rounded-4 hover:bg-violet-light-dashboard md:pl-34 lg:pl-36">
+            <Link
+              href="/dashboard/{dashboardid}"
+              className="text-18 font-medium text-gray-400 hover:text-black sm:hidden"
+            >
+              코드잇
+            </Link>
+          </li>
+        </ul>
       </nav>
     </>
   );
