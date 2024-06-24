@@ -9,6 +9,7 @@ import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import { AuthInputs, BadRequest, UserInfoResponse } from '../../../types';
+import AuthButton from '../commons/button/AuthButton';
 
 export default function LoginForm() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -37,17 +38,16 @@ export default function LoginForm() {
       router.push('/');
     }
   };
+
   return (
-    <form
-      className="m-auto w-351 md:w-520 lg:w-520"
-      onSubmit={handleSubmit(onSubmit)}
-    >
+    <form className="m-auto w-351 md:w-520" onSubmit={handleSubmit(onSubmit)}>
       <label htmlFor="email" className="mb-16">
         이메일
         <input
           id="email"
           className={`mt-8 ${errors.email ? 'border-red-500' : ''}`}
           placeholder="이메일을 입력해주세요"
+          autoComplete="true"
           {...register('email', { required: true })}
         />
         <span className="block pt-8 text-14 text-red-500">
@@ -75,6 +75,7 @@ export default function LoginForm() {
           className={`mt-8 ${errors.password ? 'border-red-500' : ''}`}
           type={showPassword ? 'text' : 'password'}
           placeholder="비밀번호를 입력해주세요"
+          autoComplete="false"
           {...register('password', { required: true })}
         />
         <span className="block pt-8 text-14 text-red-500">
@@ -82,14 +83,7 @@ export default function LoginForm() {
         </span>
       </label>
 
-      <button
-        type="submit"
-        className={`mt-21 w-full rounded-8 bg-gray-300 py-14 font-medium text-white ${isValid ? 'bg-toss-blue' : 'bg-cool-gray400'}`}
-        title="로그인"
-        disabled={!isValid}
-      >
-        로그인
-      </button>
+      <AuthButton text="로그인" disabled={!isValid} />
     </form>
   );
 }
