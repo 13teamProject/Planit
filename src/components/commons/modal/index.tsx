@@ -35,6 +35,7 @@ export default function Modal({
   );
 
   return ReactDOM.createPortal(
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
     <div
       className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
       onClick={handleBackgroundClick}
