@@ -1,4 +1,4 @@
-'useClient';
+'use client';
 
 import classNames from 'classnames';
 

@@ -13,7 +13,6 @@ type BarButtonProps = {
 export default function BarButton({
   text,
   size = 'lg',
-  weight,
   onClick,
 }: BarButtonProps) {
   const className = classNames(
@@ -26,7 +25,7 @@ export default function BarButton({
     },
   );
   return (
-    <button type="button" className={`${className}`} onClick={onClick}>
+    <button type="button" className={className} onClick={onClick}>
       {text}
       <Image
         width={22}
