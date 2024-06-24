@@ -1,11 +1,20 @@
 import LoginForm from '@/components/login/LoginForm';
+import Image from 'next/image';
 import Link from 'next/link';
 
 export default function Login() {
   return (
     <>
-      <header className="pb-50 text-center md:pb-38">
-        <p className="text-50 font-bold text-toss-blue">Planit:</p>
+      <header className="flex flex-col items-center gap-10 pb-50 md:gap-13 md:pb-38">
+        <div className="w-120 md:w-150">
+          <Image
+            width={150}
+            height={150}
+            src="/image/logo_blue.png"
+            alt="로고"
+            layout="responsive"
+          />
+        </div>
         <p className="text-20">오늘도 만나서 반가워요!</p>
       </header>
       <LoginForm />
