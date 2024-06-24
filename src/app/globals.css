@@ -6,9 +6,10 @@
   body,
   input,
   button,
+  select,
   textarea {
     font-family:
-      NexonLv2Gothic,
+      var(--nexonGothicFont),
       system-ui,
       -apple-system,
       BlinkMacSystemFont,
@@ -21,6 +22,23 @@
       'Helvetica Neue',
       sans-serif;
   }
+
+  html {
+    -ms-overflow-style: none; /* 인터넷 익스플로러 */
+    scrollbar-width: none; /* 파이어폭스 */
+    overflow: scroll;
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  }
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+  box-sizing: border-box;
 }
 
 label {

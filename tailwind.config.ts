@@ -18,9 +18,14 @@ const config: Config = {
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    './node_modules/react-tailwindcss-datepicker/dist/index.esm.js',
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['var(--nexonGothicFont)'],
+        serif: ['var(--nexonGothicFont)'],
+      },
       borderWidth: PX_10,
       borderRadius: PX_100,
       fontSize: PX_100,
@@ -67,9 +72,10 @@ const config: Config = {
         'purple-light-chip': '#F0E2FF',
       },
       screens: {
-        sm: { min: '375px', max: '743px' },
-        md: { min: '744px', max: '1199px' },
+        sm: { min: '375px' },
+        md: { min: '744px' },
         lg: { min: '1200px' },
+        landing: { min: '1200px', max: '1670px' },
       },
     },
   },
