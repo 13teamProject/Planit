@@ -6,7 +6,6 @@ import Image from 'next/image';
 type BarButtonProps = {
   text?: string;
   size?: 'sm' | 'lg';
-  weight?: 'string';
   onClick?: () => void;
 };
 
