@@ -7,11 +7,13 @@ import DropdownInput from '@/components/commons/input/DropdownInput';
 import ImageInput from '@/components/commons/input/ImageInput';
 import TagInput from '@/components/commons/input/TagInput';
 import Textarea from '@/components/commons/input/Textarea';
+import { Device } from '@/constants/device';
+import useDeviceState from '@/hooks/useDeviceState';
 import { useForm } from 'react-hook-form';
 
-// TODO: 반응형
 export default function CreateCard() {
   const { register, handleSubmit, watch, control } = useForm();
+  const deviceState = useDeviceState();
 
   return (
     <form className="fixed left-1/2 top-1/2 min-w-327 -translate-x-1/2 -translate-y-1/2 transform rounded-xl border border-gray-200 bg-white p-28 md:min-w-[506px]">
@@ -26,7 +28,7 @@ export default function CreateCard() {
       <DropdownInput
         name="dropdown"
         control={control}
-        size="lg"
+        size={deviceState === Device.MOBILE ? 'lg' : 'md'}
         placeholder="이름을 입력해 주세요"
       >
         <DropdownInput.Option id={1}>Option 1</DropdownInput.Option>
@@ -41,7 +43,7 @@ export default function CreateCard() {
       <Input
         id="title"
         type="text"
-        size="md"
+        size={deviceState === Device.MOBILE ? 'sm' : 'md'}
         placeholder="제목을 입력해 주세요"
         register={{ ...register('title', { required: true }) }}
       />
@@ -54,7 +56,7 @@ export default function CreateCard() {
       </label>
       <Textarea
         id="description"
-        size="sm"
+        size={deviceState === Device.MOBILE ? 'sm' : 'lg'}
         placeholder="설명을 입력해 주세요"
         register={{ ...register('description', { required: true }) }}
       />
@@ -66,7 +68,7 @@ export default function CreateCard() {
         마감일
       </label>
       <DateInput
-        size="md"
+        size={deviceState === Device.MOBILE ? 'md' : 'lg'}
         control={control}
         placeholder="날짜를 입력해 주세요"
         name="date"
@@ -80,7 +82,7 @@ export default function CreateCard() {
       </label>
       <TagInput
         id="tag"
-        size="md"
+        size={deviceState === Device.MOBILE ? 'md' : 'lg'}
         placeholder="입력 후 Enter"
         name="tag"
         control={control}
@@ -92,7 +94,11 @@ export default function CreateCard() {
       >
         이미지
       </label>
-      <ImageInput id="image" size="md" register={{ ...register('image') }} />
+      <ImageInput
+        id="image"
+        size={deviceState === Device.MOBILE ? 'sm' : 'md'}
+        register={{ ...register('image') }}
+      />
 
       <div className="mt-24 flex justify-between md:mt-28 md:justify-end md:gap-12">
         <Button size="sm" text="취소" cancel />
