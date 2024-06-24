@@ -14,7 +14,10 @@ export default function RootLayout({
           href="https://webfontworld.github.io/NexonLv2Gothic/NexonLv2Gothic.css"
         />
       </head>
-      <body suppressHydrationWarning>{children}</body>
+      <body suppressHydrationWarning>
+        {children}
+        <div id="modal-root"></div>
+      </body>
     </html>
   );
 }

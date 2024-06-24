@@ -1,6 +1,7 @@
 'use client';
 
 import classNames from 'classnames';
+import ReactDOM from 'react-dom';
 
 type ModalProps = {
   isOpen: boolean;
@@ -33,12 +34,13 @@ export default function Modal({
     },
   );
 
-  return (
+  return ReactDOM.createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+      className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
       onClick={handleBackgroundClick}
     >
-      <div className={`${modalClass}`}>{children}</div>
-    </div>
+      <div className={modalClass}>{children}</div>
+    </div>,
+    document.getElementById('modal-root') as HTMLElement,
   );
 }
