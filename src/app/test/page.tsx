@@ -1,6 +1,6 @@
 import ColorCircle from '@/components/commons/circle/ColorCircle';
 import ProfileCircle from '@/components/commons/circle/ProfileCircle';
-import Tag from '@/components/commons/tag/Tag';
+import Tag from '@/components/commons/tag';
 
 export default function ComponentTest() {
   return (
@@ -9,8 +9,16 @@ export default function ComponentTest() {
       <ProfileCircle color="bg-[#a3c4a2]" size="lg">
         <span className="font-bold text-white">B</span>
       </ProfileCircle>
-      <Tag color="toss" text="To do" size="lg" round={true} />
-      <Tag color="pink" text="프로젝트" size="sm" />
+      <Tag color="toss" size="lg" round={true}>
+        <ColorCircle size="sm" color="bg-toss-blue" />
+        To do
+      </Tag>
+      <Tag color="pink" size="sm">
+        프로젝트
+      </Tag>
+      <Tag color="green" size="lg">
+        백엔드
+      </Tag>
     </>
   );
 }
