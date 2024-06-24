@@ -25,6 +25,12 @@ export default function Modal({
     }
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === 'Escape') {
+      onClose();
+    }
+  };
+
   const modalClass = classNames(
     'rounded-8 relative w-full bg-white p-20 shadow-lg',
     {
@@ -38,6 +44,8 @@ export default function Modal({
     <div
       className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
       onClick={handleBackgroundClick}
+      onKeyDown={handleKeyDown}
+      role="presentation"
     >
       <div className={modalClass}>{children}</div>
     </div>,
