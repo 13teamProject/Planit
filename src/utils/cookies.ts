@@ -1,5 +1,4 @@
 import { IS_SERVER } from '@/constants/global-constants';
-import { IncomingMessage } from 'http';
 
 type CookieOptions = {
   path?: string;
@@ -10,25 +9,23 @@ type CookieOptions = {
 
 export function getCookie(
   name: string,
-  req?: IncomingMessage,
+  cookieString?: string,
 ): string | undefined {
-  if (IS_SERVER) {
-    if (!req?.headers?.cookie) return undefined;
+  const cookiePattern = new RegExp(
+    `(?:^|; )${name.replace(/([.$*|{}()[\]\\/+^])/g, '\\$1')}=([^;]*)`,
+  );
 
-    const matches = req.headers.cookie.match(
-      new RegExp(
-        `(?:^|; )${name.replace(/([.$*|{}()[\]\\/+^])/g, '\\$1')}=([^;]*)`,
-      ),
-    );
+  if (cookieString) {
+    const matches = cookieString.match(cookiePattern);
     return matches ? decodeURIComponent(matches[1]) : undefined;
   }
 
-  const matches = document.cookie.match(
-    new RegExp(
-      `(?:^|; )${name.replace(/([.$*|{}()[\]\\/+^])/g, '\\$1')}=([^;]*)`,
-    ),
-  );
-  return matches ? decodeURIComponent(matches[1]) : undefined;
+  if (IS_SERVER) {
+    const matches = document.cookie.match(cookiePattern);
+    return matches ? decodeURIComponent(matches[1]) : undefined;
+  }
+
+  return undefined;
 }
 
 export function setCookie(
