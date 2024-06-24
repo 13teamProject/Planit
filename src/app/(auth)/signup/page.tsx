@@ -7,13 +7,15 @@ export default function SignUpPage() {
     <>
       <header className="flex flex-col items-center gap-10 pb-50 md:gap-13 md:pb-38">
         <div className="w-120 md:w-150">
-          <Image
-            width={150}
-            height={150}
-            src="/image/logo_blue.png"
-            alt="로고"
-            layout="responsive"
-          />
+          <Link href="/">
+            <Image
+              width={150}
+              height={150}
+              src="/image/logo_blue.png"
+              alt="로고"
+              layout="responsive"
+            />
+          </Link>
         </div>
         <p className="text-20">첫 방문을 환영합니다!</p>
       </header>
