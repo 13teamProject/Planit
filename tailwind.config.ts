@@ -22,6 +22,10 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['var(--nexonGothicFont)'],
+        serif: ['var(--nexonGothicFont)'],
+      },
       borderWidth: PX_10,
       borderRadius: PX_100,
       fontSize: PX_100,
@@ -66,6 +70,12 @@ const config: Config = {
         'red-light-chip': '#FBDAE0',
         'purple-chip': '#994EE5',
         'purple-light-chip': '#F0E2FF',
+      },
+      screens: {
+        sm: { min: '375px' },
+        md: { min: '744px' },
+        lg: { min: '1200px' },
+        landing: { min: '1200px', max: '1670px' },
       },
     },
   },
