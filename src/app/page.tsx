@@ -4,7 +4,7 @@ import Link from 'next/link';
 export default function Home() {
   return (
     <div className="break-keep">
-      <div className="mt-180 text-center text-toss-blue">
+      <section className="mt-180 text-center text-toss-blue">
         <div className="mx-15">
           <div className="mb-40 text-26 font-light md:mb-35 md:flex md:grid-cols-2 md:items-center md:justify-center md:gap-18 md:text-62 lg:mb-35 lg:flex lg:grid-cols-2 lg:items-center lg:justify-center lg:gap-18 lg:text-76">
             <span className="-mb-7">새로운 일정 관리</span>
@@ -34,10 +34,10 @@ export default function Home() {
           height={312}
           className="mt-60 md:mt-100 lg:mt-135"
         />
-      </div>
-      <div className="h-fit overflow-hidden bg-[#F9FAFB] py-60 lg:flex lg:items-center lg:overflow-auto lg:py-100">
+      </section>
+      <section className="h-fit overflow-hidden bg-[#F9FAFB] py-60 lg:flex lg:items-center lg:overflow-auto lg:py-100">
         <div className="relative w-full">
-          <div className="container before:-inset-1 before:bg-[url('/image/main_content01.png')] before:bg-contain before:bg-[center_right] before:bg-no-repeat lg:!py-150 lg:before:absolute">
+          <div className="container before:-inset-1 before:bg-[url('/image/main_content01.png')] before:bg-contain before:bg-[center_right] before:bg-no-repeat lg:!py-150 lg:before:absolute landing:!py-80">
             <span className="mb-10 inline-block rounded-b-lg bg-toss-blue px-13 py-7 text-14 font-bold text-white">
               Point 1
             </span>
@@ -57,8 +57,8 @@ export default function Home() {
           height={511}
           className="float-right pl-15 lg:hidden"
         />
-      </div>
-      <div className="bg-toss-blue-light lg:pt-190">
+      </section>
+      <section className="bg-toss-blue-light lg:pt-190">
         <div className="container lg:flex lg:items-center lg:gap-30">
           <div className="lg:order-last lg:basis-1/2">
             <span className="mb-10 inline-block rounded-b-lg bg-toss-blue px-13 py-7 text-14 font-bold text-white">
@@ -82,14 +82,14 @@ export default function Home() {
             />
           </div>
         </div>
-      </div>
-      <div className="bg-[#F9FAFB] py-60 lg:py-100">
+      </section>
+      <section className="bg-[#F9FAFB] py-60 lg:py-100">
         <div className="container">
           <h3 className="mb-35 text-26 md:text-28 lg:text-28">
             생산성을 높이는 다양한 설정 ⚡
           </h3>
-          <div className="md:flex md:flex-wrap md:gap-10 lg:flex lg:gap-10">
-            <div className="m-auto mb-20 w-full max-w-375 overflow-hidden rounded-lg md:mb-0 lg:mb-0">
+          <div className="md:flex md:flex-wrap md:gap-10">
+            <div className="m-auto mb-20 w-full max-w-375 overflow-hidden rounded-lg md:mb-0">
               <div className="relative h-260 bg-white">
                 <Image
                   src="/image/main_content03_1.png"
@@ -106,7 +106,7 @@ export default function Home() {
                 </dd>
               </dl>
             </div>
-            <div className="m-auto mb-20 w-full max-w-375 overflow-hidden rounded-lg md:mb-0 lg:mb-0">
+            <div className="m-auto mb-20 w-full max-w-375 overflow-hidden rounded-lg md:mb-0">
               <div className="relative h-260 bg-white">
                 <Image
                   src="/image/main_content03_2.png"
@@ -138,7 +138,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 }

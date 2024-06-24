@@ -71,9 +71,10 @@ const config: Config = {
         'purple-light-chip': '#F0E2FF',
       },
       screens: {
-        sm: { min: '375px', max: '743px' },
-        md: { min: '744px', max: '1199px' },
+        sm: { min: '375px' },
+        md: { min: '744px' },
         lg: { min: '1200px' },
+        landing: { min: '1200px', max: '1670px' },
       },
     },
   },
