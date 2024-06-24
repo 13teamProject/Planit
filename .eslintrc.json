@@ -30,7 +30,13 @@
     "react/require-default-props": "off",
     "react/jsx-no-useless-fragment": "warn",
     "react-hooks/exhaustive-deps": "off",
-    "import/prefer-default-export": "off"
+    "import/prefer-default-export": "off",
+    "jsx-a11y/label-has-associated-control": [
+      2,
+      {
+        "labelAttributes": ["htmlFor"]
+      }
+    ]
   },
   "overrides": [
     {

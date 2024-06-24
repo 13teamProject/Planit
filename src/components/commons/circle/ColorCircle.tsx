@@ -9,8 +9,8 @@ type Props = {
 
 export default function ColorCircle({ color, size }: Props) {
   const classnames = classNames('rounded-full', color, {
-    'size-2': size === 'sm',
-    'size-[30px]': size === 'lg',
+    'size-8': size === 'sm',
+    'size-30': size === 'lg',
   });
 
   return <div className={classnames} />;
