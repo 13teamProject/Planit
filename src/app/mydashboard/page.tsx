@@ -26,7 +26,7 @@ export default function MyDashBoardPage() {
       );
     }
 
-    fetchDashboard();
+    //fetchDashboard();
     async function addDashboard() {
       try {
         const formData = { title: '비브리지', color: 'green-dashboard' }; // 여기에 자동으로 추가할 데이터 설정
@@ -43,7 +43,7 @@ export default function MyDashBoardPage() {
         console.error('Failed to create dashboard:', error);
       }
     }
-    addDashboard();
+    //addDashboard();
   }, []);
 
   return (
