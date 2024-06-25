@@ -48,3 +48,7 @@ label {
 input {
   @apply w-full rounded-8 border border-solid border-gray-200 p-16;
 }
+
+button {
+  @apply select-none;
+}
