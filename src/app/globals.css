@@ -9,7 +9,7 @@
   select,
   textarea {
     font-family:
-      NexonLv2Gothic,
+      var(--nexonGothicFont),
       system-ui,
       -apple-system,
       BlinkMacSystemFont,
@@ -31,4 +31,12 @@
       display: none;
     }
   }
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+  box-sizing: border-box;
 }
