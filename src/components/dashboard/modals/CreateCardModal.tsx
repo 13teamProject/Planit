@@ -10,21 +10,43 @@ import Textarea from '@/components/commons/input/Textarea';
 import Modal from '@/components/commons/modal';
 import { Device } from '@/constants/device';
 import useDeviceState from '@/hooks/useDeviceState';
+import Image from 'next/image';
+import { KeyboardEvent, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 type Props = {
   isOpen: boolean;
-  size?: 'sm' | 'md' | 'lg';
   onClose: () => void;
 };
 
 export default function CreateCardModal(props: Props) {
-  const { register, handleSubmit, watch, control } = useForm();
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const { register, handleSubmit, watch, control, reset } = useForm();
   const deviceState = useDeviceState();
+  const imageValue = watch('image');
+
+  const handleImageDelete = () => {
+    setPreviewImage('');
+    reset({ image: null });
+  };
+
+  useEffect(() => {
+    if (imageValue && imageValue.length > 0) {
+      const newPreview = URL.createObjectURL(imageValue[0]);
+      setPreviewImage(newPreview);
+
+      return () => {
+        setPreviewImage('');
+        URL.revokeObjectURL(newPreview);
+      };
+    }
+
+    return () => {};
+  }, [imageValue]);
 
   return (
     <Modal {...props}>
-      <form className="min-w-327 p-20 md:min-w-[506px] md:p-24">
+      <form className="max-h-[734px] w-327 overflow-y-auto p-20 md:max-h-[845px] md:min-w-[506px] md:p-24">
         <h1 className="mb-18 text-20 font-bold md:mb-22">할 일 생성</h1>
 
         <label
@@ -102,11 +124,20 @@ export default function CreateCardModal(props: Props) {
         >
           이미지
         </label>
-        <ImageInput
-          id="image"
-          size={deviceState === Device.MOBILE ? 'sm' : 'md'}
-          register={{ ...register('image') }}
-        />
+        <div className="flex gap-10">
+          <ImageInput
+            id="image"
+            size={deviceState === Device.MOBILE ? 'sm' : 'md'}
+            register={{ ...register('image') }}
+          />
+          {previewImage && (
+            <PreviewImage
+              previewImage={previewImage}
+              deviceState={deviceState}
+              handleImageDelete={handleImageDelete}
+            />
+          )}
+        </div>
 
         <div className="mt-18 flex justify-between md:mt-28 md:justify-end md:gap-12">
           <Button
@@ -121,5 +152,41 @@ export default function CreateCardModal(props: Props) {
         </div>
       </form>
     </Modal>
+  );
+}
+
+type PreviewProps = {
+  previewImage: string;
+  deviceState: Device;
+  handleImageDelete: () => void;
+};
+
+function PreviewImage({
+  previewImage,
+  deviceState,
+  handleImageDelete,
+}: PreviewProps) {
+  const handleKeyboard = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === 'Backspace' || event.key === 'Delete') {
+      // eslint-disable-next-line no-alert
+      alert('이미지를 삭제하시겠습니까?');
+      handleImageDelete();
+    }
+  };
+
+  return (
+    <div
+      className={`relative aspect-square rounded-md focus:outline focus:outline-[1.5px] ${deviceState === Device.MOBILE ? 'size-58' : 'size-76'}`}
+      onKeyUp={handleKeyboard}
+      role="button"
+      tabIndex={0}
+    >
+      <Image
+        src={previewImage}
+        fill
+        className="absolute rounded-md object-cover"
+        alt="preview"
+      />
+    </div>
   );
 }

@@ -1,22 +1,15 @@
 'use client';
 
-import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 
 type ModalProps = {
   isOpen: boolean;
-  size?: 'sm' | 'md' | 'lg';
   onClose: () => void;
   children: React.ReactNode;
 };
 
-export default function Modal({
-  isOpen,
-  size = 'md',
-  onClose,
-  children,
-}: ModalProps) {
+export default function Modal({ isOpen, onClose, children }: ModalProps) {
   const [isMounted, setIsMounted] = useState(false);
 
   const handleBackgroundClick = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -32,8 +25,6 @@ export default function Modal({
     }
   };
 
-  const modalClass = classNames('rounded-8 relative bg-white shadow-lg');
-
   useEffect(() => {
     setIsMounted(true);
   }, []);
@@ -47,7 +38,7 @@ export default function Modal({
       onKeyDown={handleKeyDown}
       role="presentation"
     >
-      <div className={modalClass}>{children}</div>
+      <div className="relative rounded-8 bg-white shadow-lg">{children}</div>
     </div>,
     document.getElementById('modal-root') as HTMLElement,
   );

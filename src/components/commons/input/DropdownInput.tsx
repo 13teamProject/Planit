@@ -153,7 +153,7 @@ function ToggleButton() {
     <button
       type="button"
       onClick={toggle}
-      className="flex size-full select-none items-center justify-between rounded-md border border-gray-200 px-16 py-11"
+      className="flex size-full select-none items-center justify-between rounded-md border border-gray-200 py-11 pl-16 pr-12"
     >
       {selected}
       <Image

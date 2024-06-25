@@ -9,6 +9,8 @@ import {
 } from 'react';
 import { Control, Controller } from 'react-hook-form';
 
+import Tag from '../tag';
+
 type TagInputWrapperProps = Omit<
   InputHTMLAttributes<HTMLInputElement>,
   'size' | 'onChange'
@@ -55,18 +57,25 @@ function TagInput({ size, onChange, ...args }: TagInputProps) {
   const addTag = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key !== 'Enter' || e.currentTarget.value.trim() === '') return;
     if (tagList.includes(currentTag)) {
+      // eslint-disable-next-line no-alert
       alert('같은 태그가 있습니다');
       return;
     }
 
     const newTagList = [...tagList, currentTag];
     setTagList(newTagList);
+    onChange(newTagList);
     setCurrentTag('');
+  };
+
+  const filterTagList = (tagToFilter: string) => {
+    const newTagList = [...tagList].filter((tag) => tag !== tagToFilter);
+    setTagList(newTagList);
     onChange(newTagList);
   };
 
   const classnames = classNames(
-    'block w-full rounded-md border px-16 outline-none placeholder:text-gray-300',
+    'block w-full rounded-md border border-gray-200 px-16 outline-none placeholder:text-gray-300',
     {
       'h-42': size === 'md',
       'h-48': size === 'lg',
@@ -74,13 +83,31 @@ function TagInput({ size, onChange, ...args }: TagInputProps) {
   );
 
   return (
-    <input
-      type="text"
-      value={currentTag}
-      onKeyUp={addTag}
-      onChange={handleChange}
-      className={classnames}
-      {...args}
-    />
+    <>
+      <input
+        type="text"
+        value={currentTag}
+        onKeyUp={addTag}
+        onChange={handleChange}
+        className={classnames}
+        {...args}
+      />
+      {tagList.length > 0 && (
+        <div className="mt-8 flex flex-wrap gap-4">
+          {[...tagList].reverse().map((tag: string) => (
+            <Tag
+              key={tag}
+              size="lg"
+              color="toss"
+              deleteTag={() => {
+                filterTagList(tag);
+              }}
+            >
+              {tag}
+            </Tag>
+          ))}
+        </div>
+      )}
+    </>
   );
 }
