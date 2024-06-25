@@ -19,7 +19,7 @@ type Props = {
   onClose: () => void;
 };
 
-export default function CreateCardModal(props: Props) {
+export default function CreateCardModal({ isOpen, onClose }: Props) {
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const { register, handleSubmit, watch, control, reset } = useForm();
   const deviceState = useDeviceState();
@@ -45,9 +45,19 @@ export default function CreateCardModal(props: Props) {
   }, [imageValue]);
 
   return (
-    <Modal {...props}>
+    <Modal isOpen={isOpen} onClose={() => {}}>
       <form className="max-h-[734px] w-327 overflow-y-auto p-20 md:max-h-[845px] md:min-w-[506px] md:p-24">
-        <h1 className="mb-18 text-20 font-bold md:mb-22">할 일 생성</h1>
+        <div className="mb-18 flex items-center justify-between md:mb-22">
+          <h1 className="text-20 font-bold">할 일 생성</h1>
+          <Image
+            src="/icon/close.svg"
+            alt="close"
+            width={32}
+            height={32}
+            className="cursor-pointer"
+            onClick={onClose}
+          />
+        </div>
 
         <label
           htmlFor="dropdown"

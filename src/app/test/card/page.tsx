@@ -18,7 +18,7 @@ export default function CreateCard() {
   return (
     <div className="m-auto mt-[40vh] w-1/5">
       <BarButton onClick={openModal} />
-      <CreateCardModal isOpen={isModalOpen} size="lg" onClose={closeModal} />
+      <CreateCardModal isOpen={isModalOpen} onClose={closeModal} />
     </div>
   );
 }
