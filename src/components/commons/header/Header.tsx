@@ -9,7 +9,7 @@ type Props = {
 
 export default function Header({ color }: Props) {
   const cn = classNames(
-    'z-999 fixed top-0 flex h-70 w-full items-center justify-between border-1 border-b-gray-200 px-80 py-25 md:px-40 sm:px-20',
+    'z-999 fixed top-0 flex h-70 w-full items-center justify-between border-1 border-b-gray-200 px-20 lg:px-80 py-25 md:px-40 ',
     {
       'bg-black text-white': color === 'black',
       'bg-white': color === 'white',
@@ -24,10 +24,10 @@ export default function Header({ color }: Props) {
         Planit:
       </Link>
       <ul className="flex">
-        <li className="px-36 sm:px-20">
+        <li className="px-20 md:px-36 lg:px-36">
           <Link
             href="/login"
-            className="cursor-pointer text-16 hover:text-gray-400"
+            className="cursor-pointer text-16 hover:text-toss-blue"
           >
             로그인
           </Link>
@@ -35,7 +35,7 @@ export default function Header({ color }: Props) {
         <li>
           <Link
             href="/signup"
-            className="cursor-pointer text-16 hover:text-gray-400"
+            className="cursor-pointer text-16 hover:text-toss-blue"
           >
             회원가입
           </Link>
