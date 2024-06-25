@@ -1,4 +1,4 @@
-import { IS_SERVER } from '@/constants/global-constants';
+import { IS_SERVER } from '@/constants/globalConstants';
 
 type CookieOptions = {
   path?: string;

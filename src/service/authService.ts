@@ -1,5 +1,5 @@
 import { loginUser, signUpUser } from '@/app/api/users';
-import { useAuthStore } from '@/store/auth-store';
+import { useAuthStore } from '@/store/authStore';
 import { deleteCookie, setCookie } from '@/utils/cookies';
 
 import {

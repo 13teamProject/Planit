@@ -1,4 +1,4 @@
-import ErrorMessages from '@/constants/error-message';
+import ErrorMessages from '@/constants/errorMessage';
 import * as yup from 'yup';
 
 export const authValidationSchema = yup.object().shape({
