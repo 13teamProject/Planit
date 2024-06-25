@@ -1,9 +1,4 @@
-import {
-  ErrorResponse,
-  UpdateUserFile,
-  UpdateUserUrl,
-  UserInfoResponse,
-} from '../../../types';
+import { ErrorResponse, UpdateUser, UserInfoResponse } from '../../../types';
 
 // 임시로 토큰 가져오기
 export async function getAccessToken() {
@@ -41,10 +36,10 @@ export async function getUserInfo(): Promise<UserInfoResponse> {
 }
 
 // 이미지 업로드 API
-export async function uploadProfileImage(image: FileList): Promise<string> {
+export async function uploadProfileImage(image: File): Promise<string> {
   const token = await getAccessToken();
   const formData = new FormData();
-  formData.append('image', image[0]);
+  formData.append('image', image);
   const res = await fetch(
     `https://sp-taskify-api.vercel.app/6-13/users/me/image`,
     {
@@ -60,20 +55,8 @@ export async function uploadProfileImage(image: FileList): Promise<string> {
 }
 
 // 내 정보 수정
-export async function editUserInfo(
-  data: UpdateUserFile,
-): Promise<ErrorResponse> {
+export async function editUserInfo(data: UpdateUser): Promise<ErrorResponse> {
   try {
-    let userData: UpdateUserUrl = {
-      nickname: data.nickname,
-    };
-    if (data.profileImageUrl) {
-      const uploadImage = await uploadProfileImage(data.profileImageUrl);
-      userData = {
-        ...data,
-        profileImageUrl: uploadImage,
-      };
-    }
     const token = await getAccessToken();
     const res = await fetch(`https://sp-taskify-api.vercel.app/6-13/users/me`, {
       method: 'PUT',
@@ -81,7 +64,7 @@ export async function editUserInfo(
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(userData),
+      body: JSON.stringify(data),
     });
     const json = await res.json();
     if (res.status !== 200) {

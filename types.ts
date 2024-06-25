@@ -13,12 +13,7 @@ export type ErrorResponse = {
   data?: object;
 };
 
-export type UpdateUserFile = {
-  nickname: string;
-  profileImageUrl?: FileList;
-};
-
-export type UpdateUserUrl = {
+export type UpdateUser = {
   nickname: string;
   profileImageUrl?: string;
 };
