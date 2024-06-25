@@ -1,4 +1,4 @@
-import { loginUser, signUpUser } from '@/app/api/users';
+import { loginUser, signUpUser } from '@/app/api/auth';
 import { useAuthStore } from '@/store/authStore';
 import { deleteCookie, setCookie } from '@/utils/cookies';
 

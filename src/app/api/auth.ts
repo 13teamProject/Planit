@@ -4,7 +4,7 @@ import {
   SignUpProps,
   SignUpResult,
 } from '../../../types';
-import { API_URL, createFetchRequestOptions } from './base-url';
+import { API_URL, createFetchRequestOptions } from './baseUrl';
 
 // 회원가입 데이터 전송
 export async function signUpUser({
