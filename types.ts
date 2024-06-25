@@ -39,3 +39,9 @@ export type LoginProps = {
 };
 
 export type LoginResult = LoginResponse | BadRequest;
+
+// Modal type
+export type ModalState = {
+  isOpen: boolean;
+  message: string;
+};
