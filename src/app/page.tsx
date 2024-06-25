@@ -1,9 +1,11 @@
+import Header from '@/components/commons/header/Header';
 import Image from 'next/image';
 import Link from 'next/link';
 
 export default function Home() {
   return (
     <div className="break-keep">
+      <Header color="white" />
       <section className="mt-180 text-center text-toss-blue">
         <div className="mx-15">
           <div className="mb-40 text-26 font-light md:mb-35 md:flex md:grid-cols-2 md:items-center md:justify-center md:gap-18 md:text-62 lg:mb-35 lg:flex lg:grid-cols-2 lg:items-center lg:justify-center lg:gap-18 lg:text-76">
@@ -37,7 +39,7 @@ export default function Home() {
       </section>
       <section className="h-fit overflow-hidden bg-[#F9FAFB] py-60 lg:flex lg:items-center lg:overflow-auto lg:py-100">
         <div className="relative w-full">
-          <div className="container before:-inset-1 before:bg-[url('/image/main_content01.png')] before:bg-contain before:bg-[center_right] before:bg-no-repeat lg:!py-150 lg:before:absolute landing:!py-80">
+          <div className="landing:!py-80 container before:-inset-1 before:bg-[url('/image/main_content01.png')] before:bg-contain before:bg-[center_right] before:bg-no-repeat lg:!py-150 lg:before:absolute">
             <span className="mb-10 inline-block rounded-b-lg bg-toss-blue px-13 py-7 text-14 font-bold text-white">
               Point 1
             </span>
