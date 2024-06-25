@@ -96,30 +96,28 @@ type CustomInputProps = {
 };
 
 const CustomInput = forwardRef<HTMLButtonElement, CustomInputProps>(
-  ({ value, onClick, placeholderText }, ref) => {
-    return (
-      <button
-        type="button"
-        onClick={onClick}
-        ref={ref}
-        className="block size-full rounded-md border border-gray-200 bg-white"
-      >
-        <div className="flex items-center justify-start gap-10 px-16">
-          <Image
-            src={value ? '/icon/calendar.svg' : '/icon/calendar_gray.svg'}
-            alt="calendar"
-            width={22}
-            height={22}
-          />
-          {value ? (
-            <span className="text-black-800">{value}</span>
-          ) : (
-            <span className="text-gray-300">{placeholderText}</span>
-          )}
-        </div>
-      </button>
-    );
-  },
+  ({ value, onClick, placeholderText }, ref) => (
+    <button
+      type="button"
+      onClick={onClick}
+      ref={ref}
+      className="block size-full rounded-md border border-gray-200 bg-white"
+    >
+      <div className="flex items-center justify-start gap-10 px-16">
+        <Image
+          src={value ? '/icon/calendar.svg' : '/icon/calendar_gray.svg'}
+          alt="calendar"
+          width={22}
+          height={22}
+        />
+        {value ? (
+          <span className="text-black-800">{value}</span>
+        ) : (
+          <span className="text-gray-300">{placeholderText}</span>
+        )}
+      </div>
+    </button>
+  ),
 );
 
 CustomInput.displayName = 'CustomInput';

@@ -1,14 +1,13 @@
 import type { Config } from 'tailwindcss';
 
-const createPxMap = (size: number): Record<string, string> => {
-  return Array.from({ length: size + 1 }, (_, i) => `${i}px`).reduce(
+const createPxMap = (size: number): Record<string, string> =>
+  Array.from({ length: size + 1 }, (_, i) => `${i}px`).reduce(
     (acc, val, i) => {
       acc[i] = val;
       return acc;
     },
     {} as Record<string, string>,
   );
-};
 
 const PX_10 = createPxMap(10);
 const PX_100 = createPxMap(100);
