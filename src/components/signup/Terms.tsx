@@ -107,7 +107,7 @@ export default function Terms() {
         <strong className="block">
           고객센터
           <br />
-          (대표번호:1234 – 5678 / 평일 09:00~18:00)
+          (대표번호 : 1234 – 5678 / 평일 09:00~18:00)
         </strong>{' '}
         로 문의 주시기 바랍니다.
       </section>

@@ -20,7 +20,7 @@ import Modal from '../commons/modal';
 
 export default function LoginForm() {
   const [modalState, setModalState] = useState<ModalState>({
-    isOpen: true,
+    isOpen: false,
     message: '',
   });
   const resolver = yupResolver(authValidationSchema);
