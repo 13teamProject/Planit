@@ -1,9 +1,11 @@
+import Header from '@/components/commons/header/Header';
 import Image from 'next/image';
 import Link from 'next/link';
 
 export default function Home() {
   return (
     <div className="break-keep">
+      <Header color="white" />
       <section className="mt-180 text-center text-toss-blue">
         <div className="mx-15">
           <div className="mb-40 text-26 font-light md:mb-35 md:flex md:grid-cols-2 md:items-center md:justify-center md:gap-18 md:text-62 lg:mb-35 lg:flex lg:grid-cols-2 lg:items-center lg:justify-center lg:gap-18 lg:text-76">
