@@ -1,6 +1,7 @@
 'use client';
 
 import classNames from 'classnames';
+import Image from 'next/image';
 import Link from 'next/link';
 
 type Props = {
@@ -17,11 +18,21 @@ export default function Header({ color }: Props) {
   );
   return (
     <nav className={cn}>
-      <Link
-        href="/"
-        className="cursor-pointer text-25 font-bold text-toss-blue"
-      >
-        Planit:
+      <Link href="/" className="cursor-pointer sm:hidden md:block lg:block">
+        <Image
+          src="/image/logo_text_blue.png"
+          width={80}
+          height={25}
+          alt="헤더 로고"
+        />
+      </Link>
+      <Link href="/" className="cursor-pointer md:hidden">
+        <Image
+          src="/image/logo_icon_blue.png"
+          width={25}
+          height={25}
+          alt="헤더 로고 모바일"
+        />
       </Link>
       <ul className="flex">
         <li className="px-20 md:px-36 lg:px-36">

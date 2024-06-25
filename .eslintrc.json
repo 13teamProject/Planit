@@ -1,7 +1,7 @@
 {
   "root": true,
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint", "prettier"],
+  "plugins": ["@typescript-eslint"],
   "parserOptions": {
     "project": "./tsconfig.json",
     "createDefaultProgram": true
@@ -17,7 +17,6 @@
     "airbnb/hooks",
     "next/core-web-vitals",
     "plugin:@typescript-eslint/recommended",
-    "plugin:prettier/recommended",
     "prettier"
   ],
   "rules": {
@@ -30,7 +29,13 @@
     "react/require-default-props": "off",
     "react/jsx-no-useless-fragment": "warn",
     "react-hooks/exhaustive-deps": "off",
-    "import/prefer-default-export": "off"
+    "import/prefer-default-export": "off",
+    "jsx-a11y/label-has-associated-control": [
+      2,
+      {
+        "labelAttributes": ["htmlFor"]
+      }
+    ]
   },
   "overrides": [
     {
@@ -39,5 +44,6 @@
         "@typescript-eslint/no-use-before-define": "off"
       }
     }
-  ]
+  ],
+  "ignorePatterns": ["next.config.mjs", "postcss.config.mjs"]
 }
