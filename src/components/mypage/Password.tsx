@@ -1,5 +1,6 @@
 import { useForm } from 'react-hook-form';
 
+import Button from '../commons/button';
 import Input from '../commons/input';
 
 export default function Password() {
@@ -34,7 +35,7 @@ export default function Password() {
           size="md"
           register={{ ...register('password-confirm', { required: true }) }}
         />
-        <button type="submit">변경</button>
+        <Button type="submit" text="변경" />
       </form>
     </div>
   );
