@@ -1,7 +1,6 @@
 'use client';
 
 import '@/styles/custom-datepicker.css';
-import classNames from 'classnames';
 import Image from 'next/image';
 import React, { forwardRef, memo, useState } from 'react';
 import DatePicker from 'react-datepicker';
@@ -9,7 +8,6 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { Control, Controller } from 'react-hook-form';
 
 type DateInputWrapperProps = {
-  size: 'md' | 'lg';
   control: Control;
   placeholder: string;
   name: string;
@@ -22,7 +20,6 @@ type DateInputWrapperProps = {
 export default function DateInputWrapper({
   name,
   placeholder,
-  size,
   control,
 }: DateInputWrapperProps) {
   return (
@@ -30,19 +27,18 @@ export default function DateInputWrapper({
       name={name}
       control={control}
       render={({ field: { onChange } }) => (
-        <DateInput size={size} placeholder={placeholder} onChange={onChange} />
+        <DateInput placeholder={placeholder} onChange={onChange} />
       )}
     />
   );
 }
 
 type DateInputProps = {
-  size: 'md' | 'lg';
   placeholder: string;
   onChange: (value: Date) => void;
 };
 
-const DateInput = memo(({ size, placeholder, onChange }: DateInputProps) => {
+const DateInput = memo(({ placeholder, onChange }: DateInputProps) => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const now = new Date();
   const isToday =
@@ -54,13 +50,8 @@ const DateInput = memo(({ size, placeholder, onChange }: DateInputProps) => {
     onChange(date);
   };
 
-  const wrapperClassnames = classNames('block w-full', {
-    'h-42': size === 'md',
-    'h-48': size === 'lg',
-  });
-
   return (
-    <div className={wrapperClassnames}>
+    <div className="block h-42 w-full text-14 md:h-48 md:text-16">
       <DatePicker
         selected={selectedDate}
         onChange={handleChange}

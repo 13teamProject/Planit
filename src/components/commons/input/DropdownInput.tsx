@@ -1,6 +1,5 @@
 'use client';
 
-import classNames from 'classnames';
 import Image from 'next/image';
 import {
   ReactNode,
@@ -15,7 +14,6 @@ import { Control, Controller } from 'react-hook-form';
 
 type DropdownInputWrapperProps = {
   children: ReactNode;
-  size: 'md' | 'lg';
   control: Control;
   placeholder: string;
   name: string;
@@ -29,7 +27,6 @@ export default function DropdownInputWrapper({
   children,
   name,
   control,
-  size,
   placeholder,
 }: DropdownInputWrapperProps) {
   return (
@@ -37,11 +34,7 @@ export default function DropdownInputWrapper({
       name={name}
       control={control}
       render={({ field: { onChange } }) => (
-        <DropdownInput
-          size={size}
-          placeholder={placeholder}
-          onChange={onChange}
-        >
+        <DropdownInput placeholder={placeholder} onChange={onChange}>
           {children}
         </DropdownInput>
       )}
@@ -65,7 +58,6 @@ const DropdownInputContext = createContext<DropdownInputContextType>({
 
 type DropdownInputProps = {
   children: ReactNode;
-  size: 'md' | 'lg';
   placeholder: string;
   onChange: (value: number) => void;
 };
@@ -76,7 +68,6 @@ type DropdownInputProps = {
  */
 function DropdownInput({
   children,
-  size,
   placeholder,
   onChange,
 }: DropdownInputProps) {
@@ -106,19 +97,6 @@ function DropdownInput({
     [isOpen, selected],
   );
 
-  const wrapperClassnames = classNames('relative', {
-    'w-217 h-48': size === 'md',
-    'w-287 h-42': size === 'lg',
-  });
-
-  const listClassnames = classNames(
-    'absolute z-50 w-full bg-white top-20 border border-gray-200 rounded-md',
-    {
-      'top-56': size === 'md',
-      'top-48': size === 'lg',
-    },
-  );
-
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (
@@ -138,9 +116,16 @@ function DropdownInput({
 
   return (
     <DropdownInputContext.Provider value={contextValue}>
-      <div ref={dropdownRef} className={wrapperClassnames}>
+      <div
+        ref={dropdownRef}
+        className="relative h-42 w-287 text-14 md:h-48 md:w-217 md:text-16"
+      >
         <ToggleButton />
-        {isOpen && <div className={listClassnames}>{children}</div>}
+        {isOpen && (
+          <div className="absolute top-48 z-50 w-full rounded-md border border-gray-200 bg-white md:top-56">
+            {children}
+          </div>
+        )}
       </div>
     </DropdownInputContext.Provider>
   );

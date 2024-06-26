@@ -20,7 +20,6 @@ export default function ComponentTest() {
         id="name"
         type="text"
         placeholder="닉네임"
-        size="md"
         register={{ ...register('name', { required: true }) }}
       />
 
@@ -29,7 +28,6 @@ export default function ComponentTest() {
         id="email"
         type="email"
         placeholder="이메일"
-        size="md"
         register={{ ...register('email', { required: true }) }}
       />
 
@@ -38,7 +36,6 @@ export default function ComponentTest() {
         id="password"
         type="password"
         placeholder="비밀번호"
-        size="md"
         register={{ ...register('password', { required: true }) }}
       />
 
@@ -47,26 +44,23 @@ export default function ComponentTest() {
         id="password-confirm"
         type="password"
         placeholder="비밀번호 확인"
-        size="md"
         register={{ ...register('password-confirm', { required: true }) }}
       />
 
       <label htmlFor="textarea">내용</label>
       <Textarea
         id="textarea"
-        size="lg"
         placeholder="내용"
         register={{ ...register('textarea', { required: true }) }}
       />
 
       <label htmlFor="image">이미지</label>
-      <ImageInput id="image" size="lg" register={{ ...register('image') }} />
+      <ImageInput id="image" register={{ ...register('image') }} />
 
       <label htmlFor="dropdown">담당자</label>
       <DropdownInput
         name="dropdown"
         control={control}
-        size="md"
         placeholder="Select an option"
       >
         <DropdownInput.Option id={1}>Option 1</DropdownInput.Option>
@@ -76,7 +70,6 @@ export default function ComponentTest() {
 
       <label htmlFor="date">담당자</label>
       <DateInput
-        size="md"
         control={control}
         placeholder="날짜를 입력해 주세요"
         name="date"
@@ -84,7 +77,6 @@ export default function ComponentTest() {
 
       <label htmlFor="tag">태그</label>
       <TagInput
-        size="md"
         placeholder="입력 후 Enter"
         name="tag"
         id="tag"
