@@ -11,7 +11,7 @@ const createPxMap = (size: number): Record<string, string> =>
 
 const PX_10 = createPxMap(10);
 const PX_100 = createPxMap(100);
-const PX_500 = createPxMap(2000);
+const PX_2000 = createPxMap(2000);
 const config: Config = {
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
@@ -29,9 +29,9 @@ const config: Config = {
       borderRadius: PX_100,
       fontSize: PX_100,
       lineHeight: PX_100,
-      minWidth: PX_500,
-      minHeight: PX_500,
-      spacing: PX_500,
+      minWidth: PX_2000,
+      minHeight: PX_2000,
+      spacing: PX_2000,
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':
