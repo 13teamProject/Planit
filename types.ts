@@ -1,3 +1,14 @@
+export type ErrorResponse = {
+  success: boolean;
+  message: string;
+  data?: object;
+};
+
+export type UpdateUser = {
+  nickname: string;
+  profileImageUrl?: string;
+};
+
 // Auth types
 export type AuthInputs = {
   email: string;
