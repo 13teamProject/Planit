@@ -1,32 +1,29 @@
 'use client';
 
 import classNames from 'classnames';
+import { ButtonHTMLAttributes } from 'react';
 
-type ButtonProps = {
-  size: 'sm' | 'lg';
+type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   text: string;
   cancel?: boolean;
+  style?: string;
   onClick?: () => void;
-  color?: string;
 };
 
 export default function Button({
-  size = 'lg',
   text,
-  cancel,
-  color,
+  cancel = false,
+  style,
   onClick,
 }: ButtonProps) {
   const className = classNames('rounded-8', {
-    'text-16 px-46 py-14': size === 'lg',
-    'text-14 px-56 py-12': size === 'sm',
     'bg-white border border-gray-200 text-gray-400 hover:bg-gray-200 hover:text-white':
       cancel,
-    'bg-toss-blue text-white hover:bg-blue-400': !cancel,
+    'bg-toss-blue text-white hover:bg-toss-blue/95': !cancel,
   });
 
   return (
-    <button type="button" className={`${className} ${color}`} onClick={onClick}>
+    <button className={`${className} ${style}`} onClick={onClick}>
       {text}
     </button>
   );

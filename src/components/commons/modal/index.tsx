@@ -1,22 +1,16 @@
 'use client';
 
-import classNames from 'classnames';
+import { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 
 type ModalProps = {
   isOpen: boolean;
-  size?: 'sm' | 'md' | 'lg';
   onClose: () => void;
   children: React.ReactNode;
 };
 
-export default function Modal({
-  isOpen,
-  size = 'md',
-  onClose,
-  children,
-}: ModalProps) {
-  if (!isOpen) return null;
+export default function Modal({ isOpen, onClose, children }: ModalProps) {
+  const [isMounted, setIsMounted] = useState(false);
 
   const handleBackgroundClick = (event: React.MouseEvent<HTMLDivElement>) => {
     // 배경 클릭 시 모달 닫기
@@ -31,14 +25,11 @@ export default function Modal({
     }
   };
 
-  const modalClass = classNames(
-    'rounded-8 relative w-full bg-white p-20 shadow-lg',
-    {
-      'max-w-lg': size === 'lg',
-      'max-w-md': size === 'md',
-      'max-w-sm': size === 'sm',
-    },
-  );
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isOpen || !isMounted) return null;
 
   return ReactDOM.createPortal(
     <div
@@ -47,7 +38,7 @@ export default function Modal({
       onKeyDown={handleKeyDown}
       role="presentation"
     >
-      <div className={modalClass}>{children}</div>
+      <div className="relative rounded-8 bg-white shadow-lg">{children}</div>
     </div>,
     document.getElementById('modal-root') as HTMLElement,
   );
