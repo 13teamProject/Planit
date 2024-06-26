@@ -14,6 +14,8 @@ import Image from 'next/image';
 import { KeyboardEvent, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
+/* eslint-disable react/style-prop-object */
+
 type Props = {
   isOpen: boolean;
   onClose: () => void;
@@ -68,7 +70,6 @@ export default function CreateCardModal({ isOpen, onClose }: Props) {
         <DropdownInput
           name="dropdown"
           control={control}
-          size={deviceState === Device.MOBILE ? 'lg' : 'md'}
           placeholder="이름을 입력해 주세요"
         >
           <DropdownInput.Option id={1}>Option 1</DropdownInput.Option>
@@ -83,7 +84,6 @@ export default function CreateCardModal({ isOpen, onClose }: Props) {
         <Input
           id="title"
           type="text"
-          size={deviceState === Device.MOBILE ? 'sm' : 'md'}
           placeholder="제목을 입력해 주세요"
           register={{ ...register('title', { required: true }) }}
         />
@@ -96,7 +96,6 @@ export default function CreateCardModal({ isOpen, onClose }: Props) {
         </label>
         <Textarea
           id="description"
-          size={deviceState === Device.MOBILE ? 'sm' : 'lg'}
           placeholder="설명을 입력해 주세요"
           register={{ ...register('description', { required: true }) }}
         />
@@ -108,7 +107,6 @@ export default function CreateCardModal({ isOpen, onClose }: Props) {
           마감일
         </label>
         <DateInput
-          size={deviceState === Device.MOBILE ? 'md' : 'lg'}
           control={control}
           placeholder="날짜를 입력해 주세요"
           name="date"
@@ -122,7 +120,6 @@ export default function CreateCardModal({ isOpen, onClose }: Props) {
         </label>
         <TagInput
           id="tag"
-          size={deviceState === Device.MOBILE ? 'md' : 'lg'}
           placeholder="입력 후 Enter"
           name="tag"
           control={control}
@@ -135,11 +132,7 @@ export default function CreateCardModal({ isOpen, onClose }: Props) {
           이미지
         </label>
         <div className="flex gap-10">
-          <ImageInput
-            id="image"
-            size={deviceState === Device.MOBILE ? 'sm' : 'md'}
-            register={{ ...register('image') }}
-          />
+          <ImageInput id="image" register={{ ...register('image') }} />
           {previewImage && (
             <PreviewImage
               previewImage={previewImage}
@@ -149,14 +142,14 @@ export default function CreateCardModal({ isOpen, onClose }: Props) {
           )}
         </div>
 
-        <div className="mt-18 flex justify-between md:mt-28 md:justify-end md:gap-12">
+        <div className="mt-18 flex gap-12 md:mt-28 md:justify-end">
           <Button
-            size={deviceState === Device.MOBILE ? 'sm' : 'lg'}
+            style="py-12 px-54 text-16 md:py-25 md:text-18 md:px-46 md:py-14"
             text="취소"
             cancel
           />
           <Button
-            size={deviceState === Device.MOBILE ? 'sm' : 'lg'}
+            style="py-12 px-54 text-16 md:py-25 md:text-18 md:px-46 md:py-14"
             text="생성"
           />
         </div>

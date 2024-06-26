@@ -1,6 +1,5 @@
 'use client';
 
-import classNames from 'classnames';
 import {
   ChangeEvent,
   InputHTMLAttributes,
@@ -13,11 +12,10 @@ import Tag from '../tag';
 
 type TagInputWrapperProps = Omit<
   InputHTMLAttributes<HTMLInputElement>,
-  'size' | 'onChange'
+  'onChange'
 > & {
   name: string;
   control: Control;
-  size: 'md' | 'lg';
 };
 
 /**
@@ -26,7 +24,6 @@ type TagInputWrapperProps = Omit<
  */
 export default function TagInputWrapper({
   name,
-  size,
   control,
   ...args
 }: TagInputWrapperProps) {
@@ -35,18 +32,17 @@ export default function TagInputWrapper({
       name={name}
       control={control}
       render={({ field: { onChange } }) => (
-        <TagInput size={size} onChange={onChange} {...args} />
+        <TagInput onChange={onChange} {...args} />
       )}
     />
   );
 }
 
-type TagInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> & {
-  size: 'md' | 'lg';
+type TagInputProps = InputHTMLAttributes<HTMLInputElement> & {
   onChange: (value: string[]) => void;
 };
 
-function TagInput({ size, onChange, ...args }: TagInputProps) {
+function TagInput({ onChange, ...args }: TagInputProps) {
   const [currentTag, setCurrentTag] = useState('');
   const [tagList, setTagList] = useState<string[]>([]);
 
@@ -74,14 +70,6 @@ function TagInput({ size, onChange, ...args }: TagInputProps) {
     onChange(newTagList);
   };
 
-  const classnames = classNames(
-    'block w-full rounded-md border border-gray-200 px-16 outline-none placeholder:text-gray-300',
-    {
-      'h-42': size === 'md',
-      'h-48': size === 'lg',
-    },
-  );
-
   return (
     <>
       <input
@@ -89,7 +77,7 @@ function TagInput({ size, onChange, ...args }: TagInputProps) {
         value={currentTag}
         onKeyUp={addTag}
         onChange={handleChange}
-        className={classnames}
+        className="block h-42 w-full rounded-md border px-16 text-14 outline-none placeholder:text-gray-300 md:h-48 md:text-16"
         {...args}
       />
       {tagList.length > 0 && (

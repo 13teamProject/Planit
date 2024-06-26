@@ -5,18 +5,17 @@ import { UseFormRegisterReturn } from 'react-hook-form';
 
 type Props = Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> & {
   register: UseFormRegisterReturn;
-  size: 'sm' | 'md' | 'lg';
+  size?: 'sm' | 'lg';
 };
 
-export default function ImageInput({ register, size, ...args }: Props) {
+export default function ImageInput({ register, size = 'sm', ...args }: Props) {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const { ref: registerRef, ...registerRest } = register;
 
   const classnames = classNames(
     'flex aspect-square items-center justify-center rounded-md bg-[#f5f5f5] outline-none',
     {
-      'size-58': size === 'sm',
-      'size-76': size === 'md',
+      'size-58 md:size-76': size === 'sm',
       'size-182': size === 'lg',
     },
   );

@@ -51,7 +51,7 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
-      <body suppressHydrationWarning>
+      <body suppressHydrationWarning className={`${customFont.variable}`}>
         {children}
         <div id="modal-root" />
       </body>
