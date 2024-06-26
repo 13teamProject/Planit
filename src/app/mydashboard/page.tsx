@@ -29,7 +29,7 @@ export default function MyDashBoardPage() {
     //fetchDashboard();
     async function addDashboard() {
       try {
-        const formData = { title: '비브리지', color: 'green-dashboard' }; // 여기에 자동으로 추가할 데이터 설정
+        const formData = { title: '비브리지', color: 'green-dashboard' }; // api로 데이터 받아올 예정
         const response = await postDashboards(formData);
         setDashboards([
           ...dashboards,
@@ -49,7 +49,7 @@ export default function MyDashBoardPage() {
   return (
     <div className="flex">
       <Sidemenu dashboards={dashboards} />
-      <DashBoardHeader />
+      <DashBoardHeader isDashboard={true} />
     </div>
   );
 }
