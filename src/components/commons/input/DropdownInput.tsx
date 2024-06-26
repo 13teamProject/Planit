@@ -10,25 +10,25 @@ import {
   useRef,
   useState,
 } from 'react';
-import { Control, Controller } from 'react-hook-form';
+import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 
-type DropdownInputWrapperProps = {
+type DropdownInputWrapperProps<T extends FieldValues> = {
   children: ReactNode;
-  control: Control;
+  control: Control<T>;
   placeholder: string;
-  name: string;
+  name: Path<T>;
 };
 
 /**
  * DropdownInputWrapper 컴포넌트는 react-hook-form의 Controller를 통해\
  * DropdownInput 컴포넌트를 렌더링합니다.
  */
-export default function DropdownInputWrapper({
+export default function DropdownInputWrapper<T extends FieldValues>({
   children,
   name,
   control,
   placeholder,
-}: DropdownInputWrapperProps) {
+}: DropdownInputWrapperProps<T>) {
   return (
     <Controller
       name={name}
@@ -138,7 +138,7 @@ function ToggleButton() {
     <button
       type="button"
       onClick={toggle}
-      className="flex size-full select-none items-center justify-between rounded-md border border-gray-200 py-11 pl-16 pr-12"
+      className="flex size-full select-none items-center justify-between rounded-md border border-gray-200 py-11 pl-16 pr-12 focus:border-[1.5px] focus:border-toss-blue"
     >
       {selected}
       <Image

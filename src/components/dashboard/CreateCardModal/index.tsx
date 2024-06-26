@@ -1,5 +1,7 @@
 'use client';
 
+import postCardImage from '@/app/api/cards/postCardImage';
+import postCreateCard from '@/app/api/cards/postCreateCard';
 import Button from '@/components/commons/button';
 import Input from '@/components/commons/input';
 import DateInput from '@/components/commons/input/DateInput';
@@ -8,43 +10,65 @@ import ImageInput from '@/components/commons/input/ImageInput';
 import TagInput from '@/components/commons/input/TagInput';
 import Textarea from '@/components/commons/input/Textarea';
 import Modal from '@/components/commons/modal';
-import { Device } from '@/constants/device';
-import useDeviceState from '@/hooks/useDeviceState';
+import { useAuthStore } from '@/store/authStore';
+import { formatDate } from '@/utils/date';
+import { CreateCardRequest } from '@planit-api';
 import Image from 'next/image';
-import { KeyboardEvent, useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
 /* eslint-disable react/style-prop-object */
 
 type Props = {
   isOpen: boolean;
   onClose: () => void;
+  dashboardId: number;
+  columnId: number;
 };
 
-export default function CreateCardModal({ isOpen, onClose }: Props) {
-  const [previewImage, setPreviewImage] = useState<string | null>(null);
-  const { register, handleSubmit, watch, control, reset } = useForm();
-  const deviceState = useDeviceState();
-  const imageValue = watch('image');
+export type CreateCardInputs = {
+  assignee: number;
+  title: string;
+  description: string;
+  dueDate: Date;
+  tags?: string[];
+  image?: string;
+};
 
-  const handleImageDelete = () => {
-    setPreviewImage('');
-    reset({ image: null });
+export default function CreateCardModal({
+  isOpen,
+  onClose,
+  dashboardId,
+  columnId,
+}: Props) {
+  const { register, handleSubmit, control, reset } =
+    useForm<CreateCardInputs>();
+  const userInfo = useAuthStore((state) => state.userInfo);
+
+  const onSubmit: SubmitHandler<CreateCardInputs> = async ({
+    title,
+    description,
+    tags,
+    dueDate,
+    image,
+  }) => {
+    const reqBody: CreateCardRequest = {
+      assigneeUserId: userInfo!.id,
+      dashboardId,
+      columnId,
+      title,
+      description,
+      tags,
+      dueDate: formatDate(dueDate),
+      imageUrl: image,
+    };
+
+    const res = await postCreateCard(reqBody);
+
+    if ('message' in res) alert(res.message);
+    console.log(res);
+    onClose();
+    reset();
   };
-
-  useEffect(() => {
-    if (imageValue && imageValue.length > 0) {
-      const newPreview = URL.createObjectURL(imageValue[0]);
-      setPreviewImage(newPreview);
-
-      return () => {
-        setPreviewImage('');
-        URL.revokeObjectURL(newPreview);
-      };
-    }
-
-    return () => {};
-  }, [imageValue]);
 
   return (
     <Modal isOpen={isOpen} onClose={() => {}}>
@@ -68,7 +92,7 @@ export default function CreateCardModal({ isOpen, onClose }: Props) {
           담당자
         </label>
         <DropdownInput
-          name="dropdown"
+          name="assignee"
           control={control}
           placeholder="이름을 입력해 주세요"
         >
@@ -109,7 +133,7 @@ export default function CreateCardModal({ isOpen, onClose }: Props) {
         <DateInput
           control={control}
           placeholder="날짜를 입력해 주세요"
-          name="date"
+          name="dueDate"
         />
 
         <label
@@ -121,7 +145,7 @@ export default function CreateCardModal({ isOpen, onClose }: Props) {
         <TagInput
           id="tag"
           placeholder="입력 후 Enter"
-          name="tag"
+          name="tags"
           control={control}
         />
 
@@ -131,65 +155,30 @@ export default function CreateCardModal({ isOpen, onClose }: Props) {
         >
           이미지
         </label>
-        <div className="flex gap-10">
-          <ImageInput id="image" register={{ ...register('image') }} />
-          {previewImage && (
-            <PreviewImage
-              previewImage={previewImage}
-              deviceState={deviceState}
-              handleImageDelete={handleImageDelete}
-            />
-          )}
-        </div>
+        <ImageInput
+          control={control}
+          name="image"
+          type="card"
+          columnId={columnId}
+          fetchFn={postCardImage}
+        />
 
         <div className="mt-18 flex gap-12 md:mt-28 md:justify-end">
           <Button
-            style="py-12 px-54 text-16 md:py-25 md:text-18 md:px-46 md:py-14"
+            onClick={() => {
+              onClose();
+            }}
+            style="py-12 px-54 text-16 md:py-14 md:text-18 md:px-46 md:py-14"
             text="취소"
             cancel
           />
           <Button
-            style="py-12 px-54 text-16 md:py-25 md:text-18 md:px-46 md:py-14"
+            onClick={handleSubmit(onSubmit)}
+            style="py-12 px-54 text-16 md:py-14 md:text-18 md:px-46 md:py-14"
             text="생성"
           />
         </div>
       </form>
     </Modal>
-  );
-}
-
-type PreviewProps = {
-  previewImage: string;
-  deviceState: Device;
-  handleImageDelete: () => void;
-};
-
-function PreviewImage({
-  previewImage,
-  deviceState,
-  handleImageDelete,
-}: PreviewProps) {
-  const handleKeyboard = (event: KeyboardEvent<HTMLDivElement>) => {
-    if (event.key === 'Backspace' || event.key === 'Delete') {
-      // eslint-disable-next-line no-alert
-      alert('이미지를 삭제하시겠습니까?');
-      handleImageDelete();
-    }
-  };
-
-  return (
-    <div
-      className={`relative aspect-square rounded-md focus:outline focus:outline-[1.5px] ${deviceState === Device.MOBILE ? 'size-58' : 'size-76'}`}
-      onKeyUp={handleKeyboard}
-      role="button"
-      tabIndex={0}
-    >
-      <Image
-        src={previewImage}
-        fill
-        className="absolute rounded-md object-cover"
-        alt="preview"
-      />
-    </div>
   );
 }

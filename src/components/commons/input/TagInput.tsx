@@ -6,27 +6,27 @@ import {
   KeyboardEvent,
   useState,
 } from 'react';
-import { Control, Controller } from 'react-hook-form';
+import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 
 import Tag from '../tag';
 
-type TagInputWrapperProps = Omit<
+type TagInputWrapperProps<T extends FieldValues> = Omit<
   InputHTMLAttributes<HTMLInputElement>,
   'onChange'
 > & {
-  name: string;
-  control: Control;
+  name: Path<T>;
+  control: Control<T>;
 };
 
 /**
  * TagInputWrapper 컴포넌트는 react-hook-form의 Controller를 통해\
  * TagInput 컴포넌트를 렌더링합니다.
  */
-export default function TagInputWrapper({
+export default function TagInputWrapper<T extends FieldValues>({
   name,
   control,
   ...args
-}: TagInputWrapperProps) {
+}: TagInputWrapperProps<T>) {
   return (
     <Controller
       name={name}
@@ -77,7 +77,7 @@ function TagInput({ onChange, ...args }: TagInputProps) {
         value={currentTag}
         onKeyUp={addTag}
         onChange={handleChange}
-        className="block h-42 w-full rounded-md border px-16 text-14 outline-none placeholder:text-gray-300 md:h-48 md:text-16"
+        className="block h-42 w-full rounded-md border px-16 text-14 outline-none placeholder:text-gray-300 focus:border-[1.5px] focus:border-toss-blue md:h-48 md:text-16"
         {...args}
       />
       {tagList.length > 0 && (

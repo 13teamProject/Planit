@@ -1,6 +1,7 @@
+import { getCookie } from '@/utils/cookies';
 import { CardImageResponse, ErrorMessage } from '@planit-api';
 
-import { API_URL } from '../base-url';
+import { API_URL } from '../baseUrl';
 
 type Params = {
   columnId: number;
@@ -11,12 +12,17 @@ export default async function postCardImage({
   columnId,
   image,
 }: Params): Promise<CardImageResponse | ErrorMessage> {
+  const token = getCookie('accessToken');
+
   const formData = new FormData();
   formData.append('image', image);
 
   const obj: RequestInit = {
     method: 'POST',
     body: formData,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   };
 
   try {

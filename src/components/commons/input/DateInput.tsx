@@ -5,23 +5,23 @@ import Image from 'next/image';
 import React, { forwardRef, memo, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { Control, Controller } from 'react-hook-form';
+import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 
-type DateInputWrapperProps = {
-  control: Control;
+type DateInputWrapperProps<T extends FieldValues> = {
+  control: Control<T>;
   placeholder: string;
-  name: string;
+  name: Path<T>;
 };
 
 /**
  * DateInputWrapper 컴포넌트는 react-hook-form의 Controller를 통해\
  * DateInput 컴포넌트를 렌더링합니다.
  */
-export default function DateInputWrapper({
+export default function DateInputWrapper<T extends FieldValues>({
   name,
   placeholder,
   control,
-}: DateInputWrapperProps) {
+}: DateInputWrapperProps<T>) {
   return (
     <Controller
       name={name}
@@ -92,7 +92,7 @@ const CustomInput = forwardRef<HTMLButtonElement, CustomInputProps>(
       type="button"
       onClick={onClick}
       ref={ref}
-      className="block size-full rounded-md border border-gray-200 bg-white"
+      className="block size-full rounded-md border border-gray-200 bg-white focus:border-[1.5px] focus:border-toss-blue"
     >
       <div className="flex items-center justify-start gap-10 px-16">
         <Image

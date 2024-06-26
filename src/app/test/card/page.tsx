@@ -1,7 +1,7 @@
 'use client';
 
 import BarButton from '@/components/commons/button/BarButton';
-import CreateCardModal from '@/components/dashboard/modals/CreateCardModal';
+import CreateCardModal from '@/components/dashboard/CreateCardModal';
 import { useState } from 'react';
 
 export default function CreateCard() {
@@ -18,7 +18,12 @@ export default function CreateCard() {
   return (
     <div className="m-auto mt-[40vh] w-1/5">
       <BarButton onClick={openModal} />
-      <CreateCardModal isOpen={isModalOpen} onClose={closeModal} />
+      <CreateCardModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        dashboardId={9768}
+        columnId={32949}
+      />
     </div>
   );
 }

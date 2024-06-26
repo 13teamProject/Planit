@@ -11,9 +11,9 @@ declare module '@planit-api' {
     columnId: number;
     title: string;
     description: string;
-    dueDate: string;
-    tags: string[];
-    imageUrl: string;
+    dueDate?: string;
+    tags?: string[];
+    imageUrl?: string;
   };
 
   export type CreateCardResponse = {

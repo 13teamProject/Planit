@@ -4,12 +4,13 @@ import {
   ErrorMessage,
 } from '@planit-api';
 
-import { API_URL, createFetchRequestOptions } from '../base-url';
+import { API_URL } from '../baseUrl';
+import { createRequestWithToken } from '../createRequestWithToken';
 
 export default async function postCreateCard(
   formValue: CreateCardRequest,
 ): Promise<CreateCardResponse | ErrorMessage> {
-  const obj = createFetchRequestOptions('POST', {
+  const obj = createRequestWithToken('POST', {
     ...formValue,
   });
 
