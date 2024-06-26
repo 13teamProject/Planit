@@ -1,3 +1,4 @@
+import { Metadata } from 'next';
 import localFont from 'next/font/local';
 
 import './globals.css';
@@ -28,6 +29,18 @@ const customFont = localFont({
   variable: '--nexonGothicFont',
   display: 'swap',
 });
+
+export const metadata: Metadata = {
+  title: {
+    template: '%s | 플랜잇',
+    default: '플랜잇 | 나만의 일정관리 매니저',
+  },
+  description: '나만의 일정관리 매니저',
+  icons: {
+    icon: '/icon/favicon.ico',
+  },
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -36,6 +49,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <head>
+        <link rel="icon" href="/favicon.ico" sizes="any" />
         <link
           rel="stylesheet"
           type="text/css"
