@@ -16,8 +16,6 @@ import { CreateCardRequest } from '@planit-api';
 import Image from 'next/image';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
-/* eslint-disable react/style-prop-object */
-
 type Props = {
   isOpen: boolean;
   onClose: () => void;
@@ -168,13 +166,13 @@ export default function CreateCardModal({
             onClick={() => {
               onClose();
             }}
-            style="py-12 px-54 text-16 md:py-14 md:text-18 md:px-46 md:py-14"
+            styles="py-12 px-54 text-16 md:py-14 md:text-18 md:px-46 md:py-14"
             text="취소"
             cancel
           />
           <Button
             onClick={handleSubmit(onSubmit)}
-            style="py-12 px-54 text-16 md:py-14 md:text-18 md:px-46 md:py-14"
+            styles="py-12 px-54 text-16 md:py-14 md:text-18 md:px-46 md:py-14"
             text="생성"
           />
         </div>
