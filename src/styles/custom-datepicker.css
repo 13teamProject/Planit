@@ -3,3 +3,7 @@
   display: block !important;
   height: 100%;
 }
+
+.react-datepicker {
+  display: flex !important;
+}
