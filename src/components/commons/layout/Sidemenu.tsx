@@ -1,3 +1,5 @@
+'use client;';
+
 import { getDashboards } from '@/app/api/dashboards';
 import ColorCircle from '@/components/commons/circle/ColorCircle';
 import Image from 'next/image';

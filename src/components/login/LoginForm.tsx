@@ -91,7 +91,11 @@ export default function LoginForm() {
           <div className="m-auto px-54 pb-29 pt-26 text-right text-18 md:w-540 md:px-33">
             <p className="pb-47 pt-50 text-center">{modalState.message}</p>
             <span className="flex justify-center md:justify-end">
-              <Button size="sm" text="확인" onClick={handleClose} />
+              <Button
+                styles="w-138 h-42 md:w-120 md:h-48"
+                text="확인"
+                onClick={handleClose}
+              />
             </span>
           </div>
         </Modal>
