@@ -8,24 +8,24 @@ import { UseFormRegisterReturn } from 'react-hook-form';
 type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> & {
   type?: string;
   error?: boolean;
-  size: 'md' | 'lg';
+  size?: 'sm' | 'lg';
   register: UseFormRegisterReturn;
 };
 
 export default function Input({
   type = 'text',
-  size,
+  size = 'sm',
   error,
   register,
   ...args
 }: InputProps) {
   const classnames = classNames(
-    'block w-full rounded-md border pl-16 pr-40 outline-none placeholder:text-gray-300',
+    'block w-full rounded-md border pl-16 pr-40 outline-none placeholder:text-gray-300 text-14 md:text-16',
     {
-      'border-red-dashboard focus:border-red-dashboard': error,
-      'border-gray-200 focus:border-toss-blue': !error,
-      'h-42': size === 'md',
-      'h-48': size === 'lg',
+      'border-red-dashboard border-[1.5px] focus:border-red-dashboard': error,
+      'border-gray-200 focus:border-toss-blue focus:border-[1.5px]': !error,
+      'h-42 md:h-48': size === 'sm',
+      'h-55': size === 'lg',
     },
   );
 
@@ -64,7 +64,7 @@ function PasswordInput({ className, register, ...args }: PasswordInputProps) {
         width={24}
         height={24}
         onClick={togglePWEye}
-        className="absolute right-16 top-1/2 -translate-y-1/2 cursor-pointer"
+        className="absolute right-18 top-1/2 -translate-y-1/2 cursor-pointer"
       />
     </div>
   );

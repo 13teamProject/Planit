@@ -39,7 +39,7 @@ export default function Home() {
       </section>
       <section className="h-fit overflow-hidden bg-[#F9FAFB] py-60 lg:flex lg:items-center lg:overflow-auto lg:py-100">
         <div className="relative w-full">
-          <div className="landing:!py-80 container before:-inset-1 before:bg-[url('/image/main_content01.png')] before:bg-contain before:bg-[center_right] before:bg-no-repeat lg:!py-150 lg:before:absolute">
+          <div className="container before:-inset-1 before:bg-[url('/image/main_content01.png')] before:bg-contain before:bg-[center_right] before:bg-no-repeat lg:!py-150 lg:before:absolute landing:!py-80">
             <span className="mb-10 inline-block rounded-b-lg bg-toss-blue px-13 py-7 text-14 font-bold text-white">
               Point 1
             </span>
