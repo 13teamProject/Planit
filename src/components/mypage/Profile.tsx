@@ -7,45 +7,48 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import type { UpdateUser, UserInfoResponse } from '../../../types';
 import Button from '../commons/button';
 import Input from '../commons/input';
-import Preview from './Preview';
+import ImageInput from '../commons/input/ImageInput';
 
 export default function Profile() {
-  const { register, handleSubmit } = useForm<UpdateUser>();
+  const { register, handleSubmit, control } = useForm<UpdateUser>();
   const [userData, setUserData] = useState<UserInfoResponse>();
-  const [image, setImage] = useState<File | null>(null);
 
+  // 프로필 수정
   const onSubmit: SubmitHandler<UpdateUser> = async (data) => {
-    const info = data;
-    if (image) {
-      const imageData = await uploadProfileImage(image);
-      info.profileImageUrl = imageData;
-    }
-    const successEditUserInfo = await editUserInfo(info);
+    const successEditUserInfo = await editUserInfo(data);
 
-    if (successEditUserInfo.success) {
+    if ('message' in successEditUserInfo) {
       alert(successEditUserInfo.message);
+    } else {
+      alert('프로필을 수정했습니다.');
     }
-  };
-
-  const handleImageChange = (file: File | null) => {
-    setImage(file);
+    // console.log(successEditUserInfo);
   };
 
   useEffect(() => {
     const fetchUserInfo = async () => {
       const fetchedUserInfo = await getUserInfo();
-      setUserData(fetchedUserInfo);
+      // console.log(fetchedUserInfo);
+
+      if ('message' in fetchedUserInfo) {
+        alert(fetchedUserInfo.message);
+      } else {
+        setUserData(fetchedUserInfo);
+      }
     };
+
     fetchUserInfo();
   }, []);
   return (
     <div className="w-full max-w-[620px] rounded-md bg-white px-28 pb-28 pt-32">
       <h3 className="mb-32 text-24 font-bold">프로필</h3>
       {userData && (
-        <form onSubmit={handleSubmit(onSubmit)} className="flex gap-18">
-          <Preview
-            image={userData.profileImageUrl}
-            onChange={handleImageChange}
+        <form className="flex gap-18" onSubmit={handleSubmit(onSubmit)}>
+          <ImageInput
+            control={control}
+            name="profileImageUrl"
+            type="default"
+            fetchFn={uploadProfileImage}
           />
           <div className="w-full">
             <p className="mb-10 text-18">이메일</p>
@@ -55,19 +58,22 @@ export default function Profile() {
               defaultValue={userData.email}
               readOnly
             />
-            <label htmlFor="name" className="mb-10 inline-block text-18">
+            <label htmlFor="nickname" className="mb-10 inline-block text-18">
               닉네임
             </label>
             <Input
               id="nickname"
               type="text"
               placeholder="닉네임"
-              size="md"
+              size="sm"
               defaultValue={userData.nickname}
               register={{ ...register('nickname', { required: true }) }}
             />
-            <button type="submit">저장</button>
-            <Button size="sm" text="저장" />
+            <Button
+              type="submit"
+              text="저장"
+              styles="px-30 py-8 mt-24 float-right text-14"
+            />
           </div>
         </form>
       )}
