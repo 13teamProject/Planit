@@ -21,7 +21,7 @@ export default function ProfileCircle({ styles, data }: Props) {
 
   return (
     <div
-      className={`relative flex items-center justify-center rounded-full ring-2 ring-white ${styles}`}
+      className={`relative flex cursor-pointer items-center justify-center rounded-full ring-2 ring-white ${styles}`}
     >
       {profileImageUrl ? (
         <Image
