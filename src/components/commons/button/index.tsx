@@ -6,15 +6,15 @@ import { ButtonHTMLAttributes } from 'react';
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   text: string;
   cancel?: boolean;
-  style?: string;
-  onClick?: () => void;
+  styles?: string;
 };
 
 export default function Button({
   text,
   cancel = false,
-  style,
-  onClick,
+  styles,
+  type = 'button',
+  ...args
 }: ButtonProps) {
   const className = classNames('rounded-8', {
     'bg-white border border-gray-200 text-gray-400 hover:bg-gray-200 hover:text-white':
@@ -23,7 +23,8 @@ export default function Button({
   });
 
   return (
-    <button className={`${className} ${style}`} onClick={onClick}>
+    // eslint-disable-next-line react/button-has-type
+    <button type={type} className={`${className} ${styles}`} {...args}>
       {text}
     </button>
   );

@@ -8,24 +8,23 @@ import { UseFormRegisterReturn } from 'react-hook-form';
 type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> & {
   type?: string;
   error?: boolean;
-  size: 'sm' | 'md' | 'lg';
+  size?: 'sm' | 'lg';
   register: UseFormRegisterReturn;
 };
 
 export default function Input({
   type = 'text',
-  size,
+  size = 'sm',
   error,
   register,
   ...args
 }: InputProps) {
   const classnames = classNames(
-    'block w-full rounded-md border pl-16 pr-40 outline-none placeholder:text-gray-300',
+    'block w-full rounded-md border pl-16 pr-40 outline-none placeholder:text-gray-300 text-14 md:text-16',
     {
       'border-red-dashboard border-[1.5px] focus:border-red-dashboard': error,
       'border-gray-200 focus:border-toss-blue focus:border-[1.5px]': !error,
-      'h-42': size === 'sm',
-      'h-50': size === 'md',
+      'h-42 md:h-48': size === 'sm',
       'h-55': size === 'lg',
     },
   );
