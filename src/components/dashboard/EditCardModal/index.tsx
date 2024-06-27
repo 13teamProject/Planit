@@ -1,6 +1,6 @@
 'use client';
 
-import { postCardImage, postCreateCard } from '@/app/api/cards';
+import { postCardImage } from '@/app/api/cards';
 import Button from '@/components/commons/button';
 import Input from '@/components/commons/input';
 import DateInput from '@/components/commons/input/DateInput';
@@ -9,11 +9,8 @@ import ImageInput from '@/components/commons/input/ImageInput';
 import TagInput from '@/components/commons/input/TagInput';
 import Textarea from '@/components/commons/input/Textarea';
 import Modal from '@/components/commons/modal';
-import { useAuthStore } from '@/store/authStore';
-import { formatDate } from '@/utils/date';
-import { CreateCardRequest } from '@planit-api';
 import Image from 'next/image';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 
 type Props = {
   isOpen: boolean;
@@ -22,56 +19,29 @@ type Props = {
   columnId: number;
 };
 
-export type CreateCardInputs = {
+export type EditCardInputs = {
+  columnId: number;
   assignee: number;
   title: string;
   description: string;
-  dueDate?: Date;
+  dueDate: Date;
   tags?: string[];
   image?: string;
 };
 
-export default function CreateCardModal({
+export default function EditCardModal({
   isOpen,
   onClose,
   dashboardId,
   columnId,
 }: Props) {
-  const { register, handleSubmit, control, reset } =
-    useForm<CreateCardInputs>();
-  const userInfo = useAuthStore((state) => state.userInfo);
-
-  const onSubmit: SubmitHandler<CreateCardInputs> = async ({
-    title,
-    description,
-    tags,
-    dueDate,
-    image,
-  }) => {
-    const reqBody: CreateCardRequest = {
-      assigneeUserId: userInfo!.id,
-      dashboardId,
-      columnId,
-      title,
-      description,
-      tags,
-      dueDate: dueDate && formatDate(dueDate),
-      imageUrl: image,
-    };
-
-    const res = await postCreateCard(reqBody);
-
-    if ('message' in res) alert(res.message);
-    console.log(res);
-    onClose();
-    reset();
-  };
+  const { register, handleSubmit, control, reset } = useForm<EditCardInputs>();
 
   return (
     <Modal isOpen={isOpen} onClose={() => {}}>
-      <form className="max-h-[734px] w-327 overflow-y-auto p-20 md:max-h-[845px] md:min-w-[506px] md:p-24">
+      <form className="max-h-830 w-327 overflow-y-auto p-20 md:max-h-870 md:min-w-[506px] md:p-24">
         <div className="mb-18 flex items-center justify-between md:mb-22">
-          <h1 className="text-20 font-bold">할 일 생성</h1>
+          <h1 className="text-20 font-bold">할 일 수정</h1>
           <Image
             src="/icon/close.svg"
             alt="close"
@@ -82,19 +52,39 @@ export default function CreateCardModal({
           />
         </div>
 
-        <label
-          htmlFor="assignee"
-          className="mb-8 block text-14 text-black-800 md:text-16"
-        >
-          담당자
-        </label>
-        <DropdownInput
-          name="assignee"
-          control={control}
-          placeholder="이름을 입력해 주세요"
-        >
-          <DropdownInput.Option id={1}>Option 1</DropdownInput.Option>
-        </DropdownInput>
+        <div className="flex flex-col justify-between md:flex-row">
+          <div>
+            <label
+              htmlFor="columnId"
+              className="mb-8 block text-14 text-black-800 md:mt-0 md:text-16"
+            >
+              상태
+            </label>
+            <DropdownInput
+              name="columnId"
+              control={control}
+              placeholder="이름을 입력해 주세요"
+            >
+              <DropdownInput.Option id={1}>Option 1</DropdownInput.Option>
+            </DropdownInput>
+          </div>
+
+          <div>
+            <label
+              htmlFor="assignee"
+              className="mb-8 mt-18 block text-14 text-black-800 md:mt-0 md:text-16"
+            >
+              담당자
+            </label>
+            <DropdownInput
+              name="assignee"
+              control={control}
+              placeholder="이름을 입력해 주세요"
+            >
+              <DropdownInput.Option id={1}>Option 1</DropdownInput.Option>
+            </DropdownInput>
+          </div>
+        </div>
 
         <label
           htmlFor="title"
@@ -170,7 +160,7 @@ export default function CreateCardModal({
             cancel
           />
           <Button
-            onClick={handleSubmit(onSubmit)}
+            // onClick={handleSubmit(onSubmit)}
             styles="py-12 px-54 text-16 md:py-14 md:text-18 md:px-46 md:py-14"
             text="생성"
           />
