@@ -6,13 +6,13 @@ import { ButtonHTMLAttributes } from 'react';
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   text: string;
   cancel?: boolean;
-  style?: string;
+  styles?: string;
 };
 
 export default function Button({
   text,
   cancel = false,
-  style,
+  styles,
   type = 'button',
   ...args
 }: ButtonProps) {
@@ -24,7 +24,7 @@ export default function Button({
 
   return (
     // eslint-disable-next-line react/button-has-type
-    <button type={type} className={`${className} ${style}`} {...args}>
+    <button type={type} className={`${className} ${styles}`} {...args}>
       {text}
     </button>
   );

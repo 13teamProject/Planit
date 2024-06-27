@@ -1,6 +1,5 @@
 'use client';
 
-import classNames from 'classnames';
 import Image from 'next/image';
 import {
   ReactNode,
@@ -11,37 +10,31 @@ import {
   useRef,
   useState,
 } from 'react';
-import { Control, Controller } from 'react-hook-form';
+import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 
-type DropdownInputWrapperProps = {
+type DropdownInputWrapperProps<T extends FieldValues> = {
   children: ReactNode;
-  size: 'md' | 'lg';
-  control: Control;
+  control: Control<T>;
   placeholder: string;
-  name: string;
+  name: Path<T>;
 };
 
 /**
  * DropdownInputWrapper 컴포넌트는 react-hook-form의 Controller를 통해\
  * DropdownInput 컴포넌트를 렌더링합니다.
  */
-export default function DropdownInputWrapper({
+export default function DropdownInputWrapper<T extends FieldValues>({
   children,
   name,
   control,
-  size,
   placeholder,
-}: DropdownInputWrapperProps) {
+}: DropdownInputWrapperProps<T>) {
   return (
     <Controller
       name={name}
       control={control}
       render={({ field: { onChange } }) => (
-        <DropdownInput
-          size={size}
-          placeholder={placeholder}
-          onChange={onChange}
-        >
+        <DropdownInput placeholder={placeholder} onChange={onChange}>
           {children}
         </DropdownInput>
       )}
@@ -65,7 +58,6 @@ const DropdownInputContext = createContext<DropdownInputContextType>({
 
 type DropdownInputProps = {
   children: ReactNode;
-  size: 'md' | 'lg';
   placeholder: string;
   onChange: (value: number) => void;
 };
@@ -76,7 +68,6 @@ type DropdownInputProps = {
  */
 function DropdownInput({
   children,
-  size,
   placeholder,
   onChange,
 }: DropdownInputProps) {
@@ -106,19 +97,6 @@ function DropdownInput({
     [isOpen, selected],
   );
 
-  const wrapperClassnames = classNames('relative', {
-    'w-217 h-48': size === 'md',
-    'w-287 h-42': size === 'lg',
-  });
-
-  const listClassnames = classNames(
-    'absolute z-50 w-full bg-white top-20 border border-gray-200 rounded-md',
-    {
-      'top-56': size === 'md',
-      'top-48': size === 'lg',
-    },
-  );
-
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (
@@ -138,9 +116,16 @@ function DropdownInput({
 
   return (
     <DropdownInputContext.Provider value={contextValue}>
-      <div ref={dropdownRef} className={wrapperClassnames}>
+      <div
+        ref={dropdownRef}
+        className="relative h-42 w-287 text-14 md:h-48 md:w-217 md:text-16"
+      >
         <ToggleButton />
-        {isOpen && <div className={listClassnames}>{children}</div>}
+        {isOpen && (
+          <div className="absolute top-48 z-50 w-full rounded-md border border-gray-200 bg-white md:top-56">
+            {children}
+          </div>
+        )}
       </div>
     </DropdownInputContext.Provider>
   );
@@ -153,7 +138,7 @@ function ToggleButton() {
     <button
       type="button"
       onClick={toggle}
-      className="flex size-full select-none items-center justify-between rounded-md border border-gray-200 px-16 py-11"
+      className="flex size-full select-none items-center justify-between rounded-md border border-gray-200 py-11 pl-16 pr-12 focus:border-[1.5px] focus:border-toss-blue"
     >
       {selected}
       <Image

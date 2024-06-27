@@ -1,16 +1,23 @@
 'use client';
 
 import classNames from 'classnames';
-import { ReactNode } from 'react';
+import { KeyboardEvent, ReactNode } from 'react';
 
 type TagProps = {
   color: string;
   size: 'lg' | 'sm';
   round?: boolean;
   children: ReactNode;
+  deleteTag?: () => void;
 };
 
-export default function Tag({ color, round, size, children }: TagProps) {
+export default function Tag({
+  color,
+  round,
+  size,
+  deleteTag,
+  children,
+}: TagProps) {
   const roundClass = round ? 'rounded-full' : 'rounded';
   const colorVariants: { [key: string]: string } = {
     toss: 'bg-toss-blue-light text-toss-blue',
@@ -29,8 +36,29 @@ export default function Tag({ color, round, size, children }: TagProps) {
     },
   );
 
+  if (deleteTag) {
+    const handleKeyboard = (e: KeyboardEvent<HTMLSpanElement>) => {
+      if (e.key === 'Backspace' || e.key === 'Delete') {
+        // eslint-disable-next-line no-alert
+        alert('해당 태그를 삭제하시겠습니까?');
+        deleteTag();
+      }
+    };
+
+    return (
+      <span
+        role="button"
+        onKeyUp={handleKeyboard}
+        tabIndex={0}
+        className={`${colorVariants[color]} ${roundClass} ${sizeClass} focus:outline focus:outline-[1.5px]`}
+      >
+        {children}
+      </span>
+    );
+  }
+
   return (
-    <span className={` ${colorVariants[color]} ${roundClass} ${sizeClass}`}>
+    <span className={`${colorVariants[color]} ${roundClass} ${sizeClass}`}>
       {children}
     </span>
   );

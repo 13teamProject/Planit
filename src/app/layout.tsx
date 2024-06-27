@@ -50,11 +50,6 @@ export default function RootLayout({
     <html lang="ko">
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link
-          rel="stylesheet"
-          type="text/css"
-          href="https://webfontworld.github.io/NexonLv2Gothic/NexonLv2Gothic.css"
-        />
       </head>
       <body suppressHydrationWarning className={`${customFont.variable}`}>
         {children}

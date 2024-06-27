@@ -1,4 +1,8 @@
+import { getCookie } from '@/utils/cookies';
+
 import { ErrorResponse, UpdateUser, UserInfoResponse } from '../../../types';
+
+export const API_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 // 임시로 토큰 가져오기
 export async function getAccessToken() {
@@ -80,5 +84,34 @@ export async function editUserInfo(data: UpdateUser): Promise<ErrorResponse> {
     };
   } catch (e) {
     throw new Error('오류가 났습니다. 근데요.');
+  }
+}
+type UserResponse = {
+  id: number;
+  email: string;
+  nickname: string;
+  profileImageUrl: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+// 대시보드 목록 조회 - GET
+export async function getUsers(): Promise<UserResponse> {
+  try {
+    const token = getCookie('accessToken');
+    const response = await fetch(`${API_URL}/users/me`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error: ${response.status}`);
+    }
+
+    const body: UserResponse = await response.json();
+    console.log(body);
+    return body;
+  } catch (error) {
+    console.error('Failed to get data : ', error);
+    throw error;
   }
 }
