@@ -10,7 +10,7 @@ type Props = {
 
 export default function Header({ color }: Props) {
   const cn = classNames(
-    'z-999 fixed top-0 flex h-70 w-full items-center justify-between border-1 border-b-gray-200 px-20 lg:px-80 py-25 md:px-40 ',
+    'z-[999] fixed top-0 flex h-70 w-full items-center justify-between border-1 border-b-gray-200 px-20 lg:px-80 py-25 md:px-40 ',
     {
       'bg-black text-white': color === 'black',
       'bg-white': color === 'white',
