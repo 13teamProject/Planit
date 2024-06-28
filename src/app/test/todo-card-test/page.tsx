@@ -1,4 +1,4 @@
-import { getTodoCardDetails } from '@/app/api/cards-server';
+import { getTodoCardDetails } from '@/app/api/cards';
 import CardDetails from '@/components/dashboard/todo-detail-card/CardDetails';
 import CardTitle from '@/components/dashboard/todo-detail-card/CardTitle';
 import CommentInput from '@/components/dashboard/todo-detail-card/CommentInput';

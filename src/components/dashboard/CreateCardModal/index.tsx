@@ -1,6 +1,6 @@
 'use client';
 
-import { postCardImage, postCreateCard } from '@/app/api/cards';
+import { postCardImage, postCreateCard } from '@/app/api/cards-goni';
 import { getMembers } from '@/app/api/members';
 import Button from '@/components/commons/button';
 import ProfileCircle from '@/components/commons/circle/ProfileCircle';

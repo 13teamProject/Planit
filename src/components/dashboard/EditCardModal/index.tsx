@@ -1,6 +1,6 @@
 'use client';
 
-import { editCard, postCardImage } from '@/app/api/cards';
+import { editCard, postCardImage } from '@/app/api/cards-goni';
 import { getColumns } from '@/app/api/columns';
 import { getMembers } from '@/app/api/members';
 import Button from '@/components/commons/button';
