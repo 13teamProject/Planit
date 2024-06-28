@@ -2,6 +2,7 @@
 
 import { getDashboards } from '@/app/api/dashboards';
 import ColorCircle from '@/components/commons/circle/ColorCircle';
+import useDeviceState from '@/hooks/useDeviceState';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -30,6 +31,8 @@ const colorMapping: ColorMapping = {
 
 export default function NewDashboard() {
   const [dashboards, setDashboards] = useState<Dashboard[]>([]);
+  const deviceState = useDeviceState();
+
   useEffect(() => {
     async function fetchDashboard() {
       const response = await getDashboards();
@@ -47,7 +50,10 @@ export default function NewDashboard() {
   return (
     <div className="mb-96 ml-40 mt-40 grid w-260 grid-cols-1 grid-rows-6 gap-y-8 md:w-504 md:grid-cols-2 md:grid-rows-3 md:gap-x-10 md:gap-y-10 lg:w-1022 lg:grid-cols-3 lg:grid-rows-2 lg:gap-x-13 lg:gap-y-12">
       <div className="col-span-1 col-start-1 row-span-1 row-start-1">
-        <BarButton text="새로운 대시보드" size="lg" />
+        <BarButton
+          text="새로운 대시보드"
+          size={deviceState === 'mobile' ? 'sm' : 'lg'}
+        />
       </div>
       {dashboards &&
         dashboards.map((dashboard) => (
