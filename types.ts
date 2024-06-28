@@ -1,14 +1,4 @@
-export type ErrorResponse = {
-  success: boolean;
-  message: string;
-  data?: object;
-};
-
-export type UpdateUser = {
-  nickname: string;
-  profileImageUrl?: string;
-};
-
+\
 // Auth types
 export type AuthInputs = {
   email: string;
@@ -27,6 +17,16 @@ export type UserInfoResponse = {
   updatedAt: string;
 };
 
+export type ErrorResponse = {
+  success: boolean;
+  message: string;
+  data?: object;
+};
+
+export type UpdateUser = {
+  nickname: string;
+  profileImageUrl?: string;
+}
 export type SignUpResult = UserInfoResponse | BadRequest;
 
 export type SignUpProps = {
