@@ -1,7 +1,9 @@
 'use client';
 
 import { postCardImage, postCreateCard } from '@/app/api/cards';
+import { getMembers } from '@/app/api/members';
 import Button from '@/components/commons/button';
+import ProfileCircle from '@/components/commons/circle/ProfileCircle';
 import Input from '@/components/commons/input';
 import DateInput from '@/components/commons/input/DateInput';
 import DropdownInput from '@/components/commons/input/DropdownInput';
@@ -9,10 +11,10 @@ import ImageInput from '@/components/commons/input/ImageInput';
 import TagInput from '@/components/commons/input/TagInput';
 import Textarea from '@/components/commons/input/Textarea';
 import Modal from '@/components/commons/modal';
-import { useAuthStore } from '@/store/authStore';
 import { formatDate } from '@/utils/date';
-import { CreateCardRequest } from '@planit-api';
+import { CreateCardRequest, Member } from '@planit-api';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 type Props = {
@@ -28,7 +30,7 @@ export type CreateCardInputs = {
   description: string;
   dueDate?: Date;
   tags?: string[];
-  image?: string;
+  image?: string | null;
 };
 
 export default function CreateCardModal({
@@ -37,11 +39,12 @@ export default function CreateCardModal({
   dashboardId,
   columnId,
 }: Props) {
-  const { register, handleSubmit, control, reset } =
+  const [members, setMembers] = useState<Member[]>([]);
+  const { register, handleSubmit, control, reset, watch } =
     useForm<CreateCardInputs>();
-  const userInfo = useAuthStore((state) => state.userInfo);
 
   const onSubmit: SubmitHandler<CreateCardInputs> = async ({
+    assignee,
     title,
     description,
     tags,
@@ -49,7 +52,7 @@ export default function CreateCardModal({
     image,
   }) => {
     const reqBody: CreateCardRequest = {
-      assigneeUserId: userInfo!.id,
+      assigneeUserId: assignee,
       dashboardId,
       columnId,
       title,
@@ -66,6 +69,21 @@ export default function CreateCardModal({
     onClose();
     reset();
   };
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    (async () => {
+      const memberRes = await getMembers({ dashboardId });
+
+      if ('message' in memberRes) {
+        alert(memberRes.message);
+        return;
+      }
+
+      setMembers(memberRes.members);
+    })();
+  }, [isOpen]);
 
   return (
     <Modal isOpen={isOpen} onClose={() => {}}>
@@ -91,9 +109,21 @@ export default function CreateCardModal({
         <DropdownInput
           name="assignee"
           control={control}
-          placeholder="이름을 입력해 주세요"
+          defaultValue={
+            <span className="text-gray-300">이름을 입력해 주세요</span>
+          }
         >
-          <DropdownInput.Option id={1}>Option 1</DropdownInput.Option>
+          {members.map((member) => (
+            <DropdownInput.Option key={member.id} id={member.id}>
+              <div className="flex items-center gap-6">
+                <ProfileCircle
+                  data={member}
+                  styles="size-26 text-14 bg-toss-blue-light"
+                />
+                {member.nickname}
+              </div>
+            </DropdownInput.Option>
+          ))}
         </DropdownInput>
 
         <label

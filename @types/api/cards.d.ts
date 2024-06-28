@@ -13,7 +13,7 @@ declare module '@planit-api' {
     description: string;
     dueDate?: string;
     tags?: string[];
-    imageUrl?: string;
+    imageUrl?: string | null;
   };
 
   export type CreateCardResponse = {

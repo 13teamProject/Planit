@@ -1,25 +1,32 @@
-'use client';
+import Image from 'next/image';
 
-import classNames from 'classnames';
-import { ReactNode } from 'react';
-
-type Props = {
-  color: string;
-  size: 'sm' | 'md' | 'lg';
-  children: ReactNode;
+type User = {
+  nickname: string;
+  profileImageUrl: string | null;
 };
 
-export default function ProfileCircle({ color, size, children }: Props) {
-  const classnames = classNames(
-    'rounded-full ring-2 ring-white flex justify-center items-center text-white transition-transform duration-200 ease-in-out transform hover:scale-110 cursor-pointer',
-    color,
-    color,
-    {
-      'size-26': size === 'sm',
-      'size-34': size === 'md',
-      'size-38': size === 'lg',
-    },
-  );
+type Props = {
+  data: User;
+  styles: string;
+};
 
-  return <div className={classnames}>{children}</div>;
+export default function ProfileCircle({ styles, data }: Props) {
+  const { profileImageUrl, nickname } = data;
+
+  return (
+    <div
+      className={`relative flex transform cursor-pointer items-center justify-center rounded-full text-white ring-2 ring-white transition-transform duration-200 ease-in-out hover:scale-110 ${styles}`}
+    >
+      {profileImageUrl ? (
+        <Image
+          src={profileImageUrl}
+          fill
+          alt="profile"
+          className="absolute rounded-full object-cover"
+        />
+      ) : (
+        <span className="text-white">{nickname[0]}</span>
+      )}
+    </div>
+  );
 }
