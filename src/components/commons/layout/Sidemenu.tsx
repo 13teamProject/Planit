@@ -35,7 +35,7 @@ export default function Sidemenu() {
 
   useEffect(() => {
     async function fetchDashboard() {
-      const response = await getDashboards();
+      const response = await getDashboards('infiniteScroll', 1, 9); // 데이터 size 수정 필요
       setDashboards(
         response.dashboards.map((data) => ({
           id: data.id,
@@ -44,7 +44,6 @@ export default function Sidemenu() {
         })),
       );
     }
-
     fetchDashboard();
   }, []);
 

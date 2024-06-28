@@ -27,11 +27,15 @@ type DashboardFormData = {
 };
 
 // 대시보드 목록 조회 - GET
-export async function getDashboards(): Promise<DashboardResponse> {
+export async function getDashboards(
+  navigationMethod: string,
+  page: number,
+  size: number,
+): Promise<DashboardResponse> {
   try {
     const token = getCookie('accessToken');
     const response = await fetch(
-      `${API_URL}/dashboards?navigationMethod=infiniteScroll`,
+      `${API_URL}/dashboards?navigationMethod=${navigationMethod}&page=${page}&size=${size}`,
       {
         headers: { Authorization: `Bearer ${token}` },
       },

@@ -59,7 +59,7 @@ export default function DashBoardHeader({
       setDashboardId(dashboardid);
 
       // 대시보드 id, title 데이터
-      const response = await getDashboards();
+      const response = await getDashboards('infiniteScroll', 1, 9); // 데이터 size 수정 필요
       const fetchedDashboards = response.dashboards.map((data: Dashboard) => ({
         id: data.id,
         title: data.title,
