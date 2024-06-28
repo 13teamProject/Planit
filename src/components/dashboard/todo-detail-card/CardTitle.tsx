@@ -5,10 +5,7 @@ import { useState } from 'react';
 
 import DropDownSelectBox from './DropDownSelectBox';
 
-type Props = {
-  title: string;
-};
-export default function CardTitle({ title }: Props) {
+export default function CardTitle(title: string) {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <div className="grid md:flex md:justify-between selection:md:flex-col">

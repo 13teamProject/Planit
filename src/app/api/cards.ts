@@ -1,4 +1,5 @@
-import { TodoDetailsCardResponse } from '../../../@types/api/cards';
+import { TodoDetailsCardResponse } from '@planit-types';
+
 import { API_URL } from './baseUrl';
 import { createRequestWithToken } from './createRequestWithToken';
 
