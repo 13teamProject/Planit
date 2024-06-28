@@ -1,4 +1,4 @@
-declare module '@planit-api' {
+declare module '@planit-types' {
   export type Column = {
     id: number;
     title: string;

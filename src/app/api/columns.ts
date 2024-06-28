@@ -1,5 +1,5 @@
 import { getCookie } from '@/utils/cookies';
-import { ColumnsListResponse, ErrorMessage } from '@planit-api';
+import { ColumnsListResponse, ErrorMessage } from '@planit-types';
 
 import { API_URL } from './baseUrl';
 

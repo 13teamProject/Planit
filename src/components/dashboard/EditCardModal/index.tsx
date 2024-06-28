@@ -19,8 +19,8 @@ import {
   Column,
   EditCardRequest,
   Member,
-  ToDoDetailCardResponse,
-} from '@planit-api';
+  TodoDetailsCardResponse,
+} from '@planit-types';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -30,7 +30,7 @@ type Props = {
   onClose: () => void;
   dashboardId: number;
   columnId: number;
-  currentCardData: ToDoDetailCardResponse;
+  currentCardData: TodoDetailsCardResponse;
 };
 
 export type EditCardInputs = {

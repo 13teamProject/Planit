@@ -12,7 +12,7 @@ import TagInput from '@/components/commons/input/TagInput';
 import Textarea from '@/components/commons/input/Textarea';
 import Modal from '@/components/commons/modal';
 import { formatDate } from '@/utils/date';
-import { CreateCardRequest, Member } from '@planit-api';
+import { CreateCardRequest, Member } from '@planit-types';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -40,7 +40,7 @@ export default function CreateCardModal({
   columnId,
 }: Props) {
   const [members, setMembers] = useState<Member[]>([]);
-  const { register, handleSubmit, control, reset, watch } =
+  const { register, handleSubmit, control, reset } =
     useForm<CreateCardInputs>();
 
   const onSubmit: SubmitHandler<CreateCardInputs> = async ({

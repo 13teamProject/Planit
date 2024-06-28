@@ -1,4 +1,4 @@
-declare module '@planit-api' {
+declare module '@planit-types' {
   export type Dashboard = {
     id: number;
     title: string;
