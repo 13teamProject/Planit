@@ -62,7 +62,7 @@ export default function CreateCardModal({
       imageUrl: image,
     };
 
-    const res = await postCreateCard(reqBody, token);
+    const res = await postCreateCard(reqBody);
 
     if ('message' in res) alert(res.message);
     console.log(res);
