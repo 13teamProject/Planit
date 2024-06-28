@@ -1,7 +1,6 @@
 import { getCookie } from '@/utils/cookies';
-import { ErrorMessage } from '@planit-api';
+import { ErrorMessage, UpdateUser, UserInfoResponse } from '@planit-api';
 
-import { ErrorResponse, UpdateUser, UserInfoResponse } from '../../../types';
 import { API_URL } from './baseUrl';
 
 type UserResponse = {
@@ -11,6 +10,10 @@ type UserResponse = {
   profileImageUrl: string;
   createdAt: string;
   updatedAt: string;
+};
+
+type ProfileImageResponse = {
+  profileImageUrl: string;
 };
 
 // 대시보드 목록 조회 - GET
@@ -26,10 +29,8 @@ export async function getUsers(): Promise<UserResponse> {
     }
 
     const body: UserResponse = await response.json();
-    console.log(body);
     return body;
   } catch (error) {
-    console.error('Failed to get data : ', error);
     throw error;
   }
 }
@@ -46,7 +47,7 @@ export async function getUserInfo(): Promise<UserInfoResponse | ErrorMessage> {
   try {
     const res = await fetch(`${API_URL}/users/me`, obj);
     const data = await res.json();
-    // console.log(data);
+
     if (!res.ok) throw new Error(`${data.message}`);
 
     return data;
@@ -61,23 +62,23 @@ export async function getUserInfo(): Promise<UserInfoResponse | ErrorMessage> {
 // 이미지 업로드 API
 export async function uploadProfileImage(
   image: File,
-): Promise<string | ErrorMessage> {
+): Promise<ProfileImageResponse | ErrorMessage> {
   const token = getCookie('accessToken');
 
   const formData = new FormData();
   formData.append('image', image);
   const obj: RequestInit = {
     method: 'POST',
-    body: formData,
     headers: {
       Authorization: `Bearer ${token}`,
     },
+    body: formData,
   };
 
   try {
     const res = await fetch(`${API_URL}/users/me/image`, obj);
     const data = await res.json();
-    // console.log(data);
+
     if (!res.ok) throw new Error(`${data.message}`);
 
     return data;

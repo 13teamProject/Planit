@@ -33,7 +33,7 @@ export default function Modal({ isOpen, onClose, children }: ModalProps) {
 
   return ReactDOM.createPortal(
     <div
-      className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-50"
       onClick={handleBackgroundClick}
       onKeyDown={handleKeyDown}
       role="presentation"
