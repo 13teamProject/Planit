@@ -1,6 +1,8 @@
 'use client';
 
 import { postCardImage } from '@/app/api/cards';
+import { getColumns } from '@/app/api/columns';
+import { getMembers } from '@/app/api/members';
 import Button from '@/components/commons/button';
 import Input from '@/components/commons/input';
 import DateInput from '@/components/commons/input/DateInput';
@@ -10,8 +12,9 @@ import TagInput from '@/components/commons/input/TagInput';
 import Textarea from '@/components/commons/input/Textarea';
 import Modal from '@/components/commons/modal';
 import { useAuthStore } from '@/store/authStore';
-import { ToDoDetailCardResponse } from '@planit-api';
+import { Column, Member, ToDoDetailCardResponse } from '@planit-api';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 type Props = {
@@ -39,11 +42,39 @@ export default function EditCardModal({
   columnId,
   currentCardData,
 }: Props) {
+  const [statusList, setStatusList] = useState<Column[]>([]);
+  const [members, setMembers] = useState<Member[]>([]);
   const { register, handleSubmit, control, reset, watch } =
     useForm<EditCardInputs>();
   const userInfo = useAuthStore((state) => state.userInfo);
 
-  console.log(watch());
+  useEffect(() => {
+    if (!isOpen) return;
+
+    (async () => {
+      const [columnRes, memberRes] = await Promise.all([
+        getColumns(dashboardId),
+        getMembers({ dashboardId }),
+      ]);
+
+      if ('message' in columnRes) {
+        alert(columnRes.message);
+        return;
+      }
+
+      if ('message' in memberRes) {
+        alert(memberRes.message);
+        return;
+      }
+
+      setStatusList(columnRes.data);
+      setMembers(memberRes.members);
+    })();
+  }, [isOpen]);
+
+  useEffect(() => {
+    console.log({ statusList, members });
+  }, [statusList, members]);
 
   return (
     <Modal isOpen={isOpen} onClose={() => {}}>
@@ -73,7 +104,11 @@ export default function EditCardModal({
               control={control}
               placeholder="이름을 입력해 주세요"
             >
-              <DropdownInput.Option id={1}>Option 1</DropdownInput.Option>
+              {statusList.map((status) => (
+                <DropdownInput.Option key={status.id} id={status.id}>
+                  {status.title}
+                </DropdownInput.Option>
+              ))}
             </DropdownInput>
           </div>
 
@@ -89,7 +124,11 @@ export default function EditCardModal({
               control={control}
               placeholder="이름을 입력해 주세요"
             >
-              <DropdownInput.Option id={1}>Option 1</DropdownInput.Option>
+              {members.map((member) => (
+                <DropdownInput.Option key={member.id} id={member.id}>
+                  {member.nickname}
+                </DropdownInput.Option>
+              ))}
             </DropdownInput>
           </div>
         </div>
