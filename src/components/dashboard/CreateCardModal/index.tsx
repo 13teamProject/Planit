@@ -11,6 +11,7 @@ import TagInput from '@/components/commons/input/TagInput';
 import Textarea from '@/components/commons/input/Textarea';
 import Modal from '@/components/commons/modal';
 import { useAuthStore } from '@/store/authStore';
+import { getCookie } from '@/utils/cookies';
 import { formatDate } from '@/utils/date';
 import { CreateCardRequest } from '@planit-api';
 import Image from 'next/image';
@@ -41,6 +42,7 @@ export default function CreateCardModal({
   const { register, handleSubmit, control, reset } =
     useForm<CreateCardInputs>();
   const userInfo = useAuthStore((state) => state.userInfo);
+  const token = getCookie('accessToken');
 
   const onSubmit: SubmitHandler<CreateCardInputs> = async ({
     title,
@@ -60,7 +62,7 @@ export default function CreateCardModal({
       imageUrl: image,
     };
 
-    const res = await postCreateCard(reqBody);
+    const res = await postCreateCard(reqBody, token);
 
     if ('message' in res) alert(res.message);
     console.log(res);

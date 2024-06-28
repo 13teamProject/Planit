@@ -5,14 +5,21 @@ import {
 } from '@planit-api';
 
 import { API_URL } from '../baseUrl';
-import { createRequestWithToken } from '../createRequestWithToken';
 
 export default async function postCreateCard(
   formValue: CreateCardRequest,
+  token: string | undefined,
 ): Promise<CreateCardResponse | ErrorMessage> {
-  const obj = createRequestWithToken('POST', {
-    ...formValue,
-  });
+  const requestHeaders: HeadersInit = {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${token}`,
+  };
+
+  const obj: RequestInit = {
+    method: 'POST',
+    headers: requestHeaders,
+    body: JSON.stringify(formValue),
+  };
 
   try {
     const res = await fetch(`${API_URL}/cards`, obj);
