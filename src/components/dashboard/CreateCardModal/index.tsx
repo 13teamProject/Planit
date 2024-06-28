@@ -114,7 +114,7 @@ export default function CreateCardModal({
           }
         >
           {members.map((member) => (
-            <DropdownInput.Option key={member.id} id={member.id}>
+            <DropdownInput.Option key={member.userId} id={member.userId}>
               <div className="flex items-center gap-6">
                 <ProfileCircle
                   data={member}

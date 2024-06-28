@@ -48,4 +48,28 @@ declare module '@planit-api' {
     createdAt: string;
     updatedAt: string;
   };
+
+  export type EditCardRequest = {
+    columnId: number;
+    assigneeUserId: number;
+    title: string;
+    description: string;
+    dueDate?: string;
+    tags?: string[];
+    imageUrl?: string | null;
+  };
+
+  export type EditCardResponse = {
+    id: number;
+    title: string;
+    description: string;
+    tags?: string[];
+    dueDate?: string;
+    assignee: Assignee;
+    imageUrl?: string;
+    teamId: string;
+    columnId: number;
+    createdAt: string;
+    updatedAt: string;
+  };
 }

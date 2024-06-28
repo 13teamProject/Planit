@@ -3,6 +3,8 @@ import {
   CardImageResponse,
   CreateCardRequest,
   CreateCardResponse,
+  EditCardRequest,
+  EditCardResponse,
   ErrorMessage,
 } from '@planit-api';
 
@@ -73,5 +75,40 @@ export async function postCreateCard(
     }
 
     return { message: '카드 생성 중 알 수 없는 오류가 발생했습니다.' };
+  }
+}
+
+export async function editCard({
+  cardId,
+  formValue,
+}: {
+  cardId: number;
+  formValue: EditCardRequest;
+}): Promise<EditCardResponse | ErrorMessage> {
+  const token = getCookie('accessToken');
+
+  const obj: RequestInit = {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  obj.body = JSON.stringify({ ...formValue });
+
+  try {
+    const res = await fetch(`${API_URL}/cards/${cardId}`, obj);
+    const data = await res.json();
+
+    if (!res.ok) throw new Error(`${data.message}`);
+
+    return data;
+  } catch (err) {
+    if (err instanceof Error) {
+      return { message: err.message };
+    }
+
+    return { message: '카드 수정 중 알 수 없는 오류가 발생했습니다.' };
   }
 }

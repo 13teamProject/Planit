@@ -1,6 +1,6 @@
 'use client';
 
-import { postCardImage } from '@/app/api/cards';
+import { editCard, postCardImage } from '@/app/api/cards';
 import { getColumns } from '@/app/api/columns';
 import { getMembers } from '@/app/api/members';
 import Button from '@/components/commons/button';
@@ -14,10 +14,16 @@ import TagInput from '@/components/commons/input/TagInput';
 import Textarea from '@/components/commons/input/Textarea';
 import Modal from '@/components/commons/modal';
 import Tag from '@/components/commons/tag';
-import { Column, Member, ToDoDetailCardResponse } from '@planit-api';
+import { formatDate } from '@/utils/date';
+import {
+  Column,
+  EditCardRequest,
+  Member,
+  ToDoDetailCardResponse,
+} from '@planit-api';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
 type Props = {
   isOpen: boolean;
@@ -41,7 +47,6 @@ export default function EditCardModal({
   isOpen,
   onClose,
   dashboardId,
-  columnId,
   currentCardData,
 }: Props) {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -49,18 +54,46 @@ export default function EditCardModal({
   const [statusList, setStatusList] = useState<Column[]>([]);
   const [members, setMembers] = useState<Member[]>([]);
 
-  const { register, handleSubmit, control, reset, watch } =
-    useForm<EditCardInputs>({
-      defaultValues: {
-        columnId: currentCardData.columnId,
-        assignee: currentCardData.assignee.id,
-        title: currentCardData.title,
-        description: currentCardData.description,
-        dueDate: new Date(currentCardData.dueDate),
-        tags: currentCardData.tags,
-        image: currentCardData.imageUrl,
-      },
+  const { register, handleSubmit, control } = useForm<EditCardInputs>({
+    defaultValues: {
+      columnId: currentCardData.columnId,
+      assignee: currentCardData.assignee.id,
+      title: currentCardData.title,
+      description: currentCardData.description,
+      dueDate: new Date(currentCardData.dueDate),
+      tags: currentCardData.tags,
+      image: currentCardData.imageUrl,
+    },
+  });
+
+  const onSubmit: SubmitHandler<EditCardInputs> = async ({
+    assignee,
+    title,
+    description,
+    tags,
+    dueDate,
+    image,
+    columnId,
+  }) => {
+    const reqBody: EditCardRequest = {
+      assigneeUserId: assignee,
+      columnId,
+      title,
+      description,
+      tags,
+      dueDate: dueDate && formatDate(dueDate),
+      imageUrl: image,
+    };
+
+    const res = await editCard({
+      cardId: currentCardData.id,
+      formValue: reqBody,
     });
+
+    if ('message' in res) alert(res.message);
+    console.log(res);
+    onClose();
+  };
 
   useEffect(() => {
     if (!isOpen) return;
@@ -161,7 +194,7 @@ export default function EditCardModal({
                 }
               >
                 {members.map((member) => (
-                  <DropdownInput.Option key={member.id} id={member.id}>
+                  <DropdownInput.Option key={member.userId} id={member.userId}>
                     <div className="flex items-center gap-6">
                       <ProfileCircle
                         data={member}
@@ -232,7 +265,7 @@ export default function EditCardModal({
             control={control}
             name="image"
             type="card"
-            columnId={columnId}
+            columnId={currentCardData.columnId}
             fetchFn={postCardImage}
             defaultValue={currentCardData.imageUrl}
           />
@@ -246,7 +279,7 @@ export default function EditCardModal({
               cancel
             />
             <Button
-              // onClick={handleSubmit(onSubmit)}
+              onClick={handleSubmit(onSubmit)}
               styles="py-12 px-54 text-16 md:py-14 md:text-18 md:px-46 md:py-14"
               text="수정"
             />
