@@ -36,9 +36,8 @@ export default function CardDetails({ data }: Props) {
           </div>
           <span className="h-20 w-1 bg-gray-700" />
           <div className="flex gap-10 text-10">
-            {tags.map((tag, index) => (
-              /* eslint-disable-next-line react/no-array-index-key */
-              <div className="rounded-4 bg-gray-200 px-6 pb-4 pt-6" key={index}>
+            {tags.map((tag) => (
+              <div className="rounded-4 bg-gray-200 px-6 pb-4 pt-6" key={tag}>
                 {tag}
               </div>
             ))}
