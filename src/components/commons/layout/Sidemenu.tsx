@@ -4,6 +4,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
+import Modal from '../modal';
+
 type Dashboard = {
   id: number;
   title: string;
@@ -26,6 +28,10 @@ const colorMapping: ColorMapping = {
 
 export default function Sidemenu() {
   const [dashboards, setDashboards] = useState<Dashboard[]>([]);
+
+  const createDashboard = () => {
+    <Modal isOpen />;
+  };
 
   useEffect(() => {
     async function fetchDashboard() {
@@ -66,7 +72,7 @@ export default function Sidemenu() {
         <p className="text-12 font-bold text-gray-400 sm:hidden md:block lg:block">
           Dash Boards
         </p>
-        <button type="button" className="md:pr-10">
+        <button type="button" onClick={createDashboard} className="md:pr-10">
           <Image
             src="/icon/add_box.svg"
             width={20}
