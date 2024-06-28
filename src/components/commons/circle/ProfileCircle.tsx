@@ -1,18 +1,12 @@
 import Image from 'next/image';
 
-type Member = {
-  // id: number;
-  // userId: number;
-  // email: string;
+type User = {
   nickname: string;
   profileImageUrl: string | null;
-  // createdAt: string;
-  // updatedAt: string;
-  // isOwner: boolean;
 };
 
 type Props = {
-  data: Member;
+  data: User;
   styles: string;
 };
 
@@ -21,7 +15,7 @@ export default function ProfileCircle({ styles, data }: Props) {
 
   return (
     <div
-      className={`'rounded-full cursor-pointer' relative flex transform cursor-pointer items-center justify-center rounded-full text-white ring-2 ring-white transition-transform duration-200 ease-in-out hover:scale-110 ${styles}`}
+      className={`relative flex transform cursor-pointer items-center justify-center rounded-full text-white ring-2 ring-white transition-transform duration-200 ease-in-out hover:scale-110 ${styles}`}
     >
       {profileImageUrl ? (
         <Image
@@ -31,7 +25,7 @@ export default function ProfileCircle({ styles, data }: Props) {
           className="absolute rounded-full object-cover"
         />
       ) : (
-        <span className="text-white">{nickname[0]}</span>
+        <span className="mr-[0.5px] mt-1 text-white">{nickname[0]}</span>
       )}
     </div>
   );
