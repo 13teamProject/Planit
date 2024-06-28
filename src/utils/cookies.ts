@@ -20,12 +20,8 @@ export function getCookie(
     return matches ? decodeURIComponent(matches[1]) : undefined;
   }
 
-  if (cookieString) {
-    const matches = document.cookie.match(cookiePattern);
-    return matches ? decodeURIComponent(matches[1]) : undefined;
-  }
-
-  return undefined;
+  const matches = document.cookie.match(cookiePattern);
+  return matches ? decodeURIComponent(matches[1]) : undefined;
 }
 
 export function setCookie(

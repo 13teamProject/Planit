@@ -1,4 +1,4 @@
-'use-client';
+'use client';
 
 import { getDashboards } from '@/app/api/dashboards';
 import { getUsers } from '@/app/api/users';

@@ -28,7 +28,7 @@ export type CreateCardInputs = {
   assignee: number;
   title: string;
   description: string;
-  dueDate: Date;
+  dueDate?: Date;
   tags?: string[];
   image?: string;
 };
@@ -58,7 +58,7 @@ export default function CreateCardModal({
       title,
       description,
       tags,
-      dueDate: formatDate(dueDate),
+      dueDate: dueDate && formatDate(dueDate),
       imageUrl: image,
     };
 

@@ -1,3 +1,4 @@
+import { getCookie } from '@/utils/cookies';
 import {
   CreateCardRequest,
   CreateCardResponse,
@@ -8,18 +9,18 @@ import { API_URL } from '../baseUrl';
 
 export default async function postCreateCard(
   formValue: CreateCardRequest,
-  token: string | undefined,
 ): Promise<CreateCardResponse | ErrorMessage> {
-  const requestHeaders: HeadersInit = {
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${token}`,
-  };
+  const token = getCookie('accessToken');
 
   const obj: RequestInit = {
     method: 'POST',
-    headers: requestHeaders,
-    body: JSON.stringify(formValue),
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
   };
+
+  obj.body = JSON.stringify({ ...formValue });
 
   try {
     const res = await fetch(`${API_URL}/cards`, obj);
