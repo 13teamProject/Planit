@@ -9,6 +9,8 @@ import ImageInput from '@/components/commons/input/ImageInput';
 import TagInput from '@/components/commons/input/TagInput';
 import Textarea from '@/components/commons/input/Textarea';
 import Modal from '@/components/commons/modal';
+import { useAuthStore } from '@/store/authStore';
+import { ToDoDetailCardResponse } from '@planit-api';
 import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 
@@ -17,6 +19,7 @@ type Props = {
   onClose: () => void;
   dashboardId: number;
   columnId: number;
+  currentCardData: ToDoDetailCardResponse;
 };
 
 export type EditCardInputs = {
@@ -34,8 +37,13 @@ export default function EditCardModal({
   onClose,
   dashboardId,
   columnId,
+  currentCardData,
 }: Props) {
-  const { register, handleSubmit, control, reset } = useForm<EditCardInputs>();
+  const { register, handleSubmit, control, reset, watch } =
+    useForm<EditCardInputs>();
+  const userInfo = useAuthStore((state) => state.userInfo);
+
+  console.log(watch());
 
   return (
     <Modal isOpen={isOpen} onClose={() => {}}>
@@ -96,6 +104,7 @@ export default function EditCardModal({
           id="title"
           type="text"
           placeholder="제목을 입력해 주세요"
+          defaultValue={currentCardData.title}
           register={{ ...register('title', { required: true }) }}
         />
 
@@ -108,6 +117,7 @@ export default function EditCardModal({
         <Textarea
           id="description"
           placeholder="설명을 입력해 주세요"
+          defaultValue={currentCardData.description}
           register={{ ...register('description', { required: true }) }}
         />
 
@@ -121,6 +131,7 @@ export default function EditCardModal({
           control={control}
           placeholder="날짜를 입력해 주세요"
           name="dueDate"
+          defaultValue={new Date(currentCardData.dueDate)}
         />
 
         <label
@@ -134,6 +145,7 @@ export default function EditCardModal({
           placeholder="입력 후 Enter"
           name="tags"
           control={control}
+          defaultValue={currentCardData.tags}
         />
 
         <label
@@ -148,6 +160,7 @@ export default function EditCardModal({
           type="card"
           columnId={columnId}
           fetchFn={postCardImage}
+          defaultValue={currentCardData.imageUrl}
         />
 
         <div className="mt-18 flex gap-12 md:mt-28 md:justify-end">
@@ -162,7 +175,7 @@ export default function EditCardModal({
           <Button
             // onClick={handleSubmit(onSubmit)}
             styles="py-12 px-54 text-16 md:py-14 md:text-18 md:px-46 md:py-14"
-            text="생성"
+            text="수정"
           />
         </div>
       </form>

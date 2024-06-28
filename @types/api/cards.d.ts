@@ -34,4 +34,18 @@ declare module '@planit-api' {
   export type CardImageResponse = {
     imageUrl: string;
   };
+
+  export type ToDoDetailCardResponse = {
+    id: number;
+    title: string;
+    description: string;
+    tags: string[];
+    dueDate: string;
+    assignee: Assignee;
+    imageUrl: string;
+    teamId: string;
+    columnId: number;
+    createdAt: string;
+    updatedAt: string;
+  };
 }

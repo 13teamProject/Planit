@@ -29,6 +29,7 @@ type CardImageWrapperProps<T extends FieldValues> = {
   name: Path<T>;
   fetchFn: CardImageFetchFunction;
   columnId: number;
+  defaultValue?: T[Path<T>];
 };
 
 export default function ImageInputWrapper<T extends FieldValues>(
@@ -46,13 +47,14 @@ export default function ImageInputWrapper<T extends FieldValues>(
             <ImageInput type={type} fetchFn={fetchFn} onChange={onChange} />
           );
         }
-        const { columnId } = props;
+        const { columnId, defaultValue } = props;
         return (
           <ImageInput
             type={type}
             fetchFn={fetchFn}
             onChange={onChange}
             columnId={columnId}
+            defaultValue={defaultValue}
           />
         );
       }}
@@ -71,11 +73,18 @@ type CardImageInputProps = {
   onChange: (value: string) => void;
   fetchFn: CardImageFetchFunction;
   columnId: number;
+  defaultValue?: string;
 };
 
 function ImageInput(props: ImageInputProps | CardImageInputProps) {
   const { type, onChange, fetchFn } = props;
-  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [previewImage, setPreviewImage] = useState<string | null>(() => {
+    if (type === 'card') {
+      const { defaultValue } = props;
+      return defaultValue !== undefined ? defaultValue : null;
+    }
+    return null;
+  });
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const classnames = classNames(
