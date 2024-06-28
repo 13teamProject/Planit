@@ -3,7 +3,7 @@ import {
   LoginResponse,
   SignUpProps,
   SignUpResult,
-} from '@planit-api';
+} from '@planit-types';
 
 import { API_URL, createFetchRequestOptions } from './baseUrl';
 

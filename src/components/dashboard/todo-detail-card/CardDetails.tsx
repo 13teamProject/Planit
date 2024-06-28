@@ -1,7 +1,6 @@
 import ProfileCircle from '@/components/commons/circle/ProfileCircle';
+import { TodoDetailsCardResponse } from '@planit-types';
 import Image from 'next/image';
-
-import { TodoDetailsCardResponse } from '../../../../@types/api/cards';
 
 type Props = {
   data: TodoDetailsCardResponse;

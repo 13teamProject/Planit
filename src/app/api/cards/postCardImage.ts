@@ -1,5 +1,5 @@
 import { getCookie } from '@/utils/cookies';
-import { CardImageResponse, ErrorMessage } from '@planit-api';
+import { CardImageResponse, ErrorMessage } from '@planit-types';
 
 import { API_URL } from '../baseUrl';
 
