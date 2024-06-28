@@ -13,7 +13,7 @@ import Modal from '@/components/commons/modal';
 import { useAuthStore } from '@/store/authStore';
 import { getCookie } from '@/utils/cookies';
 import { formatDate } from '@/utils/date';
-import { CreateCardRequest } from '@planit-api';
+import { CreateCardRequest } from '@planit-types';
 import Image from 'next/image';
 import { SubmitHandler, useForm } from 'react-hook-form';
 

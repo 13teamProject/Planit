@@ -8,7 +8,7 @@ import {
   BadRequest,
   ModalState,
   UserInfoResponse,
-} from '@planit-api';
+} from '@planit-types';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
