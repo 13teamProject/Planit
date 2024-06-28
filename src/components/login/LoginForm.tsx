@@ -3,16 +3,16 @@
 import { handleLogin } from '@/service/authService';
 import { authValidationSchema } from '@/utils/validation/schema';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
-
 import {
   AuthInputs,
   BadRequest,
   ModalState,
   UserInfoResponse,
-} from '../../../types';
+} from '@planit-api';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+
 import Button from '../commons/button';
 import AuthButton from '../commons/button/AuthButton';
 import Input from '../commons/input';
