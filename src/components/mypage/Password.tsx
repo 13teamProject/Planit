@@ -1,6 +1,8 @@
 'use client';
 
 import { editUserPassword } from '@/app/api/users';
+import { passwordValidationSchema } from '@/utils/validation/schema';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { ModalState, UpdateUserPassword } from '@planit-api';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -12,10 +14,19 @@ import Modal from '../commons/modal';
 type PasswordChangeForm = {
   password: string;
   newPassword: string;
-  'password-confirm': string;
+  passwordConfirmation: string;
 };
 export default function Password() {
-  const { register, handleSubmit } = useForm<PasswordChangeForm>();
+  const resolver = yupResolver(passwordValidationSchema);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<PasswordChangeForm>({
+    resolver,
+    mode: 'onChange',
+  });
   const [modalState, setModalState] = useState<ModalState>({
     isOpen: false,
     message: '',
@@ -34,10 +45,10 @@ export default function Password() {
 
     const successEditUserPassword = await editUserPassword(apiData);
 
-    // 유저 수정시 에러 처리
     if ('message' in successEditUserPassword) {
       setModalState({ isOpen: true, message: successEditUserPassword.message });
     }
+    reset();
   };
   return (
     <div className="mt-12 w-full max-w-620 rounded-md bg-white px-28 pb-28 pt-32">
@@ -52,7 +63,11 @@ export default function Password() {
           placeholder="현재 비밀번호 입력"
           size="sm"
           register={{ ...register('password', { required: true }) }}
+          error={'password' in errors}
         />
+        <span className="block pt-8 text-14 text-red-500">
+          {errors.password?.message}
+        </span>
 
         <label htmlFor="newPassword" className="mb-10 mt-20 text-18">
           새 비밀번호
@@ -64,17 +79,24 @@ export default function Password() {
           size="sm"
           register={{ ...register('newPassword', { required: true }) }}
         />
+        <span className="block pt-8 text-14 text-red-500">
+          {errors.newPassword?.message}
+        </span>
 
-        <label htmlFor="password-confirm" className="mb-10 mt-20 text-18">
+        <label htmlFor="passwordConfirmation" className="mb-10 mt-20 text-18">
           새 비밀번호 확인
         </label>
         <Input
-          id="password-confirm"
+          id="passwordConfirmation"
           type="password"
           placeholder="새 비밀번호 입력"
           size="sm"
-          register={{ ...register('password-confirm', { required: true }) }}
+          register={{ ...register('passwordConfirmation', { required: true }) }}
+          error={'passwordConfirmation' in errors}
         />
+        <span className="block pt-8 text-14 text-red-500">
+          {errors.passwordConfirmation?.message}
+        </span>
         <Button
           type="submit"
           text="변경"
