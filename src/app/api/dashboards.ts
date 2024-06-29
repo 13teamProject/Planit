@@ -3,17 +3,17 @@ import { getCookie } from '@/utils/cookies';
 export const API_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 type DashboardResponse = {
-  cursorId: number;
-  totalCount: number;
-  dashboards: Array<{
-    id: number;
-    title: string;
-    color: string;
-    createdAt: string;
-    updatedAt: string;
-    createdByMe: boolean;
-    userId: number;
-  }>;
+  id: number;
+  title: string;
+  color: string;
+  createdAt: string;
+  updatedAt: string;
+  userId: number;
+  createdByMe: boolean;
+};
+
+type DashboardListResponse = {
+  dashboards: DashboardResponse[];
 };
 
 type DashboardUpdateData = {
@@ -31,7 +31,7 @@ export async function getDashboards(
   navigationMethod: string,
   page: number,
   size: number,
-): Promise<DashboardResponse> {
+): Promise<DashboardListResponse> {
   try {
     const token = getCookie('accessToken');
     const response = await fetch(
@@ -45,10 +45,10 @@ export async function getDashboards(
       throw new Error(`HTTP error: ${response.status}`);
     }
 
-    const body: DashboardResponse = await response.json();
+    const body: DashboardListResponse = await response.json();
     return body;
   } catch (error) {
-    console.error('Failed to get data : ', error);
+    console.error('Failed to get dashboards : ', error);
     throw error;
   }
 }
@@ -73,10 +73,6 @@ export async function postDashboards(
     }
 
     const body: DashboardResponse = await response.json();
-
-    if (!body.dashboards) {
-      throw new Error('No dashboards found in the response');
-    }
     return body;
   } catch (error) {
     console.error('Failed to post data : ', error);
@@ -105,7 +101,6 @@ export async function updateDashboard(
     }
 
     const body: DashboardResponse = await response.json();
-    console.log(body);
     return body;
   } catch (error) {
     console.error('Failed to update dashboard : ', error);
