@@ -39,7 +39,7 @@ export default function DashboardPage({
     <div className="flex h-screen">
       <Sidemenu />
       <div className="flex flex-1 flex-col">
-        {/* <DashBoardHeader isDashboard /> */}
+        <DashBoardHeader isDashboard />
         <div className="h-full w-full bg-gray-50 lg:flex">
           <Column key={dashboard.id} dashboardId={dashboard.id} teamId="6-13" />
           <div className="sm:w-full sm:p-12 md:w-full md:p-20 lg:w-500">

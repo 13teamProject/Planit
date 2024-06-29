@@ -70,7 +70,7 @@ export default function Card({ teamId, cardId, columnTitle }: CardProps) {
                   {formattedDueDate}
                 </p>
               </div>
-              <ProfileCircle styles="size-sm" data={card.assignee} />
+              <ProfileCircle styles="size-24" data={card.assignee} />
             </div>
           </div>
         </div>
