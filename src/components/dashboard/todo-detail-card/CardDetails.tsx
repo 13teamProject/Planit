@@ -15,9 +15,7 @@ export default function CardDetails({ data }: Props) {
           <h2 className="pb-4 text-10 font-bold md:pb-6 md:text-12">담당자</h2>
           <div className="flex items-center gap-8">
             <div className="relative h-26 w-26 md:h-34 md:w-34">
-              <ProfileCircle color="bg-red-500" size="sm">
-                {assignee.nickname[0]}
-              </ProfileCircle>
+              <ProfileCircle data={assignee} styles="size-34" />
             </div>
             <span className="text-12 md:text-14">{assignee.nickname}</span>
           </div>
