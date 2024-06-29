@@ -4,9 +4,8 @@ import { DashboardIdResponse, getDashboardId } from '@/app/api/getDashboardId';
 import BarButton from '@/components/commons/button/BarButton';
 import DashBoardHeader from '@/components/commons/layout/DashboardHeader';
 import Sidemenu from '@/components/commons/layout/Sidemenu';
+import Column from '@/components/dashboard/Column';
 import { useEffect, useState } from 'react';
-
-import Column from '../../../components/dashboard/Column';
 
 export default function DashboardPage({
   params,

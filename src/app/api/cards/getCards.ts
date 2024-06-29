@@ -20,7 +20,7 @@ export type CardResponse = {
   updatedAt: string;
 };
 
-type GetCardParams = {
+type GetCardColumnIdParams = {
   teamId: string;
   columnId: number;
 };
@@ -40,15 +40,19 @@ type CardsApiResponse = {
 export async function getCards({
   teamId,
   columnId,
-}: GetCardParams): Promise<CardResponse[]> {
+}: GetCardColumnIdParams): Promise<CardResponse[]> {
   try {
     const token = getCookie('accessToken');
-    const response = await fetch(
-      `${API_URL}/cards?teamId=${teamId}&columnId=${columnId}`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      },
-    );
+
+    const searchParams = new URLSearchParams({
+      teamId,
+      columnId: columnId.toString(),
+    });
+    const url = `${API_URL}/cards?${searchParams.toString()}`;
+
+    const response = await fetch(url, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
 
     if (!response.ok) {
       throw new Error(`HTTP error: ${response.status}`);
@@ -69,18 +73,19 @@ export async function getCardId({
 }: GetCardIdParams): Promise<CardResponse> {
   try {
     const token = getCookie('accessToken');
-    const response = await fetch(
-      `${API_URL}/cards/${cardId}?teamId=${teamId}`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      },
-    );
+
+    const searchParams = new URLSearchParams({ teamId });
+    const url = `${API_URL}/cards/${cardId}?${searchParams.toString()}`;
+
+    const response = await fetch(url, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
 
     if (!response.ok) {
       throw new Error(`HTTP error: ${response.status}`);
     }
 
-    const body: CardResponse = await response.json();
+    const body = await response.json();
 
     return body;
   } catch (err) {
