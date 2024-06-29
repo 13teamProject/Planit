@@ -23,7 +23,7 @@ export default function Tag({
     toss: 'bg-toss-blue-light text-toss-blue',
     blue: 'bg-blue-light-chip text-blue-chip',
     green: 'bg-green-light-chip text-green-chip',
-    orange: 'bg-orange-light-chip text-purple-chip',
+    orange: 'bg-orange-light-chip text-orange-chip',
     pink: 'bg-pink-light-chip text-pink-chip',
     red: 'bg-red-light-chip text-red-chip',
     purple: 'bg-purple-light-chip text-purple-chip',
