@@ -25,4 +25,10 @@ declare module '@planit-types' {
     createdAt: string;
     updatedAt: string;
   };
+
+  export type EditColumnRequest = {
+    title: string;
+  };
+
+  export type EditColumnResponse = CreateColumnResponse;
 }
