@@ -42,7 +42,7 @@ export default function DashboardPage({
       <Sidemenu />
       <div className="flex flex-1 flex-col">
         <DashBoardHeader isDashboard />
-        <div className="w-full bg-gray-50 lg:flex">
+        <div className="h-full w-full bg-gray-50 lg:flex">
           <Column key={dashboard.id} dashboardId={dashboard.id} teamId="6-13" />
           <div className="sm:w-full sm:p-12 md:w-full md:p-20 lg:w-500">
             <BarButton text="새로운 컬럼 추가하기" />

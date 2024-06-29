@@ -50,11 +50,11 @@ export default function Column({ teamId, dashboardId }: ColumnProps) {
   if (error) return <div>{error}</div>;
 
   return (
-    <div className="w-full sm:border-b sm:p-12 md:border-b md:p-20 lg:flex lg:h-screen">
+    <div className="w-full lg:flex lg:h-full">
       {columns.map((column) => (
         <div
           key={column.id}
-          className="w-full border-r px-20 lg:overflow-y-scroll"
+          className="w-full px-20 sm:border-b sm:p-12 md:border-r md:p-20 lg:h-full lg:overflow-y-scroll"
         >
           <div className="my-20 flex w-full items-center justify-between">
             <div className="flex items-center justify-center gap-4">
