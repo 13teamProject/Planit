@@ -83,7 +83,7 @@ export async function postDashboards(
 
 // 대시보드 상세 조회 - GET
 export async function getDashboradDetail(
-  dashboardId: string,
+  dashboardId: number,
 ): Promise<DashboardEditResponse | ErrorMessage> {
   const token = getCookie('accessToken');
 
@@ -110,7 +110,7 @@ export async function getDashboradDetail(
 }
 // 대시보드 수정 - PUT
 export async function updateDashboard(
-  dashboardId: string,
+  dashboardId: number,
   updateData: DashboardUpdateData,
 ): Promise<DashboardEditResponse | ErrorMessage> {
   const token = getCookie('accessToken');

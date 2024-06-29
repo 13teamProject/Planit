@@ -15,7 +15,7 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
-export default function DashboardName({ params }: { params: { id: string } }) {
+export default function DashboardName({ params }: { params: { id: number } }) {
   const { register, handleSubmit, reset } = useForm<DashboardEditRequest>();
   const [selectedColor, setSelectedColor] = useState<string>();
   const [dashboardData, setDashboardData] = useState<DashboardEditResponse>();
