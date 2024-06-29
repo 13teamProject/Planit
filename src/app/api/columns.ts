@@ -1,5 +1,10 @@
 import { getCookie } from '@/utils/cookies';
-import { ColumnsListResponse, ErrorMessage } from '@planit-types';
+import {
+  ColumnsListResponse,
+  CreateColumnRequest,
+  CreateColumnResponse,
+  ErrorMessage,
+} from '@planit-types';
 
 import { API_URL } from './baseUrl';
 
@@ -32,5 +37,35 @@ export async function getColumns(
     }
 
     return { message: '컬럼 목록 조회 중 알 수 없는 오류가 발생했습니다.' };
+  }
+}
+
+export async function postCreateColumn(
+  formValue: CreateColumnRequest,
+): Promise<CreateColumnResponse | ErrorMessage> {
+  const token = getCookie('accessToken');
+
+  const obj: RequestInit = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  obj.body = JSON.stringify({ ...formValue });
+
+  try {
+    const res = await fetch(`${API_URL}/columns`, obj);
+    const data = await res.json();
+
+    if (!res.ok) throw new Error(`${data.message}`);
+
+    return data;
+  } catch (err) {
+    if (err instanceof Error) {
+      return { message: err.message };
+    }
+    return { message: '컬럼 생성 중 알 수 없는 오류가 발생했습니다.' };
   }
 }

@@ -1,11 +1,11 @@
 'use client';
 
-import postCreateColumn, { getColumns } from '@/app/api/columns';
+import { getColumns, postCreateColumn } from '@/app/api/columns';
 import Button from '@/components/commons/button';
 import Input from '@/components/commons/input';
 import Modal from '@/components/commons/modal';
-import { CreateColumnRequest } from '@planit-types';
-import { useEffect } from 'react';
+import { Column, CreateColumnRequest } from '@planit-types';
+import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 type Props = {
@@ -23,11 +23,16 @@ export default function CreateColumnModal({
   isOpen,
   onClose,
 }: Props) {
-  const { register, handleSubmit, reset } = useForm<CreatColumnInputs>();
+  const [columnList, setColumnList] = useState<Column[]>([]);
+  const [error, setError] = useState('');
+  const { register, handleSubmit, reset, watch } = useForm<CreatColumnInputs>();
+  const inputValue = watch('columnTitle');
 
   const onSubmit: SubmitHandler<CreatColumnInputs> = async ({
     columnTitle,
   }) => {
+    if (error) return;
+
     const reqBody: CreateColumnRequest = {
       dashboardId,
       title: columnTitle,
@@ -49,19 +54,19 @@ export default function CreateColumnModal({
 
       if ('message' in columnRes) {
         alert(columnRes.message);
-        // return;
+        return;
       }
 
-      // setStatusList(columnRes.data);
-      // setMembers(memberRes.members);
-      // setCurrentStatus(
-      //   columnRes.data.filter(
-      //     (each) => each.id === currentCardData.columnId,
-      //   )[0],
-      // );
-      // setIsLoaded(true);
+      setColumnList(columnRes.data);
     })();
   }, [isOpen]);
+
+  useEffect(() => {
+    const columnTitleList = columnList.map((column) => column.title);
+    if (columnTitleList.includes(inputValue)) {
+      setError('중복된 컬럼 이름입니다.');
+    } else setError('');
+  }, [inputValue, columnList]);
 
   return (
     <Modal isOpen={isOpen} onClose={() => {}}>
@@ -77,8 +82,10 @@ export default function CreateColumnModal({
         <Input
           id="columnTitle"
           placeholder="컬럼을 입력해 주세요"
+          error={!!error}
           register={{ ...register('columnTitle', { required: true }) }}
         />
+        <span className="block pt-8 text-14 text-red-500">{error}</span>
 
         <div className="mt-24 flex gap-12 md:mt-28 md:justify-end">
           <Button
