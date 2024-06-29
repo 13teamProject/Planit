@@ -7,9 +7,10 @@ import React, { useEffect, useState } from 'react';
 type CardProps = {
   teamId: string;
   cardId: number;
+  columnTitle: string;
 };
 
-export default function Card({ teamId, cardId }: CardProps) {
+export default function Card({ teamId, cardId, columnTitle }: CardProps) {
   const [card, setCard] = useState<CardType | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);

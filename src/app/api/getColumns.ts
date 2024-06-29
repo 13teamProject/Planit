@@ -45,7 +45,6 @@ export async function getColumns({
 
     return body.data;
   } catch (error) {
-    console.error('Failed to get data : ', error);
     throw error;
   }
 }

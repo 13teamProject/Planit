@@ -22,11 +22,10 @@ export default function DashboardPage({
     const fetchDashboardId = async () => {
       const dashboardId = params.id;
       const res = await getDashboardId({ dashboardId, teamId: '6-13' });
-
-      if ('message' in res) {
-        setError('에러 발생!');
-      } else {
+      try {
         setDashboard(res);
+      } catch (err) {
+        setError('데이터 불러오는 중 에러 발생!');
       }
     };
 
@@ -36,6 +35,7 @@ export default function DashboardPage({
   if (!dashboard) {
     return <div>Loading...</div>;
   }
+  if (error) return <div>{error}</div>;
 
   return (
     <div className="flex h-screen">

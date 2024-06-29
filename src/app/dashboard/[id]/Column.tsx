@@ -74,7 +74,12 @@ export default function Column({ teamId, dashboardId }: ColumnProps) {
           </div>
           <div className="sm:mb-12 md:mb-20">
             {column.cards.map((card) => (
-              <Card key={card.id} teamId={teamId} cardId={card.id} />
+              <Card
+                key={card.id}
+                teamId={teamId}
+                cardId={card.id}
+                columnTitle={column.title}
+              />
             ))}
           </div>
 
