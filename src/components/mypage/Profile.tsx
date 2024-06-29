@@ -2,7 +2,7 @@
 
 import { editUserInfo, uploadProfileImage } from '@/app/api/users';
 import { useAuthStore } from '@/store/authStore';
-import type { ModalState, UpdateUser } from '@planit-api';
+import type { ModalState, UpdateUser } from '@planit-types';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 

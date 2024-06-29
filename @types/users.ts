@@ -1,13 +1,4 @@
-declare module '@planit-api' {
-  export type UserInfoResponse = {
-    id: number;
-    email: string;
-    nickname: string;
-    profileImageUrl: string;
-    createdAt: string;
-    updatedAt: string;
-  };
-
+declare module '@planit-types' {
   export type UpdateUser = {
     nickname: string;
     profileImageUrl?: string;
