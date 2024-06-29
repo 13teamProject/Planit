@@ -44,7 +44,7 @@ export async function getColumns({
     }
 
     return body.data;
-  } catch (error) {
-    throw error;
+  } catch (err) {
+    throw new Error('데이터를 받는 중에 오류가 발생했습니다.');
   }
 }

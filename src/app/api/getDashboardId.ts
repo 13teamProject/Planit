@@ -36,7 +36,7 @@ export async function getDashboardId({
 
     const body: DashboardIdResponse = await response.json();
     return body;
-  } catch (error) {
-    throw error;
+  } catch (err) {
+    throw new Error('데이터를 받는 중에 오류가 발생했습니다.');
   }
 }

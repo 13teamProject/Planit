@@ -13,7 +13,6 @@ type CardProps = {
 export default function Card({ teamId, cardId, columnTitle }: CardProps) {
   const [card, setCard] = useState<CardType | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchCard = async () => {
@@ -21,7 +20,7 @@ export default function Card({ teamId, cardId, columnTitle }: CardProps) {
         const cardData = await getCardId({ teamId, cardId });
         setCard(cardData);
       } catch (err) {
-        setError('카드를 불러오는 중 오류가 발생!');
+        throw new Error('데이터를 받는 중에 오류가 발생했습니다.');
       } finally {
         setLoading(false);
       }
@@ -30,9 +29,8 @@ export default function Card({ teamId, cardId, columnTitle }: CardProps) {
     fetchCard();
   }, [teamId, cardId]);
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
-  if (!card) return <div>No card data available</div>;
+  if (loading) return <div>로딩중...</div>;
+  if (!card) return <div>카드가 없습니다.</div>;
 
   // 날짜 포맷팅: YYYY-MM-DD HH:MM -> YYYY.MM.DD
   const formattedDueDate = card.dueDate.split(' ')[0].replace(/-/g, '.');
@@ -72,9 +70,7 @@ export default function Card({ teamId, cardId, columnTitle }: CardProps) {
                   {formattedDueDate}
                 </p>
               </div>
-              <ProfileCircle size="sm" color="bg-green-200">
-                {card.assignee.nickname.charAt(0)}
-              </ProfileCircle>
+              <ProfileCircle styles="size-sm" data={card.assignee} />
             </div>
           </div>
         </div>
