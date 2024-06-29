@@ -1,14 +1,13 @@
 import { loginUser, signUpUser } from '@/app/api/auth';
 import { useAuthStore } from '@/store/authStore';
 import { deleteCookie, setCookie } from '@/utils/cookies';
-
 import {
   BadRequest,
   LoginProps,
   SignUpProps,
   SignUpResult,
   UserInfoResponse,
-} from '../../types';
+} from '@planit-types';
 
 // 회원가입
 export async function handleSignUp({

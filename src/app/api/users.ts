@@ -4,7 +4,7 @@ import {
   UpdateUser,
   UpdateUserPassword,
   UserInfoResponse,
-} from '@planit-api';
+} from '@planit-types';
 
 import { API_URL } from './baseUrl';
 
@@ -98,7 +98,7 @@ export async function uploadProfileImage(
 // 내 정보 수정
 export async function editUserInfo(
   userData: UpdateUser,
-): Promise<ErrorMessage> {
+): Promise<ErrorMessage | UserResponse> {
   const token = getCookie('accessToken');
 
   const obj: RequestInit = {
@@ -123,7 +123,6 @@ export async function editUserInfo(
     return { message: '이미지 업로드 중 알 수 없는 오류가 발생했습니다.' };
   }
 }
-
 // 비밀번호 수정
 export async function editUserPassword(
   Data: UpdateUserPassword,

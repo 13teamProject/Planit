@@ -6,7 +6,6 @@ type BodyType = Record<string, unknown> | string;
 
 export function createRequestWithToken(RESTMethod: string, body?: BodyType) {
   let token;
-
   if (IS_SERVER) {
     const headersList = headers();
     const cookieString = headersList.get('cookie') || '';

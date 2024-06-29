@@ -1,13 +1,13 @@
+import { UserInfoResponse } from '@planit-types';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-
-import { UserInfoResponse } from '../../types';
 
 type AuthState = {
   isLoggedIn: boolean;
   userInfo: UserInfoResponse | null;
   login: (user: UserInfoResponse) => void;
   logout: () => void;
+  changeUserInfo: (userInfo: UserInfoResponse) => void;
 };
 
 export const useAuthStore = create<AuthState>()(
@@ -20,6 +20,7 @@ export const useAuthStore = create<AuthState>()(
         set({ isLoggedIn: false, userInfo: null });
         localStorage.removeItem('auth-storage');
       },
+      changeUserInfo: (userInfo) => set({ userInfo }),
     }),
     {
       name: 'auth-storage',

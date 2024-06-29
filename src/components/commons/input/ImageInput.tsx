@@ -1,4 +1,4 @@
-import { CardImageResponse, ErrorMessage } from '@planit-api';
+import { CardImageResponse, ErrorMessage } from '@planit-types';
 import classNames from 'classnames';
 import Image from 'next/image';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';

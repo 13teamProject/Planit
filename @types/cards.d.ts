@@ -1,4 +1,4 @@
-declare module '@planit-api' {
+declare module '@planit-types' {
   export type Assignee = {
     id: number;
     nickname: string;
@@ -33,5 +33,20 @@ declare module '@planit-api' {
 
   export type CardImageResponse = {
     imageUrl: string;
+  };
+
+  export type TodoDetailsCardResponse = {
+    id: number;
+    title: string;
+    description: string;
+    tags: string[];
+    dueDate: string;
+    assignee: Assignee;
+    imageUrl: string;
+    teamId: string;
+    columnId: number;
+    dashboardId: number;
+    createdAt: string;
+    updatedAt: string;
   };
 }
