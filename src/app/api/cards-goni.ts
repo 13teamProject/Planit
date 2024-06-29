@@ -10,15 +10,13 @@ import {
 
 import { API_URL } from './baseUrl';
 
-type PostCardImageParams = {
-  columnId: number;
-  image: File;
-};
-
 export async function postCardImage({
   columnId,
   image,
-}: PostCardImageParams): Promise<CardImageResponse | ErrorMessage> {
+}: {
+  columnId: number;
+  image: File;
+}): Promise<CardImageResponse | ErrorMessage> {
   const token = getCookie('accessToken');
 
   const formData = new FormData();
