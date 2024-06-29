@@ -170,7 +170,6 @@ export default function DashBoardHeader({
                 className="focus:outline-none"
                 aria-label="프로필 추가 버튼"
               >
-                
                 <ProfileCircle
                   styles="size-26 md:size-34 bg-pink-400 text-14"
                   data={{ nickname: `+${extraCount}`, profileImageUrl: null }}

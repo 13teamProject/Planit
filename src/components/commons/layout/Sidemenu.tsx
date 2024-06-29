@@ -1,6 +1,5 @@
 import { getDashboards, postDashboards } from '@/app/api/dashboards';
 import ColorCircle from '@/components/commons/circle/ColorCircle';
-import { colorMapping, colors } from '@/utils/colors';
 import { Dashboard } from '@planit-types';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -19,15 +18,37 @@ type FormValues = {
   dashboardName: string;
 };
 
+type ColorMapping = {
+  [key: string]: string;
+};
+
+export const colorMapping: ColorMapping = {
+  '#5534DA': 'bg-violet-dashboard',
+  '#D6173A': 'bg-red-dashboard',
+  '#7AC555': 'bg-green-dashboard',
+  '#FFA500': 'bg-orange-dashboard',
+  '#76A5EA': 'bg-blue-dashboard',
+  '#E876EA': 'bg-pink-dashboard',
+};
+
+export const colors = [
+  '#D6173A',
+  '#E876EA',
+  '#FFA500',
+  '#7AC555',
+  '#5534DA',
+  '#76A5EA',
+];
+
 export default function Sidemenu() {
   const [dashboards, setDashboards] = useState<Dashboard[]>([]);
   const [modalState, setModalState] = useState<ModalState>({
     isOpen: false,
     message: '',
   });
-
   const { register, handleSubmit } = useForm<FormValues>();
   const [selectedColor, setSelectedColor] = useState<string>(colors[0]);
+  const [page, setPage] = useState<number>(1);
 
   const fetchDashboard = async () => {
     const response = await getDashboards('infiniteScroll', 1, 100);
@@ -76,7 +97,7 @@ export default function Sidemenu() {
 
   return (
     <>
-      <nav className="left-0 top-0 z-[999] h-screen w-67 border-1 border-r-gray-200 bg-white pl-20 pt-20 md:w-160 md:pl-18 lg:w-300 lg:pl-24">
+      <nav className="left-0 top-0 z-[999] h-screen w-67 overflow-y-auto border-1 border-r-gray-200 bg-white pl-20 pt-20 md:w-160 md:pl-18 lg:w-300 lg:pl-24">
         <Link href="/" className="cursor-pointer">
           <Image
             className="md:hidden"
@@ -108,25 +129,31 @@ export default function Sidemenu() {
             />
           </button>
         </div>
-        <ul className="mt-20 pr-10 lg:pr-12">
-          {dashboards.map((dashboard) => (
-            <li
-              key={dashboard.id}
-              className="flex h-45 items-center rounded-4 pl-8 hover:bg-violet-light-dashboard md:pl-10 lg:pl-12"
-            >
-              <ColorCircle
-                color={colorMapping[dashboard.color] || 'bg-gray-400'}
-                size="sm"
-              />
-              <Link
-                href={`/dashboard/${dashboard.id}`}
-                className="text-18 font-medium text-gray-400 hover:text-black sm:hidden md:block md:pl-16 md:text-16 lg:block lg:pl-16"
+
+        <div
+          className="overflow-y-auto"
+          style={{ maxHeight: 'calc(100vh - 150px)' }}
+        >
+          <ul className="mt-20 pr-10 lg:pr-12">
+            {dashboards.map((dashboard) => (
+              <li
+                key={dashboard.id}
+                className="flex h-45 items-center rounded-4 pl-8 hover:bg-violet-light-dashboard md:pl-10 lg:pl-12"
               >
-                {dashboard.title}
-              </Link>
-            </li>
-          ))}
-        </ul>
+                <ColorCircle
+                  color={colorMapping[dashboard.color] || 'bg-gray-400'}
+                  size="sm"
+                />
+                <Link
+                  href={`/dashboard/${dashboard.id}`}
+                  className="text-18 font-medium text-gray-400 hover:text-black sm:hidden md:block md:pl-16 md:text-16 lg:block lg:pl-16"
+                >
+                  {dashboard.title}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
       </nav>
       {modalState.isOpen && (
         <Modal isOpen={modalState.isOpen} onClose={handleCloseModal}>
