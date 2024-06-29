@@ -3,7 +3,7 @@ import {
   CreateCardRequest,
   CreateCardResponse,
   ErrorMessage,
-} from '@planit-api';
+} from '@planit-types';
 
 import { API_URL } from '../baseUrl';
 

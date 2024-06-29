@@ -1,7 +1,6 @@
+import { UserInfoResponse } from '@planit-api';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-
-import { UserInfoResponse } from '../../types';
 
 type AuthState = {
   isLoggedIn: boolean;
