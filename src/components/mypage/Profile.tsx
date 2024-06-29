@@ -51,7 +51,7 @@ export default function Profile() {
     fetchUserInfo();
   }, []);
   return (
-    <div className="w-full max-w-[620px] rounded-md bg-white px-28 pb-28 pt-32">
+    <div className="w-full max-w-620 rounded-md bg-white px-28 pb-28 pt-32">
       <h3 className="mb-32 text-24 font-bold">프로필</h3>
       {userData && (
         <form className="flex gap-18" onSubmit={handleSubmit(onSubmit)}>
@@ -90,20 +90,18 @@ export default function Profile() {
         </form>
       )}
 
-      {modalState.isOpen && (
-        <Modal isOpen={modalState.isOpen} onClose={handleClose}>
-          <div className="m-auto px-54 pb-29 pt-26 text-right text-18 md:w-540 md:px-33">
-            <p className="pb-47 pt-50 text-center">{modalState.message}</p>
-            <span className="flex justify-center md:justify-end">
-              <Button
-                styles="w-138 h-42 md:w-120 md:h-48"
-                text="확인"
-                onClick={handleClose}
-              />
-            </span>
-          </div>
-        </Modal>
-      )}
+      <Modal isOpen={modalState.isOpen} onClose={handleClose}>
+        <div className="m-auto px-54 pb-29 pt-26 text-right text-18 md:w-540 md:px-33">
+          <p className="pb-47 pt-50 text-center">{modalState.message}</p>
+          <span className="flex justify-center md:justify-end">
+            <Button
+              styles="w-138 h-42 md:w-120 md:h-48"
+              text="확인"
+              onClick={handleClose}
+            />
+          </span>
+        </div>
+      </Modal>
     </div>
   );
 }
