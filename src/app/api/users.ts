@@ -123,10 +123,13 @@ export async function editUserInfo(
     return { message: '이미지 업로드 중 알 수 없는 오류가 발생했습니다.' };
   }
 }
+type SuccessMessage = {
+  success: true;
+};
 // 비밀번호 수정
 export async function editUserPassword(
   Data: UpdateUserPassword,
-): Promise<ErrorMessage> {
+): Promise<SuccessMessage | ErrorMessage> {
   const token = getCookie('accessToken');
 
   const obj: RequestInit = {
@@ -140,16 +143,13 @@ export async function editUserPassword(
 
   try {
     const res = await fetch(`${API_URL}/auth/password`, obj);
-    if (res.status === 204) {
-      return { message: '비밀번호 수정이 완료되었습니다.' };
-    }
 
-    const data = await res.json();
     if (!res.ok) {
+      const data = await res.json();
       throw new Error(`${data.message}`);
     }
 
-    return new Error();
+    return { success: true };
   } catch (err) {
     if (err instanceof Error) {
       return { message: err.message };

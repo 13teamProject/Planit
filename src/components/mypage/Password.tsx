@@ -3,7 +3,7 @@
 import { editUserPassword } from '@/app/api/users';
 import { passwordValidationSchema } from '@/utils/validation/schema';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { ModalState, UpdateUserPassword } from '@planit-api';
+import { ModalState, UpdateUserPassword } from '@planit-types';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
@@ -48,7 +48,13 @@ export default function Password() {
     if ('message' in successEditUserPassword) {
       setModalState({ isOpen: true, message: successEditUserPassword.message });
     }
-    reset();
+    if ('success' in successEditUserPassword) {
+      setModalState({
+        isOpen: true,
+        message: '비밀번호를 성공적으로 변경했습니다.',
+      });
+      reset();
+    }
   };
   return (
     <div className="mt-12 w-full max-w-620 rounded-md bg-white px-28 pb-28 pt-32">
