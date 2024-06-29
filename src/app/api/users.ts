@@ -93,7 +93,7 @@ export async function uploadProfileImage(
 // 내 정보 수정
 export async function editUserInfo(
   userData: UpdateUser,
-): Promise<ErrorMessage> {
+): Promise<ErrorMessage | UserResponse> {
   const token = getCookie('accessToken');
 
   const obj: RequestInit = {
