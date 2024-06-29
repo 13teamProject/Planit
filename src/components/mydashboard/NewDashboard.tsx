@@ -53,6 +53,8 @@ export default function NewDashboard() {
     message: '',
   });
   const [selectedColor, setSelectedColor] = useState<string>(colors[0]);
+  const [totalItems, setTotalItems] = useState<number>(0); // 전체 아이템 수
+  const [totalPages, setTotalPages] = useState<number>(1); // 전체 페이지 수
 
   const fetchDashboard = async (currentPage: number) => {
     const response = await getDashboards('pagination', currentPage, 5);
@@ -66,6 +68,18 @@ export default function NewDashboard() {
       createdByMe: data.createdByMe,
     }));
     setDashboards(fetchedDashboards);
+
+    const totalItemsResponse = await getDashboards(
+      'pagination',
+      1,
+      Number.MAX_SAFE_INTEGER,
+    );
+    const totalItemsCount = totalItemsResponse.dashboards.length; // 변수 이름 변경
+    setTotalItems(totalItemsCount);
+
+    const pageSize = 5; // 한 페이지 당 아이템 수
+    const calculatedTotalPages = Math.ceil(totalItemsCount / pageSize); // 변수 이름 변경
+    setTotalPages(calculatedTotalPages);
   };
 
   const handleOpenModal = () => {
@@ -110,9 +124,10 @@ export default function NewDashboard() {
   };
 
   const handleNextPage = () => {
-    setPage(page + 1);
+    if (page < totalPages) {
+      setPage(page + 1);
+    }
   };
-
   return (
     <>
       <section className="mb-8 ml-40 mt-40 grid w-260 grid-cols-1 grid-rows-6 gap-y-8 md:mb-10 md:w-504 md:grid-cols-2 md:grid-rows-3 md:gap-x-10 md:gap-y-10 lg:mb-12 lg:w-1022 lg:grid-cols-3 lg:grid-rows-2 lg:gap-x-13 lg:gap-y-12">
@@ -154,7 +169,7 @@ export default function NewDashboard() {
       </section>
       <section className="ml-40 flex w-260 items-center justify-end md:w-504 lg:w-1022">
         <p className="black-800 mr-12 text-14 font-normal md:mr-16">
-          n 페이지 중 {page}
+          {totalPages} 페이지 중 {page}
         </p>
         <button type="button" onClick={handlePreviousPage}>
           <Image
@@ -185,7 +200,7 @@ export default function NewDashboard() {
                 <input
                   {...register('dashboardName', { required: 'true' })}
                   type="text"
-                  className="block h-42 w-full rounded-md border pl-16 pr-40 text-14 outline-none md:h-48 md:text-16"
+                  className="mt-12 block h-42 w-full rounded-md border pl-16 pr-40 text-14 outline-none md:h-48 md:text-16"
                 />
               </label>
               <div className="mt-24 flex space-x-10 md:mt-28">
@@ -209,7 +224,7 @@ export default function NewDashboard() {
                         width={15}
                         height={15}
                         alt="대시보드 색상 선택"
-                        className="-translateㅎ-x-1/2 absolute left-1/2 top-1/2 -translate-y-1/2 transform"
+                        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform"
                       />
                     )}
                   </div>
