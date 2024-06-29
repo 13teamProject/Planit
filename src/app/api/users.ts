@@ -1,5 +1,10 @@
 import { getCookie } from '@/utils/cookies';
-import { ErrorMessage, UpdateUser, UserInfoResponse } from '@planit-api';
+import {
+  ErrorMessage,
+  UpdateUser,
+  UpdateUserPassword,
+  UserInfoResponse,
+} from '@planit-api';
 
 import { API_URL } from './baseUrl';
 
@@ -116,5 +121,40 @@ export async function editUserInfo(
       return { message: err.message };
     }
     return { message: '이미지 업로드 중 알 수 없는 오류가 발생했습니다.' };
+  }
+}
+
+// 비밀번호 수정
+export async function editUserPassword(
+  Data: UpdateUserPassword,
+): Promise<ErrorMessage> {
+  const token = getCookie('accessToken');
+
+  const obj: RequestInit = {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(Data),
+  };
+
+  try {
+    const res = await fetch(`${API_URL}/auth/password`, obj);
+    if (res.status === 204) {
+      return { message: '비밀번호 수정이 완료되었습니다.' };
+    }
+
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(`${data.message}`);
+    }
+
+    return new Error();
+  } catch (err) {
+    if (err instanceof Error) {
+      return { message: err.message };
+    }
+    return { message: '비밀번호 수정 중 알 수 없는 오류가 발생했습니다.' };
   }
 }

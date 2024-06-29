@@ -12,4 +12,8 @@ declare module '@planit-api' {
     nickname: string;
     profileImageUrl?: string;
   };
+  export type UpdateUserPassword = {
+    password: string;
+    newPassword: string;
+  };
 }

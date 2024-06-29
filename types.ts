@@ -1,4 +1,3 @@
-\
 // Auth types
 export type AuthInputs = {
   email: string;
@@ -26,7 +25,7 @@ export type ErrorResponse = {
 export type UpdateUser = {
   nickname: string;
   profileImageUrl?: string;
-}
+};
 export type SignUpResult = UserInfoResponse | BadRequest;
 
 export type SignUpProps = {
