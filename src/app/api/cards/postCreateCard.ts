@@ -1,18 +1,26 @@
+import { getCookie } from '@/utils/cookies';
 import {
   CreateCardRequest,
   CreateCardResponse,
   ErrorMessage,
-} from '@planit-api';
+} from '@planit-types';
 
 import { API_URL } from '../baseUrl';
-import { createRequestWithToken } from '../createRequestWithToken';
 
 export default async function postCreateCard(
   formValue: CreateCardRequest,
 ): Promise<CreateCardResponse | ErrorMessage> {
-  const obj = createRequestWithToken('POST', {
-    ...formValue,
-  });
+  const token = getCookie('accessToken');
+
+  const obj: RequestInit = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  obj.body = JSON.stringify({ ...formValue });
 
   try {
     const res = await fetch(`${API_URL}/cards`, obj);

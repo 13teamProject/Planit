@@ -1,4 +1,4 @@
-'use-client';
+'use client';
 
 import { getDashboards } from '@/app/api/dashboards';
 import { getUsers } from '@/app/api/users';
@@ -19,6 +19,7 @@ type Dashboard = {
 type User = {
   id: number;
   nickname: string;
+  profileImageUrl: string | null;
 };
 
 export default function DashBoardHeader({
@@ -149,11 +150,12 @@ export default function DashBoardHeader({
         )}
         {isDashboard && (
           <div className="flex font-semibold">
-            {visibleProfiles.map((profile) => (
-              <li key={profile}>
-                <ProfileCircle color="bg-orange-400" size="md">
-                  {profile}
-                </ProfileCircle>
+            {visibleProfiles.map((nickname) => (
+              <li key={nickname}>
+                <ProfileCircle
+                  styles="size-26 md:size-34 bg-slate-400 text-14"
+                  data={{ nickname, profileImageUrl: null }}
+                />
               </li>
             ))}
             {extraCount > 0 && (
@@ -166,10 +168,13 @@ export default function DashBoardHeader({
                   }
                 }}
                 className="focus:outline-none"
+                aria-label="프로필 추가 버튼"
               >
-                <ProfileCircle color="bg-pink-400" size="md">
-                  +{extraCount}
-                </ProfileCircle>
+                
+                <ProfileCircle
+                  styles="size-26 md:size-34 bg-pink-400 text-14"
+                  data={{ nickname: `+${extraCount}`, profileImageUrl: null }}
+                />
               </button>
             )}
           </div>
@@ -178,9 +183,12 @@ export default function DashBoardHeader({
           <div className="mx-12 h-38 border-l border-gray-200 md:mx-24 lg:mx-32" />
         )}
         <li className="h-38 font-semibold">
-          <ProfileCircle color="bg-violet-dashboard" size="md">
-            K
-          </ProfileCircle>
+          {user && (
+            <ProfileCircle
+              styles="size-26 md:size-34 bg-violet-dashboard text-14"
+              data={user}
+            />
+          )}
         </li>
         <li className="pl-12">
           {user && (

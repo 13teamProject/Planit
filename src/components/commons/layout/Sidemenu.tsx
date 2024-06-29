@@ -1,5 +1,7 @@
 import { getDashboards, postDashboards } from '@/app/api/dashboards';
 import ColorCircle from '@/components/commons/circle/ColorCircle';
+import { colorMapping, colors } from '@/utils/colors';
+import { Dashboard } from '@planit-types';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -7,12 +9,6 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 
 import Button from '../button';
 import Modal from '../modal';
-
-type Dashboard = {
-  id: number;
-  title: string;
-  color: string;
-};
 
 type ModalState = {
   isOpen: boolean;
@@ -22,29 +18,6 @@ type ModalState = {
 type FormValues = {
   dashboardName: string;
 };
-
-type ColorMapping = {
-  [key: string]: string;
-};
-
-const colorMapping: ColorMapping = {
-  '#5534DA': 'bg-violet-dashboard',
-  '#F1EFFD': 'bg-violet-light-dashboard',
-  '#D6173A': 'bg-red-dashboard',
-  '#7AC555': 'bg-green-dashboard',
-  '#FFA500': 'bg-orange-dashboard',
-  '#76A5EA': 'bg-blue-dashboard',
-  '#E876EA': 'bg-pink-dashboard',
-};
-
-const colors = [
-  '#D6173A',
-  '#E876EA',
-  '#FFA500',
-  '#7AC555',
-  '#5534DA',
-  '#76A5EA',
-];
 
 export default function Sidemenu() {
   const [dashboards, setDashboards] = useState<Dashboard[]>([]);

@@ -3,7 +3,8 @@ import {
   LoginResponse,
   SignUpProps,
   SignUpResult,
-} from '../../../types';
+} from '@planit-types';
+
 import { API_URL, createFetchRequestOptions } from './baseUrl';
 
 // 회원가입 데이터 전송

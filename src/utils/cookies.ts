@@ -15,17 +15,13 @@ export function getCookie(
     `(?:^|; )${name.replace(/([.$*|{}()[\]\\/+^])/g, '\\$1')}=([^;]*)`,
   );
 
-  if (cookieString) {
+  if (IS_SERVER && cookieString) {
     const matches = cookieString.match(cookiePattern);
     return matches ? decodeURIComponent(matches[1]) : undefined;
   }
 
-  if (IS_SERVER) {
-    const matches = document.cookie.match(cookiePattern);
-    return matches ? decodeURIComponent(matches[1]) : undefined;
-  }
-
-  return undefined;
+  const matches = document.cookie.match(cookiePattern);
+  return matches ? decodeURIComponent(matches[1]) : undefined;
 }
 
 export function setCookie(
