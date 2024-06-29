@@ -42,7 +42,6 @@ export default function CreateCardModal({
   const { register, handleSubmit, control, reset } =
     useForm<CreateCardInputs>();
   const userInfo = useAuthStore((state) => state.userInfo);
-  const token = getCookie('accessToken');
 
   const onSubmit: SubmitHandler<CreateCardInputs> = async ({
     title,
