@@ -1,12 +1,16 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { CardImageResponse, ErrorMessage } from '@planit-api';
+import { CardImageResponse, ErrorMessage } from '@planit-types';
 import classNames from 'classnames';
 import Image from 'next/image';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 
-// TODO: any 수정
-type ImageFetchFunction = (image: File) => Promise<any>;
+type ProfileImageResponse = {
+  profileImageUrl: string;
+};
+
+type ImageFetchFunction = (
+  image: File,
+) => Promise<ProfileImageResponse | ErrorMessage>;
 
 type CardImageFetchFunction = ({
   columnId,
@@ -21,6 +25,7 @@ type ImageInputWrapperProps<T extends FieldValues> = {
   control: Control<T>;
   name: Path<T>;
   fetchFn: ImageFetchFunction;
+  defaultValue?: T[Path<T>];
 };
 
 type CardImageWrapperProps<T extends FieldValues> = {
@@ -29,12 +34,13 @@ type CardImageWrapperProps<T extends FieldValues> = {
   name: Path<T>;
   fetchFn: CardImageFetchFunction;
   columnId: number;
+  defaultValue?: T[Path<T>];
 };
 
 export default function ImageInputWrapper<T extends FieldValues>(
   props: ImageInputWrapperProps<T> | CardImageWrapperProps<T>,
 ) {
-  const { name, control, fetchFn, type } = props;
+  const { name, control, fetchFn, type, defaultValue } = props;
 
   return (
     <Controller
@@ -43,7 +49,12 @@ export default function ImageInputWrapper<T extends FieldValues>(
       render={({ field: { onChange } }) => {
         if (type === 'default') {
           return (
-            <ImageInput type={type} fetchFn={fetchFn} onChange={onChange} />
+            <ImageInput
+              type={type}
+              fetchFn={fetchFn}
+              onChange={onChange}
+              defaultValue={defaultValue}
+            />
           );
         }
         const { columnId } = props;
@@ -53,6 +64,7 @@ export default function ImageInputWrapper<T extends FieldValues>(
             fetchFn={fetchFn}
             onChange={onChange}
             columnId={columnId}
+            defaultValue={defaultValue}
           />
         );
       }}
@@ -62,20 +74,24 @@ export default function ImageInputWrapper<T extends FieldValues>(
 
 type ImageInputProps = {
   type: 'default';
-  onChange: (value: string) => void;
+  onChange: (value: string | null) => void;
   fetchFn: ImageFetchFunction;
+  defaultValue?: string;
 };
 
 type CardImageInputProps = {
   type: 'card';
-  onChange: (value: string) => void;
+  onChange: (value: string | null) => void;
   fetchFn: CardImageFetchFunction;
   columnId: number;
+  defaultValue?: string;
 };
 
 function ImageInput(props: ImageInputProps | CardImageInputProps) {
-  const { type, onChange, fetchFn } = props;
-  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const { type, onChange, fetchFn, defaultValue } = props;
+  const [previewImage, setPreviewImage] = useState<string | null>(
+    defaultValue ?? null,
+  );
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const classnames = classNames(
@@ -99,16 +115,30 @@ function ImageInput(props: ImageInputProps | CardImageInputProps) {
 
     if (type === 'default') {
       res = await fetchFn(file);
+
+      if ('message' in res) {
+        alert(res.message);
+        return;
+      }
+      onChange(res.profileImageUrl);
     } else if (type === 'card') {
       const { columnId } = props;
       res = await fetchFn({ columnId, image: file });
-    }
 
-    if ('message' in res) return;
+      if ('message' in res) {
+        alert(res.message);
+        return;
+      }
+      onChange(res.imageUrl);
+    }
 
     const nextPreview = URL.createObjectURL(file);
     setPreviewImage(nextPreview);
-    onChange(res.imageUrl);
+  };
+
+  const handleImageDelete = () => {
+    onChange(null);
+    setPreviewImage('');
   };
 
   useEffect(() => {
@@ -133,7 +163,13 @@ function ImageInput(props: ImageInputProps | CardImageInputProps) {
         />
         <Image src="/icon/plus.svg" alt="plus" width={30} height={30} />
       </button>
-      {previewImage && <PreviewImage type={type} src={previewImage} />}
+      {previewImage && (
+        <PreviewImage
+          type={type}
+          src={previewImage}
+          handleImageDelete={handleImageDelete}
+        />
+      )}
     </div>
   );
 }
@@ -141,9 +177,10 @@ function ImageInput(props: ImageInputProps | CardImageInputProps) {
 type PreviewImageProps = {
   src: string;
   type: 'default' | 'card';
+  handleImageDelete: () => void;
 };
 
-function PreviewImage({ src, type }: PreviewImageProps) {
+function PreviewImage({ src, type, handleImageDelete }: PreviewImageProps) {
   const classnames = classNames('absolute aspect-square rounded-md', {
     'size-58 md:size-76 top-0 left-68 md:left-86': type === 'card',
     'size-182 top-0': type === 'default',
@@ -156,6 +193,14 @@ function PreviewImage({ src, type }: PreviewImageProps) {
         fill
         className="absolute rounded-md object-cover"
         alt="preview"
+      />
+      <Image
+        src="/icon/close.svg"
+        alt="x"
+        width={16}
+        height={16}
+        onClick={handleImageDelete}
+        className="absolute right-12 top-10 cursor-pointer rounded-full bg-white p-3"
       />
     </div>
   );

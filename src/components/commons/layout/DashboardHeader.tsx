@@ -9,7 +9,32 @@ import { useEffect, useState } from 'react';
 
 import ProfileCircle from '../circle/ProfileCircle';
 
-const PROFILES = ['Y', 'C', 'K', 'J', 'P', 'L']; // 임시 데이터
+const PROFILES = [
+  {
+    nickname: 'Y',
+    profileImageUrl: null,
+  },
+  {
+    nickname: 'C',
+    profileImageUrl: null,
+  },
+  {
+    nickname: 'K',
+    profileImageUrl: null,
+  },
+  {
+    nickname: 'J',
+    profileImageUrl: null,
+  },
+  {
+    nickname: 'P',
+    profileImageUrl: null,
+  },
+  {
+    nickname: 'L',
+    profileImageUrl: null,
+  },
+];
 
 type Dashboard = {
   id: number;
@@ -150,10 +175,11 @@ export default function DashBoardHeader({
         {isDashboard && (
           <div className="flex font-semibold">
             {visibleProfiles.map((profile) => (
-              <li key={profile}>
-                <ProfileCircle color="bg-orange-400" size="md">
-                  {profile}
-                </ProfileCircle>
+              <li key={profile.nickname}>
+                <ProfileCircle
+                  data={profile}
+                  styles="size-34 md:size-38 bg-orange-400"
+                />
               </li>
             ))}
             {extraCount > 0 && (
@@ -167,9 +193,9 @@ export default function DashBoardHeader({
                 }}
                 className="focus:outline-none"
               >
-                <ProfileCircle color="bg-pink-400" size="md">
+                <div className="flex size-34 transform cursor-pointer items-center justify-center rounded-full bg-pink-400 text-white ring-2 ring-white transition-transform duration-200 ease-in-out hover:scale-110 md:size-38">
                   +{extraCount}
-                </ProfileCircle>
+                </div>
               </button>
             )}
           </div>
@@ -177,10 +203,11 @@ export default function DashBoardHeader({
         {isDashboard && (
           <div className="mx-12 h-38 border-l border-gray-200 md:mx-24 lg:mx-32" />
         )}
-        <li className="h-38 font-semibold">
-          <ProfileCircle color="bg-violet-dashboard" size="md">
-            K
-          </ProfileCircle>
+        <li className="font-semibold">
+          <ProfileCircle
+            data={PROFILES[2]}
+            styles="size-34 md:size-38 bg-violet-dashboard"
+          />
         </li>
         <li className="pl-12">
           {user && (

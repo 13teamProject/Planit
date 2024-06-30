@@ -12,10 +12,11 @@ import Tag from '../tag';
 
 type TagInputWrapperProps<T extends FieldValues> = Omit<
   InputHTMLAttributes<HTMLInputElement>,
-  'onChange'
+  'onChange' | 'defaultValue'
 > & {
   name: Path<T>;
   control: Control<T>;
+  defaultValue?: string[];
 };
 
 /**
@@ -25,6 +26,7 @@ type TagInputWrapperProps<T extends FieldValues> = Omit<
 export default function TagInputWrapper<T extends FieldValues>({
   name,
   control,
+  defaultValue,
   ...args
 }: TagInputWrapperProps<T>) {
   return (
@@ -32,19 +34,23 @@ export default function TagInputWrapper<T extends FieldValues>({
       name={name}
       control={control}
       render={({ field: { onChange } }) => (
-        <TagInput onChange={onChange} {...args} />
+        <TagInput defaultValue={defaultValue} onChange={onChange} {...args} />
       )}
     />
   );
 }
 
-type TagInputProps = InputHTMLAttributes<HTMLInputElement> & {
+type TagInputProps = Omit<
+  InputHTMLAttributes<HTMLInputElement>,
+  'onChange' | 'defaultValue'
+> & {
   onChange: (value: string[]) => void;
+  defaultValue?: string[];
 };
 
-function TagInput({ onChange, ...args }: TagInputProps) {
+function TagInput({ onChange, defaultValue, ...args }: TagInputProps) {
   const [currentTag, setCurrentTag] = useState('');
-  const [tagList, setTagList] = useState<string[]>([]);
+  const [tagList, setTagList] = useState<string[]>(defaultValue || []);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setCurrentTag(e.target.value);

@@ -25,7 +25,7 @@ export default function ProfileCircle({ styles, data }: Props) {
           className="absolute rounded-full object-cover"
         />
       ) : (
-        <span className="mr-[0.5px] mt-1 text-white">{nickname[0]}</span>
+        <span className="text-white">{nickname[0]}</span>
       )}
     </div>
   );

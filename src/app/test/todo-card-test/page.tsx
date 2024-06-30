@@ -1,8 +1,7 @@
+import { getTodoCardDetails } from '@/app/api/cards';
 import CardDetails from '@/components/dashboard/todo-detail-card/CardDetails';
 import CardTitle from '@/components/dashboard/todo-detail-card/CardTitle';
 import CommentSection from '@/components/dashboard/todo-detail-card/CommentSection';
-
-import { getTodoCardDetails } from '../../api/cards';
 
 const boardId = '8684';
 

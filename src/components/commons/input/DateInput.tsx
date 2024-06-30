@@ -11,6 +11,7 @@ type DateInputWrapperProps<T extends FieldValues> = {
   control: Control<T>;
   placeholder: string;
   name: Path<T>;
+  defaultValue?: T[Path<T>];
 };
 
 /**
@@ -21,13 +22,18 @@ export default function DateInputWrapper<T extends FieldValues>({
   name,
   placeholder,
   control,
+  defaultValue,
 }: DateInputWrapperProps<T>) {
   return (
     <Controller
       name={name}
       control={control}
       render={({ field: { onChange } }) => (
-        <DateInput placeholder={placeholder} onChange={onChange} />
+        <DateInput
+          defaultValue={defaultValue}
+          placeholder={placeholder}
+          onChange={onChange}
+        />
       )}
     />
   );
@@ -36,47 +42,52 @@ export default function DateInputWrapper<T extends FieldValues>({
 type DateInputProps = {
   placeholder: string;
   onChange: (value: Date) => void;
+  defaultValue?: Date;
 };
 
-const DateInput = memo(({ placeholder, onChange }: DateInputProps) => {
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const now = new Date();
-  const isToday =
-    selectedDate && selectedDate.toDateString() === now.toDateString();
+const DateInput = memo(
+  ({ placeholder, onChange, defaultValue }: DateInputProps) => {
+    const [selectedDate, setSelectedDate] = useState<Date | null>(
+      defaultValue || null,
+    );
+    const now = new Date();
+    const isToday =
+      selectedDate && selectedDate.toDateString() === now.toDateString();
 
-  const handleChange = (date: Date | null) => {
-    if (!date) return;
-    setSelectedDate(date);
-    onChange(date);
-  };
+    const handleChange = (date: Date | null) => {
+      if (!date) return;
+      setSelectedDate(date);
+      onChange(date);
+    };
 
-  return (
-    <div className="block h-42 w-full text-14 md:h-48 md:text-16">
-      <DatePicker
-        selected={selectedDate}
-        onChange={handleChange}
-        minDate={now}
-        minTime={
-          isToday
-            ? now
-            : new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0)
-        }
-        maxTime={
-          new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59)
-        }
-        dateFormat="yyyy.MM.dd HH:mm"
-        showTimeSelect
-        customInput={
-          <CustomInput
-            placeholderText={placeholder}
-            onClick={() => {}}
-            value={String(selectedDate)}
-          />
-        }
-      />
-    </div>
-  );
-});
+    return (
+      <div className="block h-42 w-full text-14 md:h-48 md:text-16">
+        <DatePicker
+          selected={selectedDate}
+          onChange={handleChange}
+          minDate={now}
+          minTime={
+            isToday
+              ? now
+              : new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0)
+          }
+          maxTime={
+            new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59)
+          }
+          dateFormat="yyyy.MM.dd HH:mm"
+          showTimeSelect
+          customInput={
+            <CustomInput
+              placeholderText={placeholder}
+              onClick={() => {}}
+              value={String(selectedDate)}
+            />
+          }
+        />
+      </div>
+    );
+  },
+);
 
 DateInput.displayName = 'DateInputWrapper';
 
