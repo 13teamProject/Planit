@@ -1,6 +1,6 @@
 import { getCookie } from '@/utils/cookies';
 
-export const API_URL = process.env.NEXT_PUBLIC_BASE_URL;
+import { API_URL } from './baseUrl';
 
 export type DashboardIdResponse = {
   id: number;
@@ -12,23 +12,18 @@ export type DashboardIdResponse = {
   userId: number;
 };
 type GetDashboardIdParams = {
-  teamId: string;
   dashboardId: number;
 };
 
 // 대시보드 상세 조회 - GET
 export async function getDashboardId({
-  teamId,
   dashboardId,
 }: GetDashboardIdParams): Promise<DashboardIdResponse> {
   try {
     const token = getCookie('accessToken');
-    const response = await fetch(
-      `${API_URL}/dashboards/${dashboardId}/?teamId=${teamId}&dashboardId=${dashboardId}`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      },
-    );
+    const response = await fetch(`${API_URL}/dashboards/${dashboardId}/`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
 
     if (!response.ok) {
       throw new Error(`HTTP error: ${response.status}`);

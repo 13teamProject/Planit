@@ -29,7 +29,7 @@ export default function Tag({
     purple: 'bg-purple-light-chip text-purple-chip',
   };
   const sizeClass = classNames(
-    'text-12 inline-flex items-center rounded px-8 py-4',
+    'text-12 inline-flex items-center rounded px-8 py-4 max-w-full',
     {
       'text-12': size === 'lg',
       'text-10': size === 'sm',

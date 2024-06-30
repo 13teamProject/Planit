@@ -10,7 +10,6 @@ import React, { useEffect, useState } from 'react';
 import Card from './Card';
 
 type ColumnProps = {
-  teamId: string;
   dashboardId: number;
 };
 
@@ -18,7 +17,7 @@ type ColumnWithCards = ColumnType & {
   cards: CardResponse[];
 };
 
-export default function Column({ teamId, dashboardId }: ColumnProps) {
+export default function Column({ dashboardId }: ColumnProps) {
   const [columns, setColumns] = useState<ColumnWithCards[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -26,11 +25,11 @@ export default function Column({ teamId, dashboardId }: ColumnProps) {
   useEffect(() => {
     async function fetchColumnsAndCards() {
       try {
-        const columnsData = await getColumns({ teamId, dashboardId });
+        const columnsData = await getColumns({ dashboardId });
 
         const columnsWithCards = await Promise.all(
           columnsData.map(async (column) => {
-            const cards = await getCards({ teamId, columnId: column.id });
+            const cards = await getCards({ columnId: column.id });
             return { ...column, cards };
           }),
         );
@@ -44,17 +43,17 @@ export default function Column({ teamId, dashboardId }: ColumnProps) {
     }
 
     fetchColumnsAndCards();
-  }, [teamId, dashboardId]);
+  }, [dashboardId]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
 
   return (
-    <div className="w-full lg:flex lg:h-full">
+    <div className="w-full lg:flex lg:h-full lg:overflow-hidden">
       {columns.map((column) => (
         <div
           key={column.id}
-          className="w-full px-20 sm:border-b sm:p-12 md:border-r md:p-20 lg:h-full lg:overflow-y-scroll"
+          className="w-full px-20 sm:border-b sm:p-12 md:border-r md:p-20 lg:flex lg:h-full lg:flex-col"
         >
           <div className="my-20 flex w-full items-center justify-between">
             <div className="flex items-center justify-center gap-4">
@@ -72,18 +71,12 @@ export default function Column({ teamId, dashboardId }: ColumnProps) {
               className="cursor-pointer transition duration-500 ease-in-out hover:rotate-45"
             />
           </div>
-          <div className="sm:mb-12 md:mb-20">
+          <BarButton />
+          <div className="sm:mb-12 md:mb-20 lg:flex-1 lg:overflow-y-auto">
             {column.cards.map((card) => (
-              <Card
-                key={card.id}
-                teamId={teamId}
-                cardId={card.id}
-                columnTitle={column.title}
-              />
+              <Card key={card.id} cardId={card.id} columnTitle={column.title} />
             ))}
           </div>
-
-          <BarButton />
         </div>
       ))}
     </div>

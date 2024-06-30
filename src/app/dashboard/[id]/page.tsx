@@ -19,7 +19,7 @@ export default function DashboardPage({
   useEffect(() => {
     const fetchDashboardId = async () => {
       const dashboardId = params.id;
-      const res = await getDashboardId({ dashboardId, teamId: '6-13' });
+      const res = await getDashboardId({ dashboardId });
       try {
         setDashboard(res);
       } catch (err) {
@@ -31,16 +31,16 @@ export default function DashboardPage({
   }, [params.id]);
 
   if (!dashboard) {
-    return <div>Loading...</div>;
+    return <div>로딩중...</div>;
   }
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen lg:overflow-hidden">
       <Sidemenu />
       <div className="flex flex-1 flex-col">
         <DashBoardHeader isDashboard />
-        <div className="h-full w-full bg-gray-50 lg:flex">
-          <Column key={dashboard.id} dashboardId={dashboard.id} teamId="6-13" />
+        <div className="w-full bg-gray-50 lg:flex lg:h-full lg:overflow-hidden">
+          <Column key={dashboard.id} dashboardId={dashboard.id} />
           <div className="sm:w-full sm:p-12 md:w-full md:p-20 lg:w-500">
             <BarButton text="새로운 컬럼 추가하기" />
           </div>

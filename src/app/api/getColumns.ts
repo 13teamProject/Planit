@@ -1,6 +1,6 @@
 import { getCookie } from '@/utils/cookies';
 
-export const API_URL = process.env.NEXT_PUBLIC_BASE_URL;
+import { API_URL } from './baseUrl';
 
 export type Column = {
   id: number;
@@ -16,19 +16,17 @@ export type ColumnsResponse = {
 };
 
 type GetColumnsParams = {
-  teamId: string;
   dashboardId: number;
 };
 
 // 컬럼 목록 조회
 export async function getColumns({
-  teamId,
   dashboardId,
 }: GetColumnsParams): Promise<Column[]> {
   try {
     const token = getCookie('accessToken');
     const response = await fetch(
-      `${API_URL}/columns?teamId=${teamId}&dashboardId=${dashboardId}`,
+      `${API_URL}/columns?dashboardId=${dashboardId}`,
       {
         headers: { Authorization: `Bearer ${token}` },
       },

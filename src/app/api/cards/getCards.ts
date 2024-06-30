@@ -1,6 +1,6 @@
 import { getCookie } from '@/utils/cookies';
 
-export const API_URL = process.env.NEXT_PUBLIC_BASE_URL;
+import { API_URL } from '../baseUrl';
 
 export type CardResponse = {
   id: number;
@@ -21,35 +21,24 @@ export type CardResponse = {
 };
 
 type GetCardColumnIdParams = {
-  teamId: string;
   columnId: number;
 };
 
 type GetCardIdParams = {
-  teamId: string;
   cardId: number;
-};
-
-type CardsApiResponse = {
-  cursorId: number;
-  totalCount: number;
-  cards: CardResponse[];
 };
 
 // 카드 목록 조회
 export async function getCards({
-  teamId,
   columnId,
 }: GetCardColumnIdParams): Promise<CardResponse[]> {
   try {
     const token = getCookie('accessToken');
 
     const searchParams = new URLSearchParams({
-      teamId,
       columnId: columnId.toString(),
     });
     const url = `${API_URL}/cards?${searchParams.toString()}`;
-
     const response = await fetch(url, {
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -58,7 +47,7 @@ export async function getCards({
       throw new Error(`HTTP error: ${response.status}`);
     }
 
-    const body: CardsApiResponse = await response.json();
+    const body = await response.json();
 
     return body.cards;
   } catch (err) {
@@ -68,14 +57,12 @@ export async function getCards({
 
 // 카드 상세 조회
 export async function getCardId({
-  teamId,
   cardId,
 }: GetCardIdParams): Promise<CardResponse> {
   try {
     const token = getCookie('accessToken');
 
-    const searchParams = new URLSearchParams({ teamId });
-    const url = `${API_URL}/cards/${cardId}?${searchParams.toString()}`;
+    const url = `${API_URL}/cards/${cardId}`;
 
     const response = await fetch(url, {
       headers: { Authorization: `Bearer ${token}` },
