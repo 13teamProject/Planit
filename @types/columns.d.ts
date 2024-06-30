@@ -12,4 +12,23 @@ declare module '@planit-types' {
     result: string;
     data: Column[];
   };
+
+  export type CreateColumnRequest = {
+    title: string;
+    dashboardId: number;
+  };
+
+  export type CreateColumnResponse = {
+    id: number;
+    title: string;
+    teamId: string;
+    createdAt: string;
+    updatedAt: string;
+  };
+
+  export type EditColumnRequest = {
+    title: string;
+  };
+
+  export type EditColumnResponse = CreateColumnResponse;
 }
