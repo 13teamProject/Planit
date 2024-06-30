@@ -114,7 +114,7 @@ export default function NewDashboard() {
         id: response.id,
         title: response.title,
         color: response.color,
-        createdAt: response.createAt,
+        createdAt: response.createdAt,
         updatedAt: response.updatedAt,
         createdByMe: response.createdByMe,
         userId: response.userId,

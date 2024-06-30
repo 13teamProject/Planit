@@ -17,6 +17,10 @@ export const useDashboardStore = create<DashboardState>((set) => ({
         id: data.id,
         title: data.title,
         color: data.color,
+        createdAt: data.createdAt,
+        updatedAt: data.updatedAt,
+        userId: data.userId,
+        createdByMe: data.createdByMe,
       })),
     });
   },

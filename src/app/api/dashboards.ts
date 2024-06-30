@@ -1,5 +1,12 @@
 import { getCookie } from '@/utils/cookies';
-import { DashboardEditResponse, ErrorMessage } from '@planit-types';
+import {
+  DashboardEditResponse,
+  DashboardFormData,
+  DashboardListResponse,
+  DashboardResponse,
+  DashboardUpdateData,
+  ErrorMessage,
+} from '@planit-types';
 
 export const API_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
