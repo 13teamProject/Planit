@@ -32,7 +32,7 @@ export default function Password() {
     message: '',
   });
 
-  // 모달 닫긴
+  // 모달 닫기
   const handleClose = () => {
     setModalState({ ...modalState, isOpen: false });
   };
