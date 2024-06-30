@@ -6,6 +6,7 @@ import useDeviceState from '@/hooks/useDeviceState';
 import { Dashboard } from '@planit-types';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
@@ -55,6 +56,7 @@ export default function NewDashboard() {
   const [selectedColor, setSelectedColor] = useState<string>(colors[0]);
   const [totalItems, setTotalItems] = useState<number>(0); // 전체 아이템 수
   const [totalPages, setTotalPages] = useState<number>(1); // 전체 페이지 수
+  const router = useRouter();
 
   const fetchDashboard = async (currentPage: number) => {
     const response = await getDashboards('pagination', currentPage, 5);
@@ -69,16 +71,18 @@ export default function NewDashboard() {
     }));
     setDashboards(fetchedDashboards);
 
+    // 페이지네이션 - 전체 아이템 계산
     const totalItemsResponse = await getDashboards(
       'pagination',
       1,
       Number.MAX_SAFE_INTEGER,
     );
-    const totalItemsCount = totalItemsResponse.dashboards.length; // 변수 이름 변경
+    const totalItemsCount = totalItemsResponse.dashboards.length;
     setTotalItems(totalItemsCount);
 
-    const pageSize = 5; // 한 페이지 당 아이템 수
-    const calculatedTotalPages = Math.ceil(totalItemsCount / pageSize); // 변수 이름 변경
+    // 페이지네이션 - 한 페이지 당 아이템 수 계산
+    const pageSize = 5;
+    const calculatedTotalPages = Math.ceil(totalItemsCount / pageSize);
     setTotalPages(calculatedTotalPages);
   };
 
@@ -90,7 +94,12 @@ export default function NewDashboard() {
     setModalState({ ...modalState, isOpen: false });
   };
 
-  const { register, handleSubmit } = useForm<FormValues>();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { isValid },
+  } = useForm<FormValues>({ mode: 'onChange' });
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     try {
       const formData = {
@@ -108,6 +117,7 @@ export default function NewDashboard() {
       setDashboards((prevDashboards) => [...prevDashboards, newDashboard]);
       fetchDashboard(page);
       setModalState({ ...modalState, isOpen: false });
+      router.push(`/dashboard/${response.id}`);
     } catch (error) {
       console.error('Failed to create dashboard:', error);
     }
@@ -244,7 +254,12 @@ export default function NewDashboard() {
                   text="생성"
                   type="submit"
                   cancel={false}
-                  styles="h-42 py-10 px-54 text-16 md:h-48 md:py-12 md:text-18 md:px-46 md:py-14"
+                  disabled={!watch('dashboardName') || !selectedColor}
+                  styles={`h-42 py-10 px-54 text-16 md:h-48 md:py-12 md:text-18 md:px-46 md:py-14 ${
+                    !watch('dashboardName') || !selectedColor
+                      ? 'bg-gray-300 cursor-not-allowed'
+                      : ''
+                  }`}
                 >
                   생성
                 </Button>

@@ -3,6 +3,7 @@ import ColorCircle from '@/components/commons/circle/ColorCircle';
 import { Dashboard } from '@planit-types';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
@@ -46,7 +47,6 @@ export default function Sidemenu() {
     isOpen: false,
     message: '',
   });
-  const { register, handleSubmit } = useForm<FormValues>();
   const [selectedColor, setSelectedColor] = useState<string>(colors[0]);
   const [page, setPage] = useState<number>(1);
 
@@ -61,6 +61,13 @@ export default function Sidemenu() {
     );
   };
 
+  const router = useRouter();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { isValid },
+  } = useForm<FormValues>({ mode: 'onChange' });
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     try {
       const formData = {
@@ -78,6 +85,7 @@ export default function Sidemenu() {
       setDashboards((prevDashboards) => [...prevDashboards, newDashboard]);
       fetchDashboard();
       setModalState({ ...modalState, isOpen: false });
+      router.push(`/dashboard/${response.id}`);
     } catch (error) {
       console.error('Failed to create dashboard:', error);
     }
@@ -211,7 +219,12 @@ export default function Sidemenu() {
                   text="생성"
                   type="submit"
                   cancel={false}
-                  styles="h-42 py-10 px-54 text-16 md:h-48 md:py-12 md:text-18 md:px-46 md:py-14"
+                  disabled={!watch('dashboardName') || !selectedColor}
+                  styles={`h-42 py-10 px-54 text-16 md:h-48 md:py-12 md:text-18 md:px-46 md:py-14 ${
+                    !watch('dashboardName') || !selectedColor
+                      ? 'bg-gray-300 cursor-not-allowed'
+                      : ''
+                  }`}
                 >
                   생성
                 </Button>
