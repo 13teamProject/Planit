@@ -1,7 +1,6 @@
 import CardDetails from '@/components/dashboard/todo-detail-card/CardDetails';
 import CardTitle from '@/components/dashboard/todo-detail-card/CardTitle';
-import CommentInput from '@/components/dashboard/todo-detail-card/CommentInput';
-import CommentsList from '@/components/dashboard/todo-detail-card/CommentsList';
+import CommentSection from '@/components/dashboard/todo-detail-card/CommentSection';
 
 import { getTodoCardDetails } from '../../api/cards';
 
@@ -13,13 +12,16 @@ const boardId = '8684';
 
 export default async function TodoDetailCard() {
   const cardDetails = await getTodoCardDetails(boardId);
-
+  const { title, id, columnId, dashboardId } = cardDetails;
   return (
-    <div className="flex w-full flex-col gap-16 px-28 py-32 md:max-w-680 lg:max-w-730">
-      <CardTitle title={cardDetails.title} />
+    <div className="flex h-730 w-full flex-col gap-16 px-28 py-32 md:max-w-680 lg:max-w-730">
+      <CardTitle title={title} />
       <CardDetails data={cardDetails} />
-      <CommentInput />
-      <CommentsList />
+      <CommentSection
+        cardId={id}
+        columnId={columnId}
+        dashboardId={dashboardId}
+      />
     </div>
   );
 }
