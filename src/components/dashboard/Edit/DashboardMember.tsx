@@ -80,6 +80,7 @@ export default function DashboardMember({
     // 구성원 조회 함수 호출
     fetchDashboardMember(currentPage);
   }, [currentPage]);
+
   return (
     <div className="mt-12 w-full max-w-620 rounded-md bg-white px-28 pb-28 pt-26">
       <div className="mb-25 flex justify-between">
