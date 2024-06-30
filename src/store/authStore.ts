@@ -7,6 +7,7 @@ type AuthState = {
   userInfo: UserInfoResponse | null;
   login: (user: UserInfoResponse) => void;
   logout: () => void;
+  changeUserInfo: (userInfo: UserInfoResponse) => void;
 };
 
 export const useAuthStore = create<AuthState>()(
@@ -19,6 +20,7 @@ export const useAuthStore = create<AuthState>()(
         set({ isLoggedIn: false, userInfo: null });
         localStorage.removeItem('auth-storage');
       },
+      changeUserInfo: (userInfo) => set({ userInfo }),
     }),
     {
       name: 'auth-storage',
