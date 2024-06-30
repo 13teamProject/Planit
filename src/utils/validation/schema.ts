@@ -28,3 +28,18 @@ export const authValidationSchema = yup.object().shape({
     .required()
     .optional(),
 });
+
+export const passwordValidationSchema = yup.object().shape({
+  password: yup
+    .string()
+    .required(ErrorMessages.PASSWORD_REQUIRED)
+    .min(8, ErrorMessages.INVALID_PASSWORD),
+  newPassword: yup
+    .string()
+    .required(ErrorMessages.PASSWORD_REQUIRED)
+    .min(8, ErrorMessages.INVALID_PASSWORD),
+  passwordConfirmation: yup
+    .string()
+    .oneOf([yup.ref('newPassword')], ErrorMessages.PASSWORDS_MUST_MATCH)
+    .required(ErrorMessages.CONFIRM_PASSWORD_REQUIRED),
+});
