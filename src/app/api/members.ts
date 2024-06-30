@@ -8,6 +8,7 @@ type GetMembersParams = {
   page?: number;
   size?: 20;
 };
+
 export async function getMembers({
   dashboardId,
   page = 1,
