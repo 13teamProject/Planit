@@ -39,8 +39,7 @@ export default function DashboardMember({
       });
     } else {
       // 구성원 목록에서 해당 유저 삭제후 리스트업
-      const updatedMembers = members.filter((m) => m.id !== memberId);
-      setMembers(updatedMembers);
+      await fetchDashboardMember(currentPage);
 
       setModalState({
         isOpen: true,
