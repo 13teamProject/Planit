@@ -8,6 +8,8 @@ import { Member, ModalState } from '@planit-types';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
+const PAGE_SIZE = 5;
+
 export default function DashboardMember({
   params,
 }: {
@@ -20,8 +22,6 @@ export default function DashboardMember({
   });
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-
-  const PAGE_SIZE = 5;
 
   // 모달 닫기
   const handleClose = () => {
