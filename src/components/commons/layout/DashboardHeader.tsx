@@ -9,7 +9,32 @@ import { useEffect, useState } from 'react';
 
 import ProfileCircle from '../circle/ProfileCircle';
 
-const PROFILES = ['Y', 'C', 'K', 'J', 'P', 'L']; // 임시 데이터
+const PROFILES = [
+  {
+    nickname: 'Y',
+    profileImageUrl: null,
+  },
+  {
+    nickname: 'C',
+    profileImageUrl: null,
+  },
+  {
+    nickname: 'K',
+    profileImageUrl: null,
+  },
+  {
+    nickname: 'J',
+    profileImageUrl: null,
+  },
+  {
+    nickname: 'P',
+    profileImageUrl: null,
+  },
+  {
+    nickname: 'L',
+    profileImageUrl: null,
+  },
+];
 
 type Dashboard = {
   id: number;
@@ -69,7 +94,7 @@ export default function DashBoardHeader({
 
       // URL의 id와 일치하는 대시보드의 타이틀
       const currentDashboard = fetchedDashboards.find(
-        (dashboard) => String(dashboard.id) === dashboardid,
+        (dashboard: Dashboard) => String(dashboard.id) === dashboardid,
       );
       if (currentDashboard) {
         setCurrentTitle(currentDashboard.title);
@@ -92,8 +117,8 @@ export default function DashBoardHeader({
     fetchUser();
   }, []);
 
+  // Profile Circle toggle
   const toggleProfiles = () => {
-    // Profile Circle toggle
     if (window.innerWidth >= 1200) {
       setIsExpanded(!isExpanded);
       setMaxVisible(!isExpanded ? PROFILES.length : 4);
@@ -150,11 +175,11 @@ export default function DashBoardHeader({
         )}
         {isDashboard && (
           <div className="flex font-semibold">
-            {visibleProfiles.map((nickname) => (
-              <li key={nickname}>
+            {visibleProfiles.map((profile) => (
+              <li key={profile.nickname}>
                 <ProfileCircle
-                  styles="size-26 md:size-34 bg-slate-400 text-14"
-                  data={{ nickname, profileImageUrl: null }}
+                  data={profile}
+                  styles="size-34 md:size-38 bg-orange-400"
                 />
               </li>
             ))}
@@ -170,10 +195,9 @@ export default function DashBoardHeader({
                 className="focus:outline-none"
                 aria-label="프로필 추가 버튼"
               >
-                <ProfileCircle
-                  styles="size-26 md:size-34 bg-pink-400 text-14"
-                  data={{ nickname: `+${extraCount}`, profileImageUrl: null }}
-                />
+                <div className="flex size-34 transform cursor-pointer items-center justify-center rounded-full bg-pink-400 text-white ring-2 ring-white transition-transform duration-200 ease-in-out hover:scale-110 md:size-38">
+                  +{extraCount}
+                </div>
               </button>
             )}
           </div>
@@ -181,13 +205,11 @@ export default function DashBoardHeader({
         {isDashboard && (
           <div className="mx-12 h-38 border-l border-gray-200 md:mx-24 lg:mx-32" />
         )}
-        <li className="h-38 font-semibold">
-          {user && (
-            <ProfileCircle
-              styles="size-26 md:size-34 bg-violet-dashboard text-14"
-              data={user}
-            />
-          )}
+        <li className="font-semibold">
+          <ProfileCircle
+            data={PROFILES[2]}
+            styles="size-34 md:size-38 bg-violet-dashboard"
+          />
         </li>
         <li className="pl-12">
           {user && (

@@ -15,7 +15,7 @@ import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 type DropdownInputWrapperProps<T extends FieldValues> = {
   children: ReactNode;
   control: Control<T>;
-  placeholder: string;
+  defaultValue: ReactNode;
   name: Path<T>;
 };
 
@@ -27,14 +27,14 @@ export default function DropdownInputWrapper<T extends FieldValues>({
   children,
   name,
   control,
-  placeholder,
+  defaultValue,
 }: DropdownInputWrapperProps<T>) {
   return (
     <Controller
       name={name}
       control={control}
       render={({ field: { onChange } }) => (
-        <DropdownInput placeholder={placeholder} onChange={onChange}>
+        <DropdownInput onChange={onChange} defaultValue={defaultValue}>
           {children}
         </DropdownInput>
       )}
@@ -45,7 +45,7 @@ export default function DropdownInputWrapper<T extends FieldValues>({
 type DropdownInputContextType = {
   isOpen: boolean;
   toggle: () => void;
-  selected: JSX.Element;
+  selected: ReactNode;
   handleSelect: (id: number, element: JSX.Element) => void;
 };
 
@@ -58,8 +58,8 @@ const DropdownInputContext = createContext<DropdownInputContextType>({
 
 type DropdownInputProps = {
   children: ReactNode;
-  placeholder: string;
   onChange: (value: number) => void;
+  defaultValue: ReactNode;
 };
 
 /**
@@ -68,14 +68,12 @@ type DropdownInputProps = {
  */
 function DropdownInput({
   children,
-  placeholder,
   onChange,
+  defaultValue,
 }: DropdownInputProps) {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState(
-    <span className="text-gray-300">{placeholder}</span>,
-  );
+  const [selected, setSelected] = useState(defaultValue);
 
   const toggle = () => {
     setIsOpen((prev) => !prev);

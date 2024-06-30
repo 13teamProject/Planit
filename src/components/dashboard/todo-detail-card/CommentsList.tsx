@@ -48,9 +48,7 @@ export default function CommentsList() {
     <div>
       {mock.comments.map((comment) => (
         <div key={comment.id} className="flex gap-8 pb-16 pt-2">
-          <ProfileCircle color="bg-red-500" size="sm">
-            {comment.author.nickname[0]}
-          </ProfileCircle>
+          <ProfileCircle data={comment.author} styles="bg-red-500 size-32" />
           <div className="flex flex-col">
             <div className="flex gap-6">
               <span className="text-12 font-semibold">

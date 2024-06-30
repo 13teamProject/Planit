@@ -60,15 +60,17 @@ export default function NewDashboard() {
 
   const fetchDashboard = async (currentPage: number) => {
     const response = await getDashboards('pagination', currentPage, 5);
-    const fetchedDashboards: Dashboard[] = response.dashboards.map((data) => ({
-      id: data.id,
-      title: data.title,
-      color: data.color,
-      createdAt: data.createdAt,
-      updatedAt: data.updatedAt,
-      userId: data.userId,
-      createdByMe: data.createdByMe,
-    }));
+    const fetchedDashboards: Dashboard[] = response.dashboards.map(
+      (data: Dashboard) => ({
+        id: data.id,
+        title: data.title,
+        color: data.color,
+        createdAt: data.createdAt,
+        updatedAt: data.updatedAt,
+        userId: data.userId,
+        createdByMe: data.createdByMe,
+      }),
+    );
     setDashboards(fetchedDashboards);
 
     // 페이지네이션 - 전체 아이템 계산
@@ -112,6 +114,10 @@ export default function NewDashboard() {
         id: response.id,
         title: response.title,
         color: response.color,
+        createdAt: response.createAt,
+        updatedAt: response.updatedAt,
+        createdByMe: response.createdByMe,
+        userId: response.userId,
       };
 
       setDashboards((prevDashboards) => [...prevDashboards, newDashboard]);

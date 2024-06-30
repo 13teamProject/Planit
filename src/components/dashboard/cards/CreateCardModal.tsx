@@ -1,8 +1,9 @@
 'use client';
 
-import postCardImage from '@/app/api/cards/postCardImage';
-import postCreateCard from '@/app/api/cards/postCreateCard';
+import { postCardImage, postCreateCard } from '@/app/api/cards-goni';
+import { getMembers } from '@/app/api/members';
 import Button from '@/components/commons/button';
+import ProfileCircle from '@/components/commons/circle/ProfileCircle';
 import Input from '@/components/commons/input';
 import DateInput from '@/components/commons/input/DateInput';
 import DropdownInput from '@/components/commons/input/DropdownInput';
@@ -10,11 +11,10 @@ import ImageInput from '@/components/commons/input/ImageInput';
 import TagInput from '@/components/commons/input/TagInput';
 import Textarea from '@/components/commons/input/Textarea';
 import Modal from '@/components/commons/modal';
-import { useAuthStore } from '@/store/authStore';
-import { getCookie } from '@/utils/cookies';
 import { formatDate } from '@/utils/date';
-import { CreateCardRequest } from '@planit-types';
+import { CreateCardRequest, Member } from '@planit-types';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 type Props = {
@@ -30,7 +30,7 @@ export type CreateCardInputs = {
   description: string;
   dueDate?: Date;
   tags?: string[];
-  image?: string;
+  image?: string | null;
 };
 
 export default function CreateCardModal({
@@ -39,12 +39,12 @@ export default function CreateCardModal({
   dashboardId,
   columnId,
 }: Props) {
+  const [members, setMembers] = useState<Member[]>([]);
   const { register, handleSubmit, control, reset } =
     useForm<CreateCardInputs>();
-  const userInfo = useAuthStore((state) => state.userInfo);
-  const token = getCookie('accessToken');
 
   const onSubmit: SubmitHandler<CreateCardInputs> = async ({
+    assignee,
     title,
     description,
     tags,
@@ -52,7 +52,7 @@ export default function CreateCardModal({
     image,
   }) => {
     const reqBody: CreateCardRequest = {
-      assigneeUserId: userInfo!.id,
+      assigneeUserId: assignee,
       dashboardId,
       columnId,
       title,
@@ -70,9 +70,24 @@ export default function CreateCardModal({
     reset();
   };
 
+  useEffect(() => {
+    if (!isOpen) return;
+
+    (async () => {
+      const memberRes = await getMembers({ dashboardId });
+
+      if ('message' in memberRes) {
+        alert(memberRes.message);
+        return;
+      }
+
+      setMembers(memberRes.members);
+    })();
+  }, [isOpen]);
+
   return (
     <Modal isOpen={isOpen} onClose={() => {}}>
-      <form className="max-h-[734px] w-327 overflow-y-auto p-20 md:max-h-[845px] md:min-w-[506px] md:p-24">
+      <form className="max-h-734 w-327 overflow-y-auto p-20 md:max-h-845 md:min-w-506 md:p-24">
         <div className="mb-18 flex items-center justify-between md:mb-22">
           <h1 className="text-20 font-bold">할 일 생성</h1>
           <Image
@@ -86,7 +101,7 @@ export default function CreateCardModal({
         </div>
 
         <label
-          htmlFor="dropdown"
+          htmlFor="assignee"
           className="mb-8 block text-14 text-black-800 md:text-16"
         >
           담당자
@@ -94,9 +109,21 @@ export default function CreateCardModal({
         <DropdownInput
           name="assignee"
           control={control}
-          placeholder="이름을 입력해 주세요"
+          defaultValue={
+            <span className="text-gray-300">이름을 입력해 주세요</span>
+          }
         >
-          <DropdownInput.Option id={1}>Option 1</DropdownInput.Option>
+          {members.map((member) => (
+            <DropdownInput.Option key={member.userId} id={member.userId}>
+              <div className="flex items-center gap-6">
+                <ProfileCircle
+                  data={member}
+                  styles="size-26 text-14 bg-toss-blue-light"
+                />
+                {member.nickname}
+              </div>
+            </DropdownInput.Option>
+          ))}
         </DropdownInput>
 
         <label
@@ -125,7 +152,7 @@ export default function CreateCardModal({
         />
 
         <label
-          htmlFor="date"
+          htmlFor="dueDate"
           className="mb-8 mt-18 block text-14 text-black-800 md:mt-20 md:text-16"
         >
           마감일
@@ -137,13 +164,13 @@ export default function CreateCardModal({
         />
 
         <label
-          htmlFor="tag"
+          htmlFor="tags"
           className="mb-8 mt-18 block text-14 text-black-800 md:mt-20 md:text-16"
         >
           태그
         </label>
         <TagInput
-          id="tag"
+          id="tags"
           placeholder="입력 후 Enter"
           name="tags"
           control={control}

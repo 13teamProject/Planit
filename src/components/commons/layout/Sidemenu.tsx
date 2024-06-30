@@ -53,7 +53,7 @@ export default function Sidemenu() {
   const fetchDashboard = async () => {
     const response = await getDashboards('infiniteScroll', 1, 100);
     setDashboards(
-      response.dashboards.map((data) => ({
+      response.dashboards.map((data: Dashboard) => ({
         id: data.id,
         title: data.title,
         color: data.color,
@@ -80,6 +80,10 @@ export default function Sidemenu() {
         id: response.id,
         title: response.title,
         color: response.color,
+        createdAt: response.createAt,
+        updatedAt: response.updatedAt,
+        createdByMe: response.createdByMe,
+        userId: response.userId,
       };
 
       setDashboards((prevDashboards) => [...prevDashboards, newDashboard]);
