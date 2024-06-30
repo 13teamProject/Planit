@@ -1,6 +1,6 @@
-import DashboardInvitation from '@/components/dashboard/edit/DashboardInvitation';
-import DashboardMember from '@/components/dashboard/edit/DashboardMember';
-import DashboardName from '@/components/dashboard/edit/DashboardName';
+import DashboardInvitation from '@/components/dashboard/edits/DashboardInvitation';
+import DashboardMember from '@/components/dashboard/edits/DashboardMember';
+import DashboardName from '@/components/dashboard/edits/DashboardName';
 
 export default function Edit({ params }: { params: { id: number } }) {
   return (
