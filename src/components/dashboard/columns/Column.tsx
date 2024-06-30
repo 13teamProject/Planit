@@ -1,20 +1,21 @@
 'use client';
 
-import { CardResponse, getCards } from '@/app/api/cards/getCards';
+import { getCards } from '@/app/api/getCards';
 import { Column as ColumnType, getColumns } from '@/app/api/getColumns';
 import BarButton from '@/components/commons/button/BarButton';
 import ColorCircle from '@/components/commons/circle/ColorCircle';
+import { GetCardResponse } from '@planit-types';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 
-import Card from './Card';
+import Card from '../cards/Card';
 
 type ColumnProps = {
   dashboardId: number;
 };
 
 type ColumnWithCards = ColumnType & {
-  cards: CardResponse[];
+  cards: GetCardResponse[];
 };
 
 export default function Column({ dashboardId }: ColumnProps) {

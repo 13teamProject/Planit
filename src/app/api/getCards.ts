@@ -1,24 +1,7 @@
 import { getCookie } from '@/utils/cookies';
+import { GetCardResponse } from '@planit-types';
 
-import { API_URL } from '../baseUrl';
-
-export type CardResponse = {
-  id: number;
-  title: string;
-  description: string;
-  tags: string[];
-  dueDate: string;
-  assignee: {
-    nickname: string;
-    id: number;
-    profileImageUrl: string;
-  };
-  imageUrl: string;
-  teamId: string;
-  columnId: number;
-  createdAt: string;
-  updatedAt: string;
-};
+import { API_URL } from './baseUrl';
 
 type GetCardColumnIdParams = {
   columnId: number;
@@ -31,7 +14,7 @@ type GetCardIdParams = {
 // 카드 목록 조회
 export async function getCards({
   columnId,
-}: GetCardColumnIdParams): Promise<CardResponse[]> {
+}: GetCardColumnIdParams): Promise<GetCardResponse[]> {
   try {
     const token = getCookie('accessToken');
 
@@ -58,7 +41,7 @@ export async function getCards({
 // 카드 상세 조회
 export async function getCardId({
   cardId,
-}: GetCardIdParams): Promise<CardResponse> {
+}: GetCardIdParams): Promise<GetCardResponse> {
   try {
     const token = getCookie('accessToken');
 

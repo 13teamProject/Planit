@@ -1,6 +1,7 @@
-import { CardResponse as CardType, getCardId } from '@/app/api/cards/getCards';
+import { getCardId } from '@/app/api/getCards';
 import ProfileCircle from '@/components/commons/circle/ProfileCircle';
 import Tag from '@/components/commons/tag';
+import { GetCardResponse as CardType } from '@planit-types';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 

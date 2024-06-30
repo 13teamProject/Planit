@@ -1,10 +1,11 @@
 'use client';
 
-import { DashboardIdResponse, getDashboardId } from '@/app/api/getDashboardId';
+import { getDashboardId } from '@/app/api/getDashboardId';
 import BarButton from '@/components/commons/button/BarButton';
 import DashBoardHeader from '@/components/commons/layout/DashboardHeader';
 import Sidemenu from '@/components/commons/layout/Sidemenu';
-import Column from '@/components/dashboard/Column';
+import Column from '@/components/dashboard/columns/Column';
+import { GetDashboardIdResponse } from '@planit-types';
 import { useEffect, useState } from 'react';
 
 export default function DashboardPage({
@@ -14,7 +15,9 @@ export default function DashboardPage({
     id: number;
   };
 }) {
-  const [dashboard, setDashboard] = useState<DashboardIdResponse | null>(null);
+  const [dashboard, setDashboard] = useState<GetDashboardIdResponse | null>(
+    null,
+  );
 
   useEffect(() => {
     const fetchDashboardId = async () => {
