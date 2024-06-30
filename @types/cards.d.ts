@@ -13,7 +13,7 @@ declare module '@planit-types' {
     description: string;
     dueDate?: string;
     tags?: string[];
-    imageUrl?: string;
+    imageUrl?: string | null;
   };
 
   export type CreateCardResponse = {
@@ -45,7 +45,30 @@ declare module '@planit-types' {
     imageUrl: string;
     teamId: string;
     columnId: number;
-    dashboardId: number;
+    createdAt: string;
+    updatedAt: string;
+  };
+
+  export type EditCardRequest = {
+    columnId: number;
+    assigneeUserId: number;
+    title: string;
+    description: string;
+    dueDate?: string;
+    tags?: string[];
+    imageUrl?: string | null;
+  };
+
+  export type EditCardResponse = {
+    id: number;
+    title: string;
+    description: string;
+    tags?: string[];
+    dueDate?: string;
+    assignee: Assignee;
+    imageUrl?: string;
+    teamId: string;
+    columnId: number;
     createdAt: string;
     updatedAt: string;
   };

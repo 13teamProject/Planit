@@ -7,7 +7,7 @@ import {
   SignUpProps,
   SignUpResult,
   UserInfoResponse,
-} from '@planit-api';
+} from '@planit-types';
 
 // 회원가입
 export async function handleSignUp({

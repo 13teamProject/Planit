@@ -1,4 +1,5 @@
 import { getCookie } from '@/utils/cookies';
+import { DashboardEditResponse, ErrorMessage } from '@planit-types';
 
 export const API_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -80,32 +81,60 @@ export async function postDashboards(
   }
 }
 
+// 대시보드 상세 조회 - GET
+export async function getDashboradDetail(
+  dashboardId: number,
+): Promise<DashboardEditResponse | ErrorMessage> {
+  const token = getCookie('accessToken');
+
+  const obj: RequestInit = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  try {
+    const res = await fetch(`${API_URL}/dashboards/${dashboardId}`, obj);
+    const data = await res.json();
+
+    if (!res.ok) throw new Error(`${data.message}`);
+
+    return data;
+  } catch (err) {
+    if (err instanceof Error) {
+      return { message: err.message };
+    }
+    return { message: '대시보드 정보 조회 중 알 수 없는 오류가 발생했습니다.' };
+  }
+}
 // 대시보드 수정 - PUT
 export async function updateDashboard(
-  dashboardId: string,
+  dashboardId: number,
   updateData: DashboardUpdateData,
-): Promise<DashboardResponse> {
+): Promise<DashboardEditResponse | ErrorMessage> {
+  const token = getCookie('accessToken');
+
+  const obj: RequestInit = {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(updateData),
+  };
   try {
-    const token = getCookie('accessToken');
-    const response = await fetch(`${API_URL}/dashboards/${dashboardId}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(updateData),
-    });
+    const res = await fetch(`${API_URL}/dashboards/${dashboardId}`, obj);
+    const data = await res.json();
 
-    if (!response.ok) {
-      throw new Error(`HTTP error: ${response.status}`);
+    if (!res.ok) throw new Error(`${data.message}`);
+
+    return data;
+  } catch (err) {
+    if (err instanceof Error) {
+      return { message: err.message };
     }
-
-    const body: DashboardResponse = await response.json();
-    console.log(body);
-    return body;
-  } catch (error) {
-    console.error('Failed to update dashboard : ', error);
-    throw error;
+    return { message: '대시보드 수정 중 알 수 없는 오류가 발생했습니다.' };
   }
 }
 
