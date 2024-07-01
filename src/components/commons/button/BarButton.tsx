@@ -15,7 +15,7 @@ export default function BarButton({
   onClick,
 }: BarButtonProps) {
   const className = classNames(
-    'w-full flex justify-center items-center text-black-800 border border-gray-200 gap-8 font-bold  hover:border-gray-400 ',
+    'w-full flex justify-center items-center text-black-800 border border-gray-200 gap-8 font-bold  hover:border-gray-400 bg-white',
     {
       'py-24 rounded-8 text-18': size === 'lg' && text,
       'py-9 rounded-6': size === 'lg' && !text,

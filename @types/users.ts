@@ -3,4 +3,8 @@ declare module '@planit-types' {
     nickname: string;
     profileImageUrl?: string;
   };
+  export type UpdateUserPassword = {
+    password: string;
+    newPassword: string;
+  };
 }

@@ -73,4 +73,22 @@ declare module '@planit-types' {
     createdAt: string;
     updatedAt: string;
   };
+
+  export type GetCardResponse = {
+    id: number;
+    title: string;
+    description: string;
+    tags: string[];
+    dueDate: string;
+    assignee: {
+      nickname: string;
+      id: number;
+      profileImageUrl: string;
+    };
+    imageUrl: string;
+    teamId: string;
+    columnId: number;
+    createdAt: string;
+    updatedAt: string;
+  };
 }
