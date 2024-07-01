@@ -4,11 +4,10 @@ import { deleteMember, getMembers } from '@/app/api/members';
 import Button from '@/components/commons/button';
 import ProfileCircle from '@/components/commons/circle/ProfileCircle';
 import Modal from '@/components/commons/modal';
+import { PAGE_SIZE } from '@/constants/globalConstants';
 import { Member, ModalState } from '@planit-types';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-
-const PAGE_SIZE = 5;
 
 export default function DashboardMember({
   params,

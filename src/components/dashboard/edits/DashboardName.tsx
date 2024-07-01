@@ -23,7 +23,7 @@ export default function DashboardName({ params }: { params: { id: number } }) {
     isOpen: false,
     message: '',
   });
-
+  
   const colorMapping: ColorMapping = {
     '#7AC555': 'bg-green-dashboard',
     '#5534DA': 'bg-violet-dashboard',
