@@ -23,13 +23,13 @@ export default function Tag({
     toss: 'bg-toss-blue-light text-toss-blue',
     blue: 'bg-blue-light-chip text-blue-chip',
     green: 'bg-green-light-chip text-green-chip',
-    orange: 'bg-orange-light-chip text-purple-chip',
+    orange: 'bg-orange-light-chip text-orange-chip',
     pink: 'bg-pink-light-chip text-pink-chip',
     red: 'bg-red-light-chip text-red-chip',
     purple: 'bg-purple-light-chip text-purple-chip',
   };
   const sizeClass = classNames(
-    'text-12 inline-flex items-center rounded px-8 py-4',
+    'text-12 inline-flex items-center rounded px-8 py-4 max-w-full',
     {
       'text-12': size === 'lg',
       'text-10': size === 'sm',
