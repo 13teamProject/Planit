@@ -1,6 +1,6 @@
 import { getDashboards, postDashboards } from '@/app/api/dashboards';
 import ColorCircle from '@/components/commons/circle/ColorCircle';
-import { Dashboard } from '@planit-types';
+import { ColorMapping, Dashboard, FormValues, ModalState } from '@planit-types';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -9,19 +9,6 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 
 import Button from '../button';
 import Modal from '../modal';
-
-type ModalState = {
-  isOpen: boolean;
-  message: string;
-};
-
-type FormValues = {
-  dashboardName: string;
-};
-
-type ColorMapping = {
-  [key: string]: string;
-};
 
 export const colorMapping: ColorMapping = {
   '#5534DA': 'bg-violet-dashboard',
@@ -53,15 +40,20 @@ export default function Sidemenu() {
   const fetchDashboard = async () => {
     const response = await getDashboards('infiniteScroll', 1, 100);
     setDashboards(
-      response.dashboards.map((data: Dashboard) => ({
-        id: data.id,
-        title: data.title,
-        color: data.color,
-        createdAt: data.createdAt,
-        updatedAt: data.updatedAt,
-        createdByMe: data.createdByMe,
-        userId: data.userId,
-      })),
+      response.dashboards
+        .map((data: Dashboard) => ({
+          id: data.id,
+          title: data.title,
+          color: data.color,
+          createdAt: data.createdAt,
+          updatedAt: data.updatedAt,
+          createdByMe: data.createdByMe,
+          userId: data.userId,
+        }))
+        .sort(
+          (a, b) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+        ), // 최신순 정렬
     );
   };
 
@@ -74,10 +66,10 @@ export default function Sidemenu() {
   } = useForm<FormValues>({ mode: 'onChange' });
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     try {
-      const formData = {
+      const formData: Dashboard = {
         title: data.dashboardName,
         color: selectedColor,
-      };
+      } as Dashboard;
       const response = await postDashboards(formData);
 
       const newDashboard: Dashboard = {

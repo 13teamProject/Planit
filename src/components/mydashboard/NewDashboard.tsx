@@ -3,7 +3,7 @@
 import { getDashboards, postDashboards } from '@/app/api/dashboards';
 import ColorCircle from '@/components/commons/circle/ColorCircle';
 import useDeviceState from '@/hooks/useDeviceState';
-import { Dashboard } from '@planit-types';
+import { ColorMapping, Dashboard, FormValues, ModalState } from '@planit-types';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -13,19 +13,6 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import Button from '../commons/button';
 import BarButton from '../commons/button/BarButton';
 import Modal from '../commons/modal';
-
-type ColorMapping = {
-  [key: string]: string;
-};
-
-type ModalState = {
-  isOpen: boolean;
-  message: string;
-};
-
-type FormValues = {
-  dashboardName: string;
-};
 
 const colorMapping: ColorMapping = {
   '#5534DA': 'bg-violet-dashboard',
@@ -59,26 +46,13 @@ export default function NewDashboard() {
   const router = useRouter();
 
   const fetchDashboard = async (currentPage: number) => {
-    const response = await getDashboards('pagination', currentPage, 5);
-    const fetchedDashboards: Dashboard[] = response.dashboards.map(
-      (data: Dashboard) => ({
-        id: data.id,
-        title: data.title,
-        color: data.color,
-        createdAt: data.createdAt,
-        updatedAt: data.updatedAt,
-        userId: data.userId,
-        createdByMe: data.createdByMe,
-      }),
-    );
-    setDashboards(fetchedDashboards);
-
-    // 페이지네이션 - 전체 아이템 계산
+    // 전체 데이터 가져오기
     const totalItemsResponse = await getDashboards(
       'pagination',
       1,
       Number.MAX_SAFE_INTEGER,
     );
+
     const totalItemsCount = totalItemsResponse.dashboards.length;
     setTotalItems(totalItemsCount);
 
@@ -86,6 +60,20 @@ export default function NewDashboard() {
     const pageSize = 5;
     const calculatedTotalPages = Math.ceil(totalItemsCount / pageSize);
     setTotalPages(calculatedTotalPages);
+
+    // 전체 데이터 최신순 정렬
+    const sortedDashboards: Dashboard[] = totalItemsResponse.dashboards.sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    );
+
+    // 현재 페이지에 해당하는 데이터 설정
+    const paginatedDashboards = sortedDashboards.slice(
+      (currentPage - 1) * pageSize,
+      currentPage * pageSize,
+    );
+
+    setDashboards(paginatedDashboards);
   };
 
   const handleOpenModal = () => {
@@ -107,7 +95,7 @@ export default function NewDashboard() {
       const formData = {
         title: data.dashboardName,
         color: selectedColor,
-      };
+      } as Dashboard;
       const response = await postDashboards(formData);
 
       const newDashboard: Dashboard = {

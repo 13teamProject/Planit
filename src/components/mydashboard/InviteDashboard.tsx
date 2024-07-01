@@ -1,6 +1,6 @@
 'use client';
 
-import { postDashboards } from '@/app/api/dashboards';
+import { getDashboards, postDashboards } from '@/app/api/dashboards';
 import {
   getMyInivations,
   postInvitation,
@@ -38,11 +38,11 @@ export default function InviteDashboard() {
   };
 
   useEffect(() => {
-    fetchDashboardInvitations(5); // 한 페이지당 5개의 초대 목록을 가져옴
+    fetchDashboardInvitations(5);
   }, [currentPage]);
 
+  // 검색
   useEffect(() => {
-    // 검색어에 따라 초대 목록 필터링
     setFilteredInvitations(
       invitations.filter((invitation) =>
         invitation.dashboard.title.toLowerCase().includes(search.toLowerCase()),
@@ -50,32 +50,57 @@ export default function InviteDashboard() {
     );
   }, [search, invitations]);
 
+  // 대시보드 색상 조회
+  const fetchDashboardColor = async (dashboardId: number) => {
+    try {
+      const response = await getDashboards(
+        'pagination',
+        1,
+        Number.MAX_SAFE_INTEGER,
+      );
+      const dashboard = response.dashboards.find((d) => d.id === dashboardId);
+      return dashboard ? dashboard.color : '#FFFFFF';
+    } catch (error) {
+      console.error('Failed to get dashboard color:', error);
+      return '#FFFFFF';
+    }
+  };
+
   // 초대 응답(수락)
   const handleInvitationResponse = async (
     invitationId: number,
     accept: boolean,
-    dashboardData?: DashboardFormData,
   ) => {
+    const invitation = invitations.find((inv) => inv.id === invitationId);
+    if (!invitation) {
+      console.error('Invitation not found');
+      return;
+    }
+
     const response = await respondToInvitation(invitationId, accept);
     if ('message' in response) {
       console.error(response.message);
-    } else {
-      if (accept && dashboardData) {
-        const createResponse = await postDashboards(dashboardData);
-        if ('message' in createResponse) {
-          console.error(createResponse.message);
-        } else {
+    } else if (accept) {
+        try {
+          const color = await fetchDashboardColor(invitation.dashboard.id);
+          const formData: DashboardFormData = {
+            title: invitation.dashboard.title,
+            color,
+          };
+          const createResponse = await postDashboards(formData);
           console.log('Dashboard created successfully:', createResponse);
           fetchDashboardInvitations(5);
+        } catch (error) {
+          console.error('Failed to create dashboard:', error);
         }
+      } else {
+        fetchDashboardInvitations(5);
       }
-      fetchDashboardInvitations(5);
-    }
   };
 
   const handleAddInvitation = async () => {
     const newEmail: EmailRequest = { email: 'yeon@naver.com' };
-    const response = await postInvitation(newEmail, 10167);
+    const response = await postInvitation(newEmail, 10185);
     if ('message' in response) {
       console.error(response.message);
     } else {
@@ -146,10 +171,7 @@ export default function InviteDashboard() {
                         cancel={false}
                         styles="flex items-center justify-center w-109 h-28 md:w-72 md:h-35 lg:w-84 lg:h-40 text-16 md:text-18 mr-12"
                         onClick={() =>
-                          handleInvitationResponse(invitation.id, true, {
-                            title: invitation.dashboard.title,
-                            color: invitation.dashboard.color, // 대시보드 색상 설정
-                          })
+                          handleInvitationResponse(invitation.id, true)
                         }
                       >
                         수락

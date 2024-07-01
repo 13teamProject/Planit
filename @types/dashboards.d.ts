@@ -9,6 +9,7 @@ declare module '@planit-types' {
     createdByMe: boolean;
     userId: number;
   };
+
   export type DashboardResponse = {
     id: number;
     title: string;
@@ -37,6 +38,7 @@ declare module '@planit-types' {
     title: string;
     color: string;
   };
+
   export type DashboardEditResponse = {
     id: number;
     title: string;
@@ -46,11 +48,16 @@ declare module '@planit-types' {
     userId: number;
     createdByMe: boolean;
   };
+  
   export type EmailRequest = {
     email: string;
   };
 
-  type ColorMapping = {
+  export type FormValues = {
+    dashboardName: string;
+  };
+  
+  export type ColorMapping = {
     [key: string]: string;
   };
 
