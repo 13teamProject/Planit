@@ -5,7 +5,7 @@ import Button from '@/components/commons/button';
 import Modal from '@/components/commons/modal';
 import { ContentModalState } from '@planit-types';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 export default function DashboardDeleteButton({
   params,

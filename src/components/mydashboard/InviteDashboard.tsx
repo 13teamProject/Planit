@@ -76,22 +76,21 @@ export default function InviteDashboard() {
     if ('message' in response) {
       console.error(response.message);
     } else if (accept) {
-        try {
-          const color = await fetchDashboardColor(invitation.dashboard.id);
-          const formData: DashboardFormData = {
-            title: invitation.dashboard.title,
-            color,
-          };
-          const createResponse = await postDashboards(formData);
-          console.log('Dashboard created successfully:', createResponse);
-          fetchDashboardInvitations(5);
-          window.location.reload(); // 페이지 새로고침
-        } catch (error) {
-          console.error('Failed to create dashboard:', error);
-        }
-      } else {
+      try {
+        const color = await fetchDashboardColor(invitation.dashboard.id);
+        const formData: DashboardFormData = {
+          title: invitation.dashboard.title,
+          color,
+        };
+        const createResponse = await postDashboards(formData);
         fetchDashboardInvitations(5);
+        window.location.reload(); // 페이지 새로고침
+      } catch (error) {
+        console.error('Failed to create dashboard:', error);
       }
+    } else {
+      fetchDashboardInvitations(5);
+    }
   };
   return (
     <>

@@ -60,8 +60,7 @@ export async function respondToInvitation(
     const res = await fetch(`${API_URL}/invitations/${invitationId}`, obj);
     const data: MyInvitationResponse = await res.json();
 
-    if (!res.ok)
-      throw new Error(data.message || 'Failed to respond to invitation.');
+    if (!res.ok) throw new Error('Failed to respond to invitation.');
 
     return data;
   } catch (err) {

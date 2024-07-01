@@ -11,7 +11,13 @@ import {
 export const API_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 type DashboardResponse = {
-  [x: string]: string;
+  userId: number;
+  createdByMe: boolean;
+  updatedAt: string;
+  createdAt: string;
+  color: string;
+  title: string;
+  id: number;
   cursorId: number;
   totalCount: number;
   dashboards: Array<{
