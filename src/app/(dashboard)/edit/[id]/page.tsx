@@ -1,5 +1,5 @@
-import DashboardMember from '@/components/dashboard/Edit/DashboardMember';
-import DashboardName from '@/components/dashboard/Edit/DashboardName';
+import DashboardMember from '@/components/dashboard/edits/DashboardMember';
+import DashboardName from '@/components/dashboard/edits/DashboardName';
 
 export default function Edit({ params }: { params: { id: number } }) {
   return (
