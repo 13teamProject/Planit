@@ -1,27 +1,21 @@
 'use client';
 
 import { getDashboards, postDashboards } from '@/app/api/dashboards';
-import {
-  getMyInivations,
-  postInvitation,
-  respondToInvitation,
-} from '@/app/api/inivations';
-import { DashboardFormData, EmailRequest, Invitation } from '@planit-types';
+import { getMyInivations, respondToInvitation } from '@/app/api/inivations';
+import { DashboardFormData, Invitation } from '@planit-types';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import Button from '../commons/button';
 
 export default function InviteDashboard() {
-  const isInvited = true;
+  const [isInvited, setIsInvited] = useState(false);
   const [search, setSearch] = useState('');
   const [invitations, setInvitations] = useState<Invitation[]>([]);
   const [filteredInvitations, setFilteredInvitations] = useState<Invitation[]>(
     [],
   );
   const [currentPage, setCurrentPage] = useState(1);
-  const router = useRouter();
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
@@ -34,6 +28,7 @@ export default function InviteDashboard() {
       console.error(response.message);
     } else {
       setInvitations(response.invitations);
+      setIsInvited(response.invitations.length > 0);
     }
   };
 
@@ -90,6 +85,7 @@ export default function InviteDashboard() {
           const createResponse = await postDashboards(formData);
           console.log('Dashboard created successfully:', createResponse);
           fetchDashboardInvitations(5);
+          window.location.reload(); // 페이지 새로고침
         } catch (error) {
           console.error('Failed to create dashboard:', error);
         }
@@ -97,18 +93,6 @@ export default function InviteDashboard() {
         fetchDashboardInvitations(5);
       }
   };
-
-  const handleAddInvitation = async () => {
-    const newEmail: EmailRequest = { email: 'yeon@naver.com' };
-    const response = await postInvitation(newEmail, 10185);
-    if ('message' in response) {
-      console.error(response.message);
-    } else {
-      await fetchDashboardInvitations(5);
-      console.log('post 성공');
-    }
-  };
-
   return (
     <>
       {isInvited && (
@@ -132,16 +116,6 @@ export default function InviteDashboard() {
               className="absolute left-12 top-27 md:left-16 md:top-30"
             />
           </div>
-
-          <Button
-            text="새 초대 추가"
-            type="button"
-            cancel={false}
-            styles="mt-4 mb-4"
-            onClick={handleAddInvitation}
-          >
-            새 초대 추가
-          </Button>
 
           <table className="mt-24 w-full table-fixed border-collapse">
             <thead className="sm:hidden md:table-header-group lg:table-header-group">
