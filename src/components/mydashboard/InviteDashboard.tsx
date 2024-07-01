@@ -17,6 +17,9 @@ export default function InviteDashboard() {
   const isInvited = true;
   const [search, setSearch] = useState('');
   const [invitations, setInvitations] = useState<Invitation[]>([]);
+  const [filteredInvitations, setFilteredInvitations] = useState<Invitation[]>(
+    [],
+  );
   const [currentPage, setCurrentPage] = useState(1);
   const router = useRouter();
 
@@ -37,6 +40,15 @@ export default function InviteDashboard() {
   useEffect(() => {
     fetchDashboardInvitations(5); // 한 페이지당 5개의 초대 목록을 가져옴
   }, [currentPage]);
+
+  useEffect(() => {
+    // 검색어에 따라 초대 목록 필터링
+    setFilteredInvitations(
+      invitations.filter((invitation) =>
+        invitation.dashboard.title.toLowerCase().includes(search.toLowerCase()),
+      ),
+    );
+  }, [search, invitations]);
 
   // 초대 응답(수락)
   const handleInvitationResponse = async (
@@ -63,7 +75,7 @@ export default function InviteDashboard() {
 
   const handleAddInvitation = async () => {
     const newEmail: EmailRequest = { email: 'yeon@naver.com' };
-    const response = await postInvitation(newEmail, 10163);
+    const response = await postInvitation(newEmail, 10167);
     if ('message' in response) {
       console.error(response.message);
     } else {
@@ -115,7 +127,7 @@ export default function InviteDashboard() {
               </tr>
             </thead>
             <tbody>
-              {invitations.map((invitation) => (
+              {filteredInvitations.map((invitation) => (
                 <tr
                   key={invitation.id}
                   className="h-120 border-b-1 align-middle md:h-70 lg:h-72"
@@ -134,7 +146,10 @@ export default function InviteDashboard() {
                         cancel={false}
                         styles="flex items-center justify-center w-109 h-28 md:w-72 md:h-35 lg:w-84 lg:h-40 text-16 md:text-18 mr-12"
                         onClick={() =>
-                          handleInvitationResponse(invitation.id, true)
+                          handleInvitationResponse(invitation.id, true, {
+                            title: invitation.dashboard.title,
+                            color: invitation.dashboard.color, // 대시보드 색상 설정
+                          })
                         }
                       >
                         수락
