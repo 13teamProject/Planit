@@ -46,9 +46,9 @@ export default function Tag({
         className={`${colorVariants[color]} ${roundClass} ${sizeClass} group/tag relative`}
       >
         {children}
-        <div className="invisible absolute inset-0 flex items-center justify-center rounded bg-gray-300 opacity-90 outline-none group-hover/tag:visible">
+        <div className="invisible absolute inset-0 flex items-center justify-center rounded bg-[#f5f5f5] bg-opacity-80 outline-none group-hover/tag:visible">
           <Image
-            src="/icon/close.svg"
+            src="/icon/close_red.svg"
             alt="x"
             width={12}
             height={12}
