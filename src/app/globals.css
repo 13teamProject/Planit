@@ -23,14 +23,10 @@
       sans-serif;
   }
 
-  /* html { */
-  /* -ms-overflow-style: none; 인터넷 익스플로러 */
-  /* scrollbar-width: none; 파이어폭스 */
-  /* overflow: scroll; */
-  /* ::-webkit-scrollbar { */
-  /* display: none; */
-  /* } */
-  /* } */
+  html {
+    scrollbar-width: none;
+    /* @apply overflow-; */
+  }
 
   .custom-scrollbar {
     -ms-overflow-style: auto; /* 인터넷 익스플로러 */
@@ -43,7 +39,8 @@
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #dae9fe;
+    background: rgb(218, 233, 254, 0.6);
+    opacity: 0.4;
     border-radius: 10px;
   }
 
