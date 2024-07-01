@@ -2,7 +2,7 @@
 
 import {
   deleteInvitation,
-  getDashboradInvitation,
+  getDashboardInvitation,
   postInvitation,
 } from '@/app/api/dashboards';
 import Button from '@/components/commons/button';
@@ -68,7 +68,7 @@ export default function DashboardInvitation({
 
   // 초대 내역 조회
   const fetchDashboardInvitation = async (page: number) => {
-    const fetchedDashboardInvitation = await getDashboradInvitation({
+    const fetchedDashboardInvitation = await getDashboardInvitation({
       dashboardId: params.id,
       page,
       size: PAGE_SIZE,

@@ -177,7 +177,7 @@ type GetMembersParams = {
 };
 
 // 대시보드 초대 불러오기
-export async function getDashboradInvitation({
+export async function getDashboardInvitation({
   dashboardId,
   page = 1,
   size = 5,
