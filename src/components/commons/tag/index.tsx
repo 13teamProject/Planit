@@ -1,7 +1,8 @@
 'use client';
 
 import classNames from 'classnames';
-import { KeyboardEvent, ReactNode } from 'react';
+import Image from 'next/image';
+import { ReactNode } from 'react';
 
 type TagProps = {
   color: string;
@@ -37,23 +38,24 @@ export default function Tag({
   );
 
   if (deleteTag) {
-    const handleKeyboard = (e: KeyboardEvent<HTMLSpanElement>) => {
-      if (e.key === 'Backspace' || e.key === 'Delete') {
-        // eslint-disable-next-line no-alert
-        alert('해당 태그를 삭제하시겠습니까?');
-        deleteTag();
-      }
-    };
-
     return (
-      <span
-        role="button"
-        onKeyUp={handleKeyboard}
+      <button
+        type="button"
+        onClick={deleteTag}
         tabIndex={0}
-        className={`${colorVariants[color]} ${roundClass} ${sizeClass} focus:outline focus:outline-[1.5px]`}
+        className={`${colorVariants[color]} ${roundClass} ${sizeClass} group/tag relative`}
       >
         {children}
-      </span>
+        <div className="invisible absolute inset-0 flex items-center justify-center rounded bg-gray-300 opacity-90 outline-none group-hover/tag:visible">
+          <Image
+            src="/icon/close.svg"
+            alt="x"
+            width={12}
+            height={12}
+            className="rounded-full bg-white"
+          />
+        </div>
+      </button>
     );
   }
 
