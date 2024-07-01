@@ -1,25 +1,26 @@
-import { getTodoCardDetails } from '@/app/api/cards';
-import CardDetails from '@/components/dashboard/todo-detail-card/CardDetails';
-import CardTitle from '@/components/dashboard/todo-detail-card/CardTitle';
-import CommentSection from '@/components/dashboard/todo-detail-card/CommentSection';
+'use client';
 
-const boardId = '8684';
+import BarButton from '@/components/commons/button/BarButton';
+import TodoDetailModal from '@/components/dashboard/todo-detail-card/TodoDetailModal';
+import { useState } from 'react';
 
-// 추후 설정 예정
-// params: { boardId: string }
-// const { boardId } = params;
+export default function TodoDetailCard() {
+  const [isTodoDetailsCardOpen, setIsTodoDetailsCardOpen] = useState(false);
 
-export default async function TodoDetailCard() {
-  const cardDetails = await getTodoCardDetails(boardId);
-  const { title, id, columnId, dashboardId } = cardDetails;
+  const openTodoDetailCardModal = () => {
+    setIsTodoDetailsCardOpen(true);
+  };
+
+  const closeTodoDetailCardModal = () => {
+    setIsTodoDetailsCardOpen(false);
+  };
+
   return (
-    <div className="flex h-730 w-full flex-col gap-16 px-28 py-32 md:max-w-680 lg:max-w-730">
-      <CardTitle title={title} />
-      <CardDetails data={cardDetails} />
-      <CommentSection
-        cardId={id}
-        columnId={columnId}
-        dashboardId={dashboardId}
+    <div className="m-auto mt-[40vh] w-1/5">
+      <BarButton onClick={openTodoDetailCardModal} />
+      <TodoDetailModal
+        todoModalIsOpen={isTodoDetailsCardOpen}
+        todoModalOnClose={closeTodoDetailCardModal}
       />
     </div>
   );
