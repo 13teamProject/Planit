@@ -5,14 +5,14 @@ import Button from '@/components/commons/button';
 import Modal from '@/components/commons/modal';
 import { ContentModalState } from '@planit-types';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function DashboardDeleteButton({
   params,
 }: {
   params: { id: number };
 }) {
-  const route = useRouter();
+  const router = useRouter();
   const [modalState, setModalState] = useState<ContentModalState>({
     isOpen: false,
     message: '',
@@ -26,6 +26,9 @@ export default function DashboardDeleteButton({
   // 모달 닫기
   const handleClose = () => {
     setModalState({ ...modalState, isOpen: false });
+    if (!modalState.isContent) {
+      router.push('/mydashboard');
+    }
   };
 
   // 대시보드 삭제
@@ -33,9 +36,7 @@ export default function DashboardDeleteButton({
     // deleteDashboard API 호출
     await deleteDashboard(params.id.toString());
     setModalState({ isOpen: true, message: '대시보드가 삭제되었습니다.' });
-    route.push('/mydashboard');
   };
-
   return (
     <>
       <div className="mt-40 w-full max-w-320">
