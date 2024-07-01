@@ -7,6 +7,7 @@ import {
   useState,
 } from 'react';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 import Tag from '../tag';
 
@@ -59,8 +60,7 @@ function TagInput({ onChange, defaultValue, ...args }: TagInputProps) {
   const addTag = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key !== 'Enter' || e.currentTarget.value.trim() === '') return;
     if (tagList.includes(currentTag)) {
-      // eslint-disable-next-line no-alert
-      alert('같은 태그가 있습니다');
+      toast.error('같은 태그가 있습니다');
       return;
     }
 

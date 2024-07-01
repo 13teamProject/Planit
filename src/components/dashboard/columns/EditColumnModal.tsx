@@ -5,6 +5,7 @@ import Modal from '@/components/commons/modal';
 import { Column, EditColumnRequest } from '@planit-types';
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 type EditColumnModalProps = {
   isOpen: boolean;
@@ -45,8 +46,11 @@ export default function EditColumnModal({
       formValue: reqBody,
     });
 
-    if ('message' in res) alert(res.message);
-    console.log(res);
+    if ('message' in res) {
+      toast.error(res.message);
+      return;
+    }
+
     onClose();
     reset();
   };
@@ -66,7 +70,7 @@ export default function EditColumnModal({
       const columnRes = await getColumns(dashboardId);
 
       if ('message' in columnRes) {
-        alert(columnRes.message);
+        toast.error(columnRes.message);
         return;
       }
 
@@ -149,7 +153,10 @@ function DeleteColumnModal({
   const handleDeleteColumn = async () => {
     const res = await deleteColumn(columnData.id);
 
-    if ('message' in res) alert(res.message);
+    if ('message' in res) {
+      toast.error(res.message);
+      return;
+    }
     onClose();
   };
 
