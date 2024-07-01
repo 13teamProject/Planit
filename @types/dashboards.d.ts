@@ -1,4 +1,5 @@
 declare module '@planit-types' {
+
   export type Dashboard = {
     id: number;
     title: string;
@@ -111,5 +112,28 @@ declare module '@planit-types' {
   export type DashboardInvitationResponse = {
     totalCount: number;
     invitations: Invitation[];
+  };
+
+  export type DashboardEditRequest = {
+    title: string;
+    color: string;
+  };
+  export type DashboardEditResponse = {
+    id: number;
+    title: string;
+    color: string;
+    createdAt: string;
+    updatedAt: string;
+    userId: number;
+    createdByMe: boolean;
+  };
+  export type GetDashboardIdResponse = {
+    id: number;
+    title: string;
+    color: string;
+    createdAt: string;
+    updatedAt: string;
+    createdByMe: boolean;
+    userId: number;
   };
 }

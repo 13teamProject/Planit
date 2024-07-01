@@ -1,8 +1,14 @@
 'use client';
 
-import { getDashboradInvitation, postInvitation } from '@/app/api/inivations';
-import { EmailRequest, Invitation } from '@planit-types';
+import { postDashboards } from '@/app/api/dashboards';
+import {
+  getMyInivations,
+  postInvitation,
+  respondToInvitation,
+} from '@/app/api/inivations';
+import { DashboardFormData, EmailRequest, Invitation } from '@planit-types';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import Button from '../commons/button';
@@ -12,17 +18,14 @@ export default function InviteDashboard() {
   const [search, setSearch] = useState('');
   const [invitations, setInvitations] = useState<Invitation[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const router = useRouter();
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
   };
 
-  const fetchDashboardInvitations = async (page: number) => {
-    const response = await getDashboradInvitation({
-      dashboardId: 9800,
-      page,
-      size: 5,
-    });
+  const fetchDashboardInvitations = async (size: number) => {
+    const response = await getMyInivations(size);
 
     if ('message' in response) {
       console.error(response.message);
@@ -32,28 +35,40 @@ export default function InviteDashboard() {
   };
 
   useEffect(() => {
-    fetchDashboardInvitations(currentPage);
+    fetchDashboardInvitations(5); // 한 페이지당 5개의 초대 목록을 가져옴
   }, [currentPage]);
 
+  // 초대 응답(수락)
   const handleInvitationResponse = async (
     invitationId: number,
     accept: boolean,
+    dashboardData?: DashboardFormData,
   ) => {
-    const response = await postInvitation({ email: 'test1@naver.com' }, 4018);
+    const response = await respondToInvitation(invitationId, accept);
     if ('message' in response) {
       console.error(response.message);
     } else {
-      fetchDashboardInvitations(currentPage);
+      if (accept && dashboardData) {
+        const createResponse = await postDashboards(dashboardData);
+        if ('message' in createResponse) {
+          console.error(createResponse.message);
+        } else {
+          console.log('Dashboard created successfully:', createResponse);
+          fetchDashboardInvitations(5);
+        }
+      }
+      fetchDashboardInvitations(5);
     }
   };
 
   const handleAddInvitation = async () => {
-    const newEmail: EmailRequest = { email: 'test1@naver.com' }; // 예시 데이터 사용
-    const response = await postInvitation(newEmail, 4018);
+    const newEmail: EmailRequest = { email: 'yeon@naver.com' };
+    const response = await postInvitation(newEmail, 10163);
     if ('message' in response) {
       console.error(response.message);
     } else {
-      fetchDashboardInvitations(currentPage); // 새 초대 추가 후 목록 새로고침
+      await fetchDashboardInvitations(5);
+      console.log('post 성공');
     }
   };
 
