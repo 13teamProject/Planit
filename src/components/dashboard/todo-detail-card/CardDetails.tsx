@@ -40,14 +40,16 @@ export default function CardDetails({ data }: Props) {
             ))}
           </div>
         </div>
-        <div className="text-12 leading-22">{description}</div>{' '}
+        <div className="text-12 leading-22">{description}</div>
         <div className="relative h-167 md:h-245 lg:h-262">
-          <Image
-            src={imageUrl}
-            fill
-            objectFit="contain"
-            alt="해야할 일 관련 이미지"
-          />
+          {imageUrl && (
+            <Image
+              src={imageUrl}
+              fill
+              objectFit="contain"
+              alt="해야할 일 관련 이미지"
+            />
+          )}
         </div>
       </div>
     </div>
