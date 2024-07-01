@@ -91,13 +91,11 @@ export default function TodoDetailModal({
             </div>
           </div>
           <CardDetails data={cardDetails} progressTitle={progressTitle} />
-          <div className="">
-            <CommentSection
-              cardId={id}
-              columnId={columnId}
-              dashboardId={dashboardId}
-            />
-          </div>
+          <CommentSection
+            cardId={id}
+            columnId={columnId}
+            dashboardId={dashboardId}
+          />
         </div>
       </Modal>
       <EditCardModal
