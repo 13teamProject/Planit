@@ -120,17 +120,17 @@ export default function DashboardInvitation({
   return (
     <div className="mt-12 w-full max-w-620 rounded-md bg-white px-28 pb-28 pt-26">
       <div className="mb-25 flex items-center justify-between">
-        <h3 className="text-24 font-bold">초대 내역</h3>
-        <div className="flex items-center gap-16">
-          <span className="text-13">
+        <h3 className="text-20 font-bold md:text-24">초대 내역</h3>
+        <div className="flex items-center gap-12 md:gap-16">
+          <span className="text-12 md:text-14">
             {totalPages} 페이지 중 {currentPage}
           </span>
           <div className="flex items-center">
             <button
               type="button"
-              className="rounded-s-md border border-gray-200 px-14 py-11"
+              className="rounded-s-md border border-gray-200 px-12 py-9 md:px-14 md:py-11"
               onClick={handlePrevPage}
-              disabled={currentPage === 1} // 첫 번째 페이지면 disabled=true
+              disabled={currentPage <= 1} // 첫 번째 페이지면 disabled=true
             >
               <Image
                 src="/icon/arrow_prev.svg"
@@ -141,9 +141,9 @@ export default function DashboardInvitation({
             </button>
             <button
               type="button"
-              className="rounded-e-md border border-gray-200 px-14 py-11"
+              className="rounded-e-md border border-gray-200 px-12 py-9 md:px-14 md:py-11"
               onClick={handleNextPage}
-              disabled={currentPage === totalPages} // 현재 페이지가 마지막 페이지면 true
+              disabled={currentPage >= totalPages} // 현재 페이지가 마지막 페이지면 true
             >
               <Image
                 src="/icon/arrow_next.svg"
@@ -156,7 +156,7 @@ export default function DashboardInvitation({
           <Button
             text="초대하기"
             onClick={handleOpenInvitation}
-            styles="px-16 py-8"
+            styles="px-12 py-7 md:px-16 md:py-8 text-12 md:text-14"
           />
         </div>
       </div>
@@ -178,11 +178,13 @@ export default function DashboardInvitation({
       ))}
 
       <Modal isOpen={modalState.isOpen} onClose={handleClose}>
-        <div className="m-auto px-54 pb-29 pt-26 text-right text-18 md:w-540 md:px-33">
+        <div className="m-auto w-330 px-20 pb-29 pt-26 text-right text-18 md:w-540 md:px-33">
           {modalState.isContent ? (
             <div className="text-left">
-              <h3 className="mb-30 text-24 font-bold">초대하기</h3>
-              <p className="mb-10 text-18">이메일</p>
+              <h3 className="mb-24 text-20 font-bold md:mb-30 md:text-24">
+                초대하기
+              </h3>
+              <p className="mb-10 text-16 md:text-18">이메일</p>
               <form onSubmit={handleSubmit(onSubmit)}>
                 <Input
                   id="email"
@@ -197,16 +199,16 @@ export default function DashboardInvitation({
                 >
                   {errors.email?.message}
                 </span>
-                <div className="mt-28 flex justify-end gap-12">
+                <div className="mt-24 flex justify-end gap-12 md:mt-28">
                   <Button
                     text="취소"
                     onClick={handleClose}
-                    styles="border !border-gray-200 !bg-white px-30 py-8 text-14 !text-toss-blue"
+                    styles="border !border-gray-200 !bg-white basis-1/2 md:basis-auto px-30 py-8 text-14 !text-toss-blue"
                   />
                   <Button
                     type="submit"
                     text="초대"
-                    styles="px-30 py-8 text-14"
+                    styles="px-30 py-8 text-14  basis-1/2 md:basis-auto "
                   />
                 </div>
               </form>

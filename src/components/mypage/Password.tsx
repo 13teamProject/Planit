@@ -57,10 +57,12 @@ export default function Password() {
     }
   };
   return (
-    <div className="mt-12 w-full max-w-620 rounded-md bg-white px-28 pb-28 pt-32">
-      <h3 className="mb-32 text-24 font-bold">비밀번호 변경</h3>
+    <div className="mt-12 w-full max-w-620 rounded-md bg-white p-20 md:px-28 md:pb-28 md:pt-32">
+      <h3 className="mb-24 text-20 font-bold md:mb-32 md:text-24">
+        비밀번호 변경
+      </h3>
       <form className="overflow-hidden" onSubmit={handleSubmit(onSubmit)}>
-        <label htmlFor="password" className="mb-10 text-18">
+        <label htmlFor="password" className="mb-10 text-16 md:text-18">
           현재 비밀번호
         </label>
         <Input
@@ -71,11 +73,14 @@ export default function Password() {
           register={{ ...register('password', { required: true }) }}
           error={'password' in errors}
         />
-        <span className="block pt-8 text-14 text-red-500">
+        <span className="block pt-5 text-12 text-red-500 md:pt-8 md:text-14">
           {errors.password?.message}
         </span>
 
-        <label htmlFor="newPassword" className="mb-10 mt-20 text-18">
+        <label
+          htmlFor="newPassword"
+          className="mb-10 mt-16 text-16 md:mt-20 md:text-18"
+        >
           새 비밀번호
         </label>
         <Input
@@ -85,11 +90,14 @@ export default function Password() {
           size="sm"
           register={{ ...register('newPassword', { required: true }) }}
         />
-        <span className="block pt-8 text-14 text-red-500">
+        <span className="block pt-5 text-12 text-red-500 md:pt-8 md:text-14">
           {errors.newPassword?.message}
         </span>
 
-        <label htmlFor="passwordConfirmation" className="mb-10 mt-20 text-18">
+        <label
+          htmlFor="passwordConfirmation"
+          className="mb-10 mt-16 text-16 md:mt-20 md:text-18"
+        >
           새 비밀번호 확인
         </label>
         <Input
@@ -100,13 +108,13 @@ export default function Password() {
           register={{ ...register('passwordConfirmation', { required: true }) }}
           error={'passwordConfirmation' in errors}
         />
-        <span className="block pt-8 text-14 text-red-500">
+        <span className="block pt-5 text-12 text-red-500 md:pt-8 md:text-14">
           {errors.passwordConfirmation?.message}
         </span>
         <Button
           type="submit"
           text="변경"
-          styles="px-30 py-8 mt-24 float-right text-14"
+          styles="px-30 py-8 mt-24 float-right text-12 md:text-14"
         />
       </form>
 
