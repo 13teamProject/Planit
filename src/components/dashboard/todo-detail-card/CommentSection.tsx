@@ -79,7 +79,7 @@ export default function CommentSection({
           </button>
         </div>
       </form>
-      <div className="h-130 w-full overflow-scroll">
+      <div className="custom-scrollbar h-130 w-full overflow-auto">
         {comments.map((comment) => (
           <Comment
             key={comment.id}

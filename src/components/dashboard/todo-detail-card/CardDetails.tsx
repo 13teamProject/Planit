@@ -44,7 +44,7 @@ export default function CardDetails({ data, progressTitle }: Props) {
             ))}
           </div>
         </div>
-        <div className="max-h-205 overflow-scroll md:max-h-283">
+        <div className="custom-scrollbar max-h-205 overflow-auto md:max-h-283">
           <section className="text-12 leading-22">{description}</section>
           <div className="relative h-167 md:h-245 lg:h-262">
             {imageUrl && (

@@ -23,13 +23,32 @@
       sans-serif;
   }
 
-  html {
-    -ms-overflow-style: none; /* 인터넷 익스플로러 */
-    scrollbar-width: none; /* 파이어폭스 */
-    overflow: scroll;
-    ::-webkit-scrollbar {
-      display: none;
-    }
+  /* html { */
+  /* -ms-overflow-style: none; 인터넷 익스플로러 */
+  /* scrollbar-width: none; 파이어폭스 */
+  /* overflow: scroll; */
+  /* ::-webkit-scrollbar { */
+  /* display: none; */
+  /* } */
+  /* } */
+
+  .custom-scrollbar {
+    -ms-overflow-style: auto; /* 인터넷 익스플로러 */
+    scrollbar-width: auto; /* 파이어폭스 */
+    overflow: auto; /* 스크롤바를 자동으로 표시 */
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #dae9fe;
+    border-radius: 10px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: #fff;
   }
 }
 
