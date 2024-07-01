@@ -83,15 +83,15 @@ export default function DashboardMember({
   return (
     <div className="mt-12 w-full max-w-620 rounded-md bg-white px-28 pb-28 pt-26">
       <div className="mb-25 flex justify-between">
-        <h3 className="text-24 font-bold">구성원</h3>
+        <h3 className="text-20 font-bold md:text-24">구성원</h3>
         <div className="flex items-center">
-          <span className="mr-16 text-13">
+          <span className="mr-16 text-12 md:text-14">
             {totalPages} 페이지 중 {currentPage}
           </span>
 
           <button
             type="button"
-            className="rounded-s-md border border-gray-200 px-14 py-11"
+            className="rounded-s-md border border-gray-200 px-12 py-9 md:px-14 md:py-11"
             onClick={handlePrevPage}
             disabled={currentPage === 1} // 첫 번째 페이지면 disabled=true
           >
@@ -104,7 +104,7 @@ export default function DashboardMember({
           </button>
           <button
             type="button"
-            className="rounded-e-md border border-gray-200 px-14 py-11"
+            className="rounded-e-md border border-gray-200 px-12 py-9 md:px-14 md:py-11"
             onClick={handleNextPage}
             disabled={currentPage === totalPages} // 현재 페이지가 마지막 페이지면 true
           >
@@ -117,7 +117,7 @@ export default function DashboardMember({
           </button>
         </div>
       </div>
-      <p className="mb-8 text-gray-300">이름</p>
+      <p className="mb-8 text-14 text-gray-300 md:text-16">이름</p>
       {members.map((member) => (
         <div
           key={member.id}
@@ -131,12 +131,14 @@ export default function DashboardMember({
               }}
               styles="size-34 md:size-38 bg-violet-dashboard"
             />
-            <p className="text-black-800">{member.nickname}</p>
+            <p className="md:text- 16 text-14 text-black-800">
+              {member.nickname}
+            </p>
           </div>
           <Button
             text="삭제"
             onClick={() => handleDeleteMember(member.id)}
-            styles="px-30 py-8 border text-14 !border-gray-200 !bg-white !text-toss-blue"
+            styles="px-15 py-7 md:px-30 md:py-8 border text-12 md:text-14  !border-gray-200 !bg-white !text-toss-blue"
           />
         </div>
       ))}
