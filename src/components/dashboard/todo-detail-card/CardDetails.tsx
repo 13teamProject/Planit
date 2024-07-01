@@ -31,12 +31,12 @@ export default function CardDetails({ data, progressTitle }: Props) {
 
       <div className="flex w-full flex-col gap-16 md:order-1 md:max-w-420 lg:max-w-450">
         <div className="flex gap-12">
-          <div className="rounded-11 bg-toss-blue-light/40 px-8 pb-4 pt-6 text-10 text-toss-blue first-line:bg-toss-blue-light/40">
+          <div className="flex max-h-22 min-w-60 items-center justify-center rounded-11 bg-toss-blue-light/40 text-10 text-toss-blue first-line:bg-toss-blue-light/40">
             <span className="mr-6 inline-block h-6 w-6 rounded-full bg-toss-blue" />
             {progressTitle}
           </div>
           <span className="h-20 w-1 bg-gray-700" />
-          <div className="flex gap-10 whitespace-pre text-10">
+          <div className="flex flex-wrap gap-10 text-10">
             {tags.map((tag) => (
               <span className="rounded-4 bg-gray-200 px-6 pb-4 pt-6" key={tag}>
                 {tag}
@@ -44,7 +44,8 @@ export default function CardDetails({ data, progressTitle }: Props) {
             ))}
           </div>
         </div>
-        <div className="custom-scrollbar max-h-205 overflow-auto md:max-h-283">
+
+        <div className="custom-scrollbar max-h-205 overflow-scroll md:max-h-283">
           <section className="text-12 leading-22">{description}</section>
           <div className="relative h-167 md:h-245 lg:h-262">
             {imageUrl && (
