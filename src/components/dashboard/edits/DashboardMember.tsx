@@ -4,11 +4,10 @@ import { deleteMember, getMembers } from '@/app/api/members';
 import Button from '@/components/commons/button';
 import ProfileCircle from '@/components/commons/circle/ProfileCircle';
 import Modal from '@/components/commons/modal';
+import { PAGE_SIZE } from '@/constants/globalConstants';
 import { Member, ModalState } from '@planit-types';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-
-const PAGE_SIZE = 5;
 
 export default function DashboardMember({
   params,
@@ -28,27 +27,6 @@ export default function DashboardMember({
     setModalState({ ...modalState, isOpen: false });
   };
 
-  useEffect(() => {
-    const fetchDashboardMember = async () => {
-      const fetchedDashboardMember = await getMembers({
-        dashboardId: params.id,
-      });
-
-      if ('message' in fetchedDashboardMember) {
-        setModalState({
-          isOpen: true,
-          message: fetchedDashboardMember.message,
-        });
-      } else {
-        setMembers(fetchedDashboardMember.members);
-      }
-    };
-    fetchDashboardMember();
-  });
-  return (
-    <div className="mt-12 w-full max-w-620 rounded-md bg-white px-28 pb-28 pt-26">
-      <div className="mb-25">
-        <h3 className="text-24 font-bold">구성원</h3>
   // 구성원 삭제
   const handleDeleteMember = async (memberId: number) => {
     const successDeleteMember = await deleteMember(memberId);
