@@ -45,6 +45,7 @@ declare module '@planit-types' {
     imageUrl: string;
     teamId: string;
     columnId: number;
+    dashboardId: number;
     createdAt: string;
     updatedAt: string;
   };

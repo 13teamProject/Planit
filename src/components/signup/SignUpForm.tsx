@@ -138,37 +138,33 @@ export default function SignUpForm() {
 
         <AuthButton text="가입하기" disabled={!isValid} />
       </form>
-      {modalState.isOpen && (
-        <Modal isOpen={modalState.isOpen} onClose={handleClose}>
-          <div className="m-auto px-54 pb-29 pt-26 text-right text-18 md:w-540 md:px-33">
-            <p className="pb-47 pt-50 text-center">{modalState.message}</p>
-            <span className="flex justify-center md:justify-end">
-              <Button
-                styles="w-138 h-42 md:w-120 md:h-48"
-                text="확인"
-                onClick={handleClose}
-              />
-            </span>
-          </div>
-        </Modal>
-      )}
-      {termsModalState && (
-        <Modal isOpen={termsModalState} onClose={handleTermsOpenClose}>
-          <div className="h-400 w-340 px-28 py-28 text-center text-18 md:h-600 md:w-600">
-            <div className="pb-10 md:pb-30">
-              <h2 className="mb-10 text-20 font-bold md:text-25">
-                플랜잇 서비스 이용약관
-              </h2>
-              <Terms />
-            </div>
+      <Modal isOpen={modalState.isOpen} onClose={handleClose}>
+        <div className="m-auto px-54 pb-29 pt-26 text-right text-18 md:w-540 md:px-33">
+          <p className="pb-47 pt-50 text-center">{modalState.message}</p>
+          <span className="flex justify-center md:justify-end">
             <Button
               styles="w-138 h-42 md:w-120 md:h-48"
               text="확인"
-              onClick={handleTermsOpenClose}
+              onClick={handleClose}
             />
+          </span>
+        </div>
+      </Modal>
+      <Modal isOpen={termsModalState} onClose={handleTermsOpenClose}>
+        <div className="h-400 w-340 px-28 py-28 text-center text-18 md:h-600 md:w-600">
+          <div className="pb-10 md:pb-30">
+            <h2 className="mb-10 text-20 font-bold md:text-25">
+              플랜잇 서비스 이용약관
+            </h2>
+            <Terms />
           </div>
-        </Modal>
-      )}
+          <Button
+            styles="w-138 h-42 md:w-120 md:h-48"
+            text="확인"
+            onClick={handleTermsOpenClose}
+          />
+        </div>
+      </Modal>
     </>
   );
 }
