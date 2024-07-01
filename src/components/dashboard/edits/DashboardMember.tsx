@@ -113,6 +113,7 @@ export default function DashboardMember({
               alt="arrow_next"
               width={8}
               height={13}
+              className="fill-gray-300"
             />
           </button>
         </div>

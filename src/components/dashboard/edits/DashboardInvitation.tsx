@@ -11,16 +11,10 @@ import Modal from '@/components/commons/modal';
 import { PAGE_SIZE } from '@/constants/globalConstants';
 import { emailValidationSchema } from '@/utils/validation/schema';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { EmailRequest, Invitation } from '@planit-types';
+import { ContentModalState, EmailRequest, Invitation } from '@planit-types';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-
-type ContentModalState = {
-  isOpen: boolean;
-  message: string;
-  isContent?: boolean;
-};
 
 export default function DashboardInvitation({
   params,
