@@ -1,3 +1,4 @@
+import ProfileCircle from '@/components/commons/circle/ProfileCircle';
 import { formatDate } from '@/utils/date';
 import { Comment as CommentType } from '@planit-types';
 import { ChangeEvent, useState } from 'react';
@@ -29,10 +30,8 @@ export default function Comment({
   };
 
   return (
-    <div className="w-full pb-16 pt-2 md:max-w-420 lg:max-w-450">
-      {/* <ProfileCircle color="bg-red-500" size="sm">
-            {comment.author.nickname[0]}
-          </ProfileCircle> */}
+    <div className="flex w-full gap-8 pb-16 pt-2 md:max-w-420 lg:max-w-450">
+      <ProfileCircle data={author} styles="size-26 md:size-34" />
       <div className="flex flex-col">
         <div>
           <span className="pr-6 text-12 font-semibold">{author.nickname}</span>

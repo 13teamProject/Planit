@@ -24,7 +24,7 @@ export async function getComments({
     params.append('cursorId', cursorId.toString());
   }
 
-  const url = `${API_URL}/comments?${params.toString()}`;
+  const url = `${API_URL}/comments?${params}`;
 
   try {
     const res = await fetch(url, {

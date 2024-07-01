@@ -10,11 +10,11 @@ import { TodoDetailsCardResponse } from '@planit-types';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
-const boardId = '8684';
+const cardId = '8684';
 
 // 추후 설정 예정
-// params: { boardId: string }
-// const { boardId } = params;
+// params: { cardId: string }
+// const { cardId } = params;
 
 const progressTitle = 'To do';
 
@@ -42,18 +42,18 @@ export default function TodoDetailModal({
 
   useEffect(() => {
     const fetchTodoCard = async () => {
-      const data = await getTodoCardDetails(boardId);
+      const data = await getTodoCardDetails(cardId);
       setCardDetails(data);
     };
-    fetchTodoCard();
-  }, [boardId]);
+
+    if (!editModalIsOpen) fetchTodoCard();
+  }, [cardId, editModalIsOpen]);
 
   if (!cardDetails) {
-    return <div>데이터가 없습니다</div>;
+    return <div />;
   }
 
   const { title, id, columnId, dashboardId } = cardDetails;
-
   return (
     <>
       <Modal isOpen={todoModalIsOpen} onClose={() => {}}>
