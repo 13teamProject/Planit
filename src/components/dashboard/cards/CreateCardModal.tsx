@@ -87,7 +87,7 @@ export default function CreateCardModal({
 
   return (
     <Modal isOpen={isOpen} onClose={() => {}}>
-      <form className="max-h-734 w-327 overflow-y-auto p-20 md:max-h-845 md:min-w-506 md:p-24">
+      <form className="custom-scrollbar max-h-734 w-340 overflow-x-hidden overflow-y-scroll p-20 md:max-h-845 md:min-w-506 md:p-24">
         <div className="mb-18 flex items-center justify-between md:mb-22">
           <h1 className="text-20 font-bold">할 일 생성</h1>
           <Image
