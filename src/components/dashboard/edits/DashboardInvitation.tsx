@@ -6,9 +6,9 @@ import {
   postInvitation,
 } from '@/app/api/dashboards';
 import Button from '@/components/commons/button';
-import BarButton from '@/components/commons/button/BarButton';
 import Input from '@/components/commons/input';
 import Modal from '@/components/commons/modal';
+import { PAGE_SIZE } from '@/constants/globalConstants';
 import { emailValidationSchema } from '@/utils/validation/schema';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { EmailRequest, Invitation } from '@planit-types';
@@ -22,7 +22,6 @@ type ContentModalState = {
   isContent?: boolean;
 };
 
-const PAGE_SIZE = 5;
 export default function DashboardInvitation({
   params,
 }: {
