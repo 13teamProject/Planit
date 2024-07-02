@@ -4,7 +4,6 @@ import { editCard, postCardImage } from '@/app/api/cards-goni';
 import { getColumns } from '@/app/api/columns';
 import { getMembers } from '@/app/api/members';
 import Button from '@/components/commons/button';
-import ColorCircle from '@/components/commons/circle/ColorCircle';
 import ProfileCircle from '@/components/commons/circle/ProfileCircle';
 import Input from '@/components/commons/input';
 import DateInput from '@/components/commons/input/DateInput';
@@ -160,22 +159,12 @@ export default function EditCardModal({
                 name="columnId"
                 control={control}
                 defaultValue={
-                  <Tag round color="orange" size="sm">
-                    <div className="md:gap-4-4 flex items-center gap-3">
-                      <ColorCircle size="xs" color="bg-orange-dashboard" />
-                      {currentStatus?.title}
-                    </div>
-                  </Tag>
+                  <Tag type="round" text={currentStatus?.title as string} />
                 }
               >
                 {statusList.map((status) => (
                   <DropdownInput.Option key={status.id} id={status.id}>
-                    <Tag round color="orange" size="sm">
-                      <div className="md:gap-4-4 flex items-center gap-3">
-                        <ColorCircle size="xs" color="bg-orange-dashboard" />
-                        {status.title}
-                      </div>
-                    </Tag>
+                    <Tag type="round" text={status.title} />
                   </DropdownInput.Option>
                 ))}
               </DropdownInput>
