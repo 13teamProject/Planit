@@ -1,3 +1,4 @@
+import ToastProvider from '@/components/commons/toast';
 import { Metadata } from 'next';
 import localFont from 'next/font/local';
 
@@ -52,8 +53,10 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
       <body suppressHydrationWarning className={`${customFont.variable}`}>
-        {children}
-        <div id="modal-root" />
+        <ToastProvider>
+          {children}
+          <div id="modal-root" />
+        </ToastProvider>
       </body>
     </html>
   );

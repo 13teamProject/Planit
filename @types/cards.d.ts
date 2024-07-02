@@ -40,8 +40,8 @@ declare module '@planit-types' {
     assigneeUserId: number;
     title: string;
     description: string;
-    dueDate?: string;
-    tags?: string[];
+    dueDate: string | null;
+    tags: string[];
     imageUrl?: string | null;
   };
 

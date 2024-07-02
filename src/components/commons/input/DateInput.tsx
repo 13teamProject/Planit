@@ -80,7 +80,7 @@ const DateInput = memo(
             <CustomInput
               placeholderText={placeholder}
               onClick={() => {}}
-              value={String(selectedDate)}
+              value={selectedDate && String(selectedDate)}
             />
           }
         />
@@ -92,7 +92,7 @@ const DateInput = memo(
 DateInput.displayName = 'DateInputWrapper';
 
 type CustomInputProps = {
-  value: string;
+  value: string | null;
   placeholderText: string;
   onClick: () => void;
 };
