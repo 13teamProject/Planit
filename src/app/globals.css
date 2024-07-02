@@ -36,12 +36,14 @@
 
   .custom-scrollbar::-webkit-scrollbar {
     width: 10px;
+    height: 0px;
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb {
     background: rgb(218, 233, 254, 0.6);
     opacity: 0.4;
     border-radius: 14px;
+    scrollbar-width: auto; /* 파이어폭스 */
   }
 
   .custom-scrollbar::-webkit-scrollbar-track {
