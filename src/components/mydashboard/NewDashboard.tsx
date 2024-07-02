@@ -105,7 +105,6 @@ export default function NewDashboard() {
         userId: response.userId,
       };
 
-      // setDashboards((prevDashboards) => [...prevDashboards, newDashboard]);
       fetchDashboard(page);
       setModalState({ ...modalState, isOpen: false });
       router.push(`/dashboard/${response.id}`);

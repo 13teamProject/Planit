@@ -84,7 +84,6 @@ export default function Sidemenu() {
         userId: response.userId,
       };
 
-      setDashboards((prevDashboards) => [...prevDashboards, newDashboard]);
       fetchDashboard();
       setModalState({ ...modalState, isOpen: false });
       router.push(`/dashboard/${response.id}`);
