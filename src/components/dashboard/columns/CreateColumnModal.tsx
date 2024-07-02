@@ -7,6 +7,7 @@ import Modal from '@/components/commons/modal';
 import { Column, CreateColumnRequest } from '@planit-types';
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 type Props = {
   isOpen: boolean;
@@ -40,8 +41,11 @@ export default function CreateColumnModal({
 
     const res = await postCreateColumn(reqBody);
 
-    if ('message' in res) alert(res.message);
-    console.log(res);
+    if ('message' in res) {
+      toast.error(res.message);
+      return;
+    }
+
     onClose();
     reset();
   };
@@ -53,7 +57,7 @@ export default function CreateColumnModal({
       const columnRes = await getColumns(dashboardId);
 
       if ('message' in columnRes) {
-        alert(columnRes.message);
+        toast.error(columnRes.message);
         return;
       }
 

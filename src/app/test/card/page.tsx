@@ -6,23 +6,23 @@ import EditCardModal from '@/components/dashboard/cards/EditCardModal';
 import { useState } from 'react';
 
 const CURRENT_CARD_DATA = {
-  id: 8679,
-  title: 'cardTest',
-  description: 'hello',
-  tags: ['hello', 'world'],
-  dueDate: '2024-06-25 17:12',
+  id: 8704,
+  title: 'dfdfdfd',
+  description: 'dfdfdf',
+  tags: [],
+  dueDate: null,
   assignee: {
     id: 4008,
-    nickname: '천권희',
-    profileImageUrl: null,
+    nickname: 'gonidd',
+    profileImageUrl:
+      'https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/taskify/profile_image/6-13_4008_1719623361465.png',
   },
-  imageUrl:
-    'https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/taskify/task_image/6-13_32949_1719303538107.png',
+  imageUrl: null,
   teamId: '6-13',
   dashboardId: 9768,
   columnId: 32949,
-  createdAt: '2024-06-25T17:19:20.232Z',
-  updatedAt: '2024-06-25T17:19:20.232Z',
+  createdAt: '2024-06-27T21:32:27.033Z',
+  updatedAt: '2024-06-27T21:32:27.033Z',
 };
 
 export default function CreateCard() {
