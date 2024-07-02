@@ -2,8 +2,9 @@ import { loginUser, signUpUser } from '@/app/api/auth';
 import { useAuthStore } from '@/store/authStore';
 import { deleteCookie, setCookie } from '@/utils/cookies';
 import {
-  BadRequest,
+  ErrorMessage,
   LoginProps,
+  LoginResult,
   SignUpProps,
   UserInfoResponse,
 } from '@planit-types';
@@ -12,28 +13,27 @@ import {
 export async function handleLogin({
   email,
   password,
-}: LoginProps): Promise<UserInfoResponse | BadRequest> {
+}: LoginProps): Promise<LoginResult> {
   const { login } = useAuthStore.getState();
 
-  try {
-    const { accessToken, user } = await loginUser({ email, password });
+  const response = await loginUser({ email, password });
 
-    setCookie('accessToken', accessToken, {
-      path: '/',
-      'max-age': 60 * 60 * 24,
-      secure: true,
-      samesite: 'strict',
-    });
-
-    login(user);
-
-    return user;
-  } catch (error) {
-    if (error instanceof Error) {
-      return { message: error.message };
-    }
-    return { message: '로그인 중 알 수 없는 오류가 발생했습니다.' };
+  if ('message' in response) {
+    return response;
   }
+
+  const { accessToken, user } = response;
+
+  setCookie('accessToken', accessToken, {
+    path: '/',
+    'max-age': 60 * 60 * 24,
+    secure: true,
+    samesite: 'strict',
+  });
+
+  login(user);
+
+  return response;
 }
 
 // 로그아웃
@@ -48,21 +48,16 @@ export async function handleSignUpAndLogin({
   email,
   password,
   nickname,
-}: SignUpProps): Promise<UserInfoResponse | BadRequest> {
-  try {
-    const signUpResult = await signUpUser({ email, password, nickname });
-
-    if ('message' in signUpResult) {
-      return signUpResult;
-    }
-
-    const loginResult = await handleLogin({ email, password });
-
-    return loginResult;
-  } catch (error) {
-    if (error instanceof Error) {
-      return { message: error.message };
-    }
-    return { message: '회원가입 중 알 수 없는 오류가 발생했습니다.' };
+}: SignUpProps): Promise<UserInfoResponse | ErrorMessage> {
+  const signUpResult = await signUpUser({ email, password, nickname });
+  if ('message' in signUpResult) {
+    return signUpResult;
   }
+
+  const loginResult = await handleLogin({ email, password });
+  if ('message' in loginResult) {
+    return loginResult;
+  }
+
+  return loginResult.user;
 }

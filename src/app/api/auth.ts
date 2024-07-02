@@ -1,6 +1,6 @@
 import {
   LoginProps,
-  LoginResponse,
+  LoginResult,
   SignUpProps,
   SignUpResult,
 } from '@planit-types';
@@ -46,7 +46,7 @@ export async function signUpUser({
 export async function loginUser({
   email,
   password,
-}: LoginProps): Promise<LoginResponse> {
+}: LoginProps): Promise<LoginResult> {
   const obj: RequestInit = {
     method: 'POST',
     headers: {
@@ -59,12 +59,18 @@ export async function loginUser({
     password,
   });
 
-  const res = await fetch(`${API_URL}/auth/login`, obj);
-  const data = await res.json();
+  try {
+    const res = await fetch(`${API_URL}/auth/login`, obj);
+    const data = await res.json();
 
-  if (!res.ok) {
-    throw new Error(data.message || '로그인에 실패하였습니다.');
+    if (!res.ok) throw new Error(`${data.message}`);
+
+    return data;
+  } catch (error) {
+    if (error instanceof Error) {
+      return { message: error.message };
+    }
+
+    return { message: '로그인 중 알 수 없는 오류가 발생했습니다.' };
   }
-
-  return data;
 }
