@@ -11,12 +11,7 @@ const CURRENT_CARD_DATA = {
   description: 'dfdfdf',
   tags: [],
   dueDate: null,
-  assignee: {
-    id: 4008,
-    nickname: 'gonidd',
-    profileImageUrl:
-      'https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/taskify/profile_image/6-13_4008_1719623361465.png',
-  },
+  assignee: null,
   imageUrl: null,
   teamId: '6-13',
   dashboardId: 9768,

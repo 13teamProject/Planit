@@ -6,14 +6,14 @@ declare module '@planit-types' {
   };
 
   export type CreateCardRequest = {
-    assigneeUserId: number;
+    assigneeUserId?: number;
     dashboardId: number;
     columnId: number;
     title: string;
     description: string;
     dueDate?: string;
     tags?: string[];
-    imageUrl?: string | null;
+    imageUrl?: string;
   };
 
   export type CreateCardResponse = {
@@ -21,9 +21,9 @@ declare module '@planit-types' {
     title: string;
     description: string;
     tags: string[];
-    dueDate: string;
-    assignee: Assignee;
-    imageUrl: string;
+    dueDate: string | null;
+    assignee: Assignee | null;
+    imageUrl: string | null;
     teamId: string;
     columnId: number;
     dashboardId: number;
@@ -41,7 +41,7 @@ declare module '@planit-types' {
     description: string;
     tags: string[];
     dueDate: string | null;
-    assignee: Assignee;
+    assignee: Assignee | null;
     imageUrl: string | null;
     teamId: string;
     columnId: number;
@@ -52,22 +52,22 @@ declare module '@planit-types' {
 
   export type EditCardRequest = {
     columnId: number;
-    assigneeUserId: number;
+    assigneeUserId?: number;
     title: string;
     description: string;
-    dueDate: string | null;
-    tags: string[];
-    imageUrl?: string | null;
+    dueDate?: string;
+    tags?: string[];
+    imageUrl?: string;
   };
 
   export type EditCardResponse = {
     id: number;
     title: string;
     description: string;
-    tags?: string[];
-    dueDate?: string;
-    assignee: Assignee;
-    imageUrl?: string;
+    tags: string[];
+    dueDate: string | null;
+    assignee: Assignee | null;
+    imageUrl: string | null;
     teamId: string;
     columnId: number;
     createdAt: string;

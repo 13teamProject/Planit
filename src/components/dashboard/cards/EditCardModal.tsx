@@ -36,12 +36,12 @@ type Props = {
 
 export type EditCardInputs = {
   columnId: number;
-  assignee: number;
+  assignee?: number;
   title: string;
   description: string;
-  dueDate: Date | null;
+  dueDate?: Date;
   tags: string[];
-  image: string | null;
+  image?: string;
 };
 
 export default function EditCardModal({
@@ -58,15 +58,14 @@ export default function EditCardModal({
   const { register, handleSubmit, control, reset } = useForm<EditCardInputs>({
     defaultValues: {
       columnId: currentCardData.columnId,
-      assignee: currentCardData.assignee.id,
+      assignee: currentCardData.assignee?.id,
       title: currentCardData.title,
       description: currentCardData.description,
-      dueDate:
-        currentCardData.dueDate !== null
-          ? new Date(currentCardData.dueDate)
-          : null,
+      dueDate: currentCardData.dueDate
+        ? new Date(currentCardData.dueDate)
+        : undefined,
       tags: currentCardData.tags,
-      image: currentCardData.imageUrl,
+      image: currentCardData.imageUrl ?? undefined,
     },
   });
 
@@ -148,6 +147,7 @@ export default function EditCardModal({
               onClick={onClose}
             />
           </div>
+
           <div className="flex flex-col justify-between md:flex-row">
             <div>
               <label
@@ -192,13 +192,17 @@ export default function EditCardModal({
                 name="assignee"
                 control={control}
                 defaultValue={
-                  <div className="flex items-center gap-6">
-                    <ProfileCircle
-                      data={currentCardData.assignee}
-                      styles="size-26 text-14 bg-toss-blue-light"
-                    />
-                    {currentCardData.assignee.nickname}
-                  </div>
+                  currentCardData.assignee ? (
+                    <div className="flex items-center gap-6">
+                      <ProfileCircle
+                        data={currentCardData.assignee}
+                        styles="size-26 text-14 bg-toss-blue-light"
+                      />
+                      {currentCardData.assignee.nickname}
+                    </div>
+                  ) : (
+                    <span className="text-gray-300">이름을 입력해 주세요</span>
+                  )
                 }
               >
                 {members.map((member) => (
@@ -215,6 +219,7 @@ export default function EditCardModal({
               </DropdownInput>
             </div>
           </div>
+
           <label
             htmlFor="title"
             className="mb-8 mt-18 block text-14 text-black-800 md:mt-20 md:text-16"
@@ -227,6 +232,7 @@ export default function EditCardModal({
             placeholder="제목을 입력해 주세요"
             register={{ ...register('title', { required: true }) }}
           />
+
           <label
             htmlFor="description"
             className="mb-8 mt-18 block text-14 text-black-800 md:mt-20 md:text-16"
@@ -238,6 +244,7 @@ export default function EditCardModal({
             placeholder="설명을 입력해 주세요"
             register={{ ...register('description', { required: true }) }}
           />
+
           <label
             htmlFor="dueDate"
             className="mb-8 mt-18 block text-14 text-black-800 md:mt-20 md:text-16"
@@ -252,6 +259,7 @@ export default function EditCardModal({
               currentCardData.dueDate && new Date(currentCardData.dueDate)
             }
           />
+
           <label
             htmlFor="tags"
             className="mb-8 mt-18 block text-14 text-black-800 md:mt-20 md:text-16"
@@ -265,6 +273,7 @@ export default function EditCardModal({
             control={control}
             defaultValue={currentCardData.tags}
           />
+
           <label
             htmlFor="image"
             className="mb-8 mt-18 block text-14 text-black-800 md:mt-20 md:text-16"
@@ -279,6 +288,7 @@ export default function EditCardModal({
             fetchFn={postCardImage}
             defaultValue={currentCardData.imageUrl}
           />
+
           <div className="mt-18 flex gap-12 md:mt-28 md:justify-end">
             <Button
               onClick={() => {

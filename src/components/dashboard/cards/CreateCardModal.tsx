@@ -26,12 +26,12 @@ type Props = {
 };
 
 export type CreateCardInputs = {
-  assignee: number;
+  assignee?: number;
   title: string;
   description: string;
   dueDate?: Date;
   tags?: string[];
-  image?: string | null;
+  image?: string;
 };
 
 export default function CreateCardModal({
