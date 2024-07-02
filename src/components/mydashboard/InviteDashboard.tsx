@@ -2,6 +2,7 @@
 
 import { getDashboards, postDashboards } from '@/app/api/dashboards';
 import { getMyInivations, respondToInvitation } from '@/app/api/inivations';
+import { SCROLL_SIZE } from '@/constants/globalConstants';
 import useDeviceState from '@/hooks/useDeviceState';
 import { DashboardFormData, Invitation } from '@planit-types';
 import Image from 'next/image';
@@ -35,10 +36,9 @@ export default function InviteDashboard() {
   };
 
   useEffect(() => {
-    fetchDashboardInvitations(5);
+    fetchDashboardInvitations(SCROLL_SIZE);
   }, [currentPage]);
 
-  // 검색
   useEffect(() => {
     setFilteredInvitations(
       invitations.filter((invitation) =>
@@ -47,7 +47,6 @@ export default function InviteDashboard() {
     );
   }, [search, invitations]);
 
-  // 대시보드 색상 조회
   const fetchDashboardColor = async (dashboardId: number) => {
     try {
       const response = await getDashboards(
@@ -63,7 +62,6 @@ export default function InviteDashboard() {
     }
   };
 
-  // 초대 응답(수락)
   const handleInvitationResponse = async (
     invitationId: number,
     accept: boolean,
@@ -85,19 +83,19 @@ export default function InviteDashboard() {
           color,
         };
         const createResponse = await postDashboards(formData);
-        fetchDashboardInvitations(5);
+        fetchDashboardInvitations(SCROLL_SIZE);
         window.location.reload(); // 페이지 새로고침
       } catch (error) {
         console.error('Failed to create dashboard:', error);
       }
     } else {
-      fetchDashboardInvitations(5);
+      fetchDashboardInvitations(SCROLL_SIZE);
     }
   };
   return (
     <>
       {isInvited && (
-        <div className="mb-120 ml-40 mt-24 h-830 w-260 rounded-8 bg-white pl-24 pr-24 md:mt-40 md:h-600 md:w-504 md:pl-28 md:pr-28 lg:w-1022">
+        <div className="mb-120 ml-40 mt-24 h-830 w-260 overflow-y-scroll rounded-8 bg-white pl-24 pr-24 md:mt-40 md:h-600 md:w-504 md:pl-28 md:pr-28 lg:w-1022">
           <p className="pt-24 text-20 font-bold text-black-800 md:pt-32 md:text-24">
             초대받은 대시보드
           </p>
@@ -164,55 +162,55 @@ export default function InviteDashboard() {
             </div>
           ) : (
             <table className="mt-24 w-full table-fixed border-collapse">
-                <thead className="table-header-group lg:table-header-group">
-                  <tr className="text-16 text-gray-300">
-                    <th className="w-1/3 px-4 py-2 text-left">이름</th>
-                    <th className="w-1/3 px-4 py-2 text-left">초대자</th>
-                    <th className="w-1/3 px-4 py-2 text-left">수락 여부</th>
+              <thead className="table-header-group lg:table-header-group">
+                <tr className="text-16 text-gray-300">
+                  <th className="w-1/3 px-4 py-2 text-left">이름</th>
+                  <th className="w-1/3 px-4 py-2 text-left">초대자</th>
+                  <th className="w-1/3 px-4 py-2 text-left">수락 여부</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredInvitations.map((invitation) => (
+                  <tr
+                    key={invitation.id}
+                    className="h-120 border-b-1 align-middle md:h-70 lg:h-72"
+                  >
+                    <td className="w-1/3 px-4 py-2 align-middle">
+                      {invitation.dashboard.title}
+                    </td>
+                    <td className="w-1/3 px-4 py-2 align-middle">
+                      {invitation.inviter.nickname}
+                    </td>
+                    <td className="w-1/3 px-4 py-2 align-middle">
+                      <div className="flex">
+                        <Button
+                          text="수락"
+                          type="submit"
+                          cancel={false}
+                          styles="flex items-center justify-center w-109 h-28 md:w-72 md:h-35 lg:w-84 lg:h-40 text-16 md:text-18 mr-12"
+                          onClick={() =>
+                            handleInvitationResponse(invitation.id, true)
+                          }
+                        >
+                          수락
+                        </Button>
+                        <Button
+                          text="거절"
+                          type="button"
+                          cancel
+                          styles="flex items-center justify-center w-109 h-28 md:w-72 md:h-35 lg:w-84 lg:h-40 text-16 md:text-18 mr-12"
+                          onClick={() =>
+                            handleInvitationResponse(invitation.id, false)
+                          }
+                        >
+                          거절
+                        </Button>
+                      </div>
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {filteredInvitations.map((invitation) => (
-                    <tr
-                      key={invitation.id}
-                      className="h-120 border-b-1 align-middle md:h-70 lg:h-72"
-                    >
-                      <td className="w-1/3 px-4 py-2 align-middle">
-                        {invitation.dashboard.title}
-                      </td>
-                      <td className="w-1/3 px-4 py-2 align-middle">
-                        {invitation.inviter.nickname}
-                      </td>
-                      <td className="w-1/3 px-4 py-2 align-middle">
-                        <div className="flex">
-                          <Button
-                            text="수락"
-                            type="submit"
-                            cancel={false}
-                            styles="flex items-center justify-center w-109 h-28 md:w-72 md:h-35 lg:w-84 lg:h-40 text-16 md:text-18 mr-12"
-                            onClick={() =>
-                              handleInvitationResponse(invitation.id, true)
-                            }
-                          >
-                            수락
-                          </Button>
-                          <Button
-                            text="거절"
-                            type="button"
-                            cancel
-                            styles="flex items-center justify-center w-109 h-28 md:w-72 md:h-35 lg:w-84 lg:h-40 text-16 md:text-18 mr-12"
-                            onClick={() =>
-                              handleInvitationResponse(invitation.id, false)
-                            }
-                          >
-                            거절
-                          </Button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                ))}
+              </tbody>
+            </table>
           )}
         </div>
       )}
