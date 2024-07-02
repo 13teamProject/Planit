@@ -6,6 +6,7 @@ import ColorCircle from '@/components/commons/circle/ColorCircle';
 import { EditCardRequest, GetCardResponse } from '@planit-types';
 import Image from 'next/image';
 import React, { useCallback, useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 import Card from '../cards/Card';
 
@@ -109,7 +110,7 @@ export default function Column({ dashboardId }: ColumnProps) {
           .find((card) => card.id === cardId);
 
         if (!currentCard) {
-          console.error('카드를 찾을 수 없습니다.');
+          toast.error('카드를 찾을 수 없습니다.');
           return;
         }
 
@@ -126,12 +127,10 @@ export default function Column({ dashboardId }: ColumnProps) {
 
         // 에러 처리 및 성공
         if ('message' in result) {
-          console.error('카드 이동 중 오류 발생:', result.message);
-        } else {
-          console.log('카드가 성공적으로 이동되었습니다.');
+          toast.error('카드 이동 중 오류 발생');
         }
       } catch (err) {
-        console.error('카드 이동 중 예상치 못한 오류 발생:', err);
+        toast.error('카드 이동 중 예상치 못한 오류 발생');
       }
 
       handleDragEnd();
@@ -190,7 +189,7 @@ export default function Column({ dashboardId }: ColumnProps) {
             {dropTarget &&
               dropTarget.columnId === column.id &&
               dropTarget.index === column.cards.length && (
-                <div className="h-2 bg-blue-500 transition-all duration-200" />
+                <div className="h-2 bg-blue-300 transition-all duration-200" />
               )}
           </div>
         </div>

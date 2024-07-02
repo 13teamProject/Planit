@@ -39,10 +39,10 @@ const Card: React.FC<CardProps> = React.memo(
         onDragStart={handleDragStart}
         onDragOver={onDragOver}
         onDrop={onDrop}
-        className={`mt-20 min-h-100 cursor-grab rounded-8 border bg-white p-10 transition-all duration-200 ${isDragging ? 'border-blue-500 opacity-50' : 'border-gray-200 hover:border-gray-400'} active:cursor-grabbing sm:block md:flex md:gap-20 md:p-20 lg:block`}
+        className={`mt-20 min-h-100 cursor-grab rounded-8 border bg-white p-10 transition-all duration-200 ${isDragging ? 'border-blue-300 opacity-50' : 'border-gray-200 hover:border-gray-400'} active:cursor-grabbing sm:block md:flex md:gap-20 md:p-20 lg:block`}
       >
         {card.imageUrl && (
-          <div className="relative aspect-video bg-green-light-chip sm:w-full md:w-200 lg:w-full">
+          <div className="relative aspect-video sm:w-full md:w-200 lg:w-full">
             <Image src={card.imageUrl} alt={card.title} layout="fill" />
           </div>
         )}
