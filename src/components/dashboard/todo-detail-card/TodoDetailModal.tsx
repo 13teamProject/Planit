@@ -63,9 +63,9 @@ export default function TodoDetailModal({
   return (
     <>
       <Modal isOpen={todoModalIsOpen} onClose={() => {}}>
-        <div className="mb-32 flex h-730 w-full flex-col gap-16 overflow-hidden px-28 pt-32 md:w-680 lg:w-730">
-          <div className="grid md:flex md:justify-between selection:md:flex-col">
-            <h1 className="order-2 pt-3 text-20 font-bold md:order-1 md:text-24">
+        <div className="mb-28 flex max-h-730 w-327 flex-col overflow-hidden px-28 pt-30 md:w-680 md:gap-16 lg:w-730">
+          <div className="grid md:flex md:justify-between md:pb-8 selection:md:flex-col">
+            <h1 className="order-2 py-10 text-20 font-bold md:order-1 md:text-24">
               {title}
             </h1>
             <div className="order-1 flex justify-end gap-24 md:order-2">
@@ -98,11 +98,13 @@ export default function TodoDetailModal({
             </div>
           </div>
           <CardDetails data={cardDetails} progressTitle={progressTitle} />
-          <CommentSection
-            cardId={id}
-            columnId={columnId}
-            dashboardId={dashboardId}
-          />
+          <div className="flex-1">
+            <CommentSection
+              cardId={id}
+              columnId={columnId}
+              dashboardId={dashboardId}
+            />
+          </div>
         </div>
       </Modal>
       <EditCardModal

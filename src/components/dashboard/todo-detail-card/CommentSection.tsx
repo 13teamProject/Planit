@@ -52,7 +52,7 @@ export default function CommentSection({
   };
 
   return (
-    <div className="flex flex-col gap-10">
+    <div className="flex flex-col gap-8">
       <form
         className="w-full md:max-w-420 lg:max-w-450"
         onSubmit={handleSubmit}
@@ -77,7 +77,7 @@ export default function CommentSection({
           </button>
         </div>
       </form>
-      <div className="custom-scrollbar h-110 w-full overflow-auto">
+      <div className="custom-scrollbar h-60 min-h-58 w-full overflow-auto md:h-110">
         {comments.map((comment) => (
           <Comment
             key={comment.id}
@@ -86,7 +86,7 @@ export default function CommentSection({
             handleModify={handleModifyComment}
           />
         ))}
-        <div ref={commentsEnd} className="h-20" />
+        <div ref={commentsEnd} className="h-10" />
         {loading && <div>Loading...</div>}
       </div>
     </div>
