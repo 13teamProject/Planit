@@ -40,9 +40,9 @@ declare module '@planit-types' {
     title: string;
     description: string;
     tags: string[];
-    dueDate: string;
+    dueDate: string | null;
     assignee: Assignee;
-    imageUrl: string;
+    imageUrl: string | null;
     teamId: string;
     columnId: number;
     dashboardId: number;
@@ -55,8 +55,8 @@ declare module '@planit-types' {
     assigneeUserId: number;
     title: string;
     description: string;
-    dueDate?: string;
-    tags?: string[];
+    dueDate: string | null;
+    tags: string[];
     imageUrl?: string | null;
   };
 

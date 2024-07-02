@@ -7,4 +7,10 @@ declare module '@planit-types' {
     isOpen: boolean;
     message: string;
   };
+
+  export type ContentModalState = {
+    isOpen: boolean;
+    message: string;
+    isContent?: boolean;
+  };
 }

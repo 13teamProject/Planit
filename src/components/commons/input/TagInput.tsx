@@ -7,6 +7,7 @@ import {
   useState,
 } from 'react';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 import Tag from '../tag';
 
@@ -48,6 +49,8 @@ type TagInputProps = Omit<
   defaultValue?: string[];
 };
 
+const MAX_TAGS = 10;
+
 function TagInput({ onChange, defaultValue, ...args }: TagInputProps) {
   const [currentTag, setCurrentTag] = useState('');
   const [tagList, setTagList] = useState<string[]>(defaultValue || []);
@@ -58,9 +61,14 @@ function TagInput({ onChange, defaultValue, ...args }: TagInputProps) {
 
   const addTag = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key !== 'Enter' || e.currentTarget.value.trim() === '') return;
+
+    if (tagList.length >= MAX_TAGS) {
+      toast.error('태그 개수는 최대 10개입니다.');
+      return;
+    }
+
     if (tagList.includes(currentTag)) {
-      // eslint-disable-next-line no-alert
-      alert('같은 태그가 있습니다');
+      toast.error('같은 태그가 있습니다');
       return;
     }
 

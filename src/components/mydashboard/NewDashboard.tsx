@@ -1,23 +1,21 @@
+'use client';
+
 import { getDashboards, postDashboards } from '@/app/api/dashboards';
 import ColorCircle from '@/components/commons/circle/ColorCircle';
-import { SCROLL_SIZE } from '@/constants/globalConstants';
-import {
-  ColorMapping,
-  Dashboard,
-  DashboardResponse,
-  FormValues,
-  ModalState,
-} from '@planit-types';
+import { PAGE_SIZE } from '@/constants/globalConstants';
+import useDeviceState from '@/hooks/useDeviceState';
+import { ColorMapping, Dashboard, FormValues, ModalState } from '@planit-types';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
-import Button from '../button';
-import Modal from '../modal';
+import Button from '../commons/button';
+import BarButton from '../commons/button/BarButton';
+import Modal from '../commons/modal';
 
-export const colorMapping: ColorMapping = {
+const colorMapping: ColorMapping = {
   '#5534DA': 'bg-violet-dashboard',
   '#D6173A': 'bg-red-dashboard',
   '#7AC555': 'bg-green-dashboard',
@@ -26,7 +24,7 @@ export const colorMapping: ColorMapping = {
   '#E876EA': 'bg-pink-dashboard',
 };
 
-export const colors = [
+const colors = [
   '#D6173A',
   '#E876EA',
   '#FFA500',
@@ -35,31 +33,54 @@ export const colors = [
   '#76A5EA',
 ];
 
-export default function Sidemenu() {
+export default function NewDashboard() {
   const [dashboards, setDashboards] = useState<Dashboard[]>([]);
+  const [page, setPage] = useState(1);
+  const deviceState = useDeviceState();
   const [modalState, setModalState] = useState<ModalState>({
     isOpen: false,
     message: '',
   });
   const [selectedColor, setSelectedColor] = useState<string>(colors[0]);
-  const [page, setPage] = useState<number>(1);
+  const [totalItems, setTotalItems] = useState<number>(0); // 전체 아이템 수
+  const [totalPages, setTotalPages] = useState<number>(1); // 전체 페이지 수
+  const router = useRouter();
 
-  const fetchDashboard = async () => {
-    const response = await getDashboards('infiniteScroll', 1, SCROLL_SIZE);
-    setDashboards(
-      response.dashboards.map((data: DashboardResponse) => ({
+  const fetchDashboard = async (currentPage: number) => {
+    const response = await getDashboards('pagination', currentPage, PAGE_SIZE);
+    const fetchedDashboards: Dashboard[] = response.dashboards.map(
+      (data: Dashboard) => ({
         id: data.id,
         title: data.title,
         color: data.color,
         createdAt: data.createdAt,
         updatedAt: data.updatedAt,
-        createdByMe: data.createdByMe,
         userId: data.userId,
-      })),
+        createdByMe: data.createdByMe,
+      }),
     );
+    setDashboards(fetchedDashboards);
+
+    const totalItemsResponse = await getDashboards(
+      'pagination',
+      1,
+      Number.MAX_SAFE_INTEGER,
+    );
+    const totalItemsCount = totalItemsResponse.dashboards.length;
+    setTotalItems(totalItemsCount);
+
+    const calculatedTotalPages = Math.ceil(totalItemsCount / PAGE_SIZE);
+    setTotalPages(calculatedTotalPages);
   };
 
-  const router = useRouter();
+  const handleOpenModal = () => {
+    setModalState({ isOpen: true, message: '' });
+  };
+
+  const handleCloseModal = () => {
+    setModalState({ ...modalState, isOpen: false });
+  };
+
   const {
     register,
     handleSubmit,
@@ -84,7 +105,7 @@ export default function Sidemenu() {
         userId: response.userId,
       };
 
-      fetchDashboard();
+      fetchDashboard(page);
       setModalState({ ...modalState, isOpen: false });
       router.push(`/dashboard/${response.id}`);
     } catch (error) {
@@ -92,78 +113,82 @@ export default function Sidemenu() {
     }
   };
 
-  const handleOpenModal = () => {
-    setModalState({ isOpen: true, message: '안녕하세요' });
-  };
-
-  const handleCloseModal = () => {
-    setModalState({ ...modalState, isOpen: false });
-  };
-
   useEffect(() => {
-    fetchDashboard();
-  }, []);
+    fetchDashboard(page);
+  }, [page]);
 
+  const handlePreviousPage = () => {
+    if (page > 1) {
+      setPage(page - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (page < totalPages) {
+      setPage(page + 1);
+    }
+  };
   return (
     <>
-      <nav className="left-0 top-0 z-[999] h-screen w-67 overflow-y-auto border-1 border-r-gray-200 bg-white pl-20 pt-20 md:w-160 md:pl-18 lg:w-300 lg:pl-24">
-        <Link href="/" className="cursor-pointer">
-          <Image
-            className="md:hidden"
-            src="/image/logo_icon_blue.png"
-            width={25}
-            height={25}
-            alt="사이드메뉴 모바일 로고"
+      <section className="mb-8 ml-40 mt-40 grid w-260 grid-cols-1 grid-rows-6 gap-y-8 md:mb-10 md:w-504 md:grid-cols-2 md:grid-rows-3 md:gap-x-10 md:gap-y-10 lg:mb-12 lg:w-1022 lg:grid-cols-3 lg:grid-rows-2 lg:gap-x-13 lg:gap-y-12">
+        <div className="col-span-1 col-start-1 row-span-1 row-start-1">
+          <BarButton
+            onClick={handleOpenModal}
+            text="새로운 대시보드"
+            size={deviceState === 'mobile' ? 'sm' : 'lg'}
           />
-        </Link>
-        <Link href="/" className="cursor-pointer sm:hidden md:block lg:block">
-          <Image
-            src="/image/logo_text_blue.png"
-            className="mt-3"
-            width={85}
-            height={30}
-            alt="사이드메뉴 로고"
-          />
-        </Link>
-        <div className="mt-50 flex items-center justify-between lg:pr-24">
-          <p className="text-12 font-bold text-gray-400 sm:hidden md:block lg:block">
-            Dash Boards
-          </p>
-          <button type="button" onClick={handleOpenModal} className="md:pr-10">
-            <Image
-              src="/icon/add_box.svg"
-              width={20}
-              height={20}
-              alt="대쉬보드 추가 버튼"
-            />
-          </button>
         </div>
-
-        <div
-          className="overflow-y-auto"
-          style={{ maxHeight: 'calc(100vh - 150px)' }}
-        >
-          <ul className="mt-20 pr-10 lg:pr-12">
-            {dashboards.map((dashboard) => (
-              <li
-                key={dashboard.id}
-                className="flex h-45 items-center rounded-4 pl-8 hover:bg-violet-light-dashboard md:pl-10 lg:pl-12"
-              >
-                <ColorCircle
-                  color={colorMapping[dashboard.color] || 'bg-gray-400'}
-                  size="sm"
-                />
-                <Link
-                  href={`/dashboard/${dashboard.id}`}
-                  className="text-18 font-medium text-gray-400 hover:text-black sm:hidden md:block md:pl-16 md:text-16 lg:block lg:pl-16"
+        {dashboards &&
+          dashboards.map((dashboard) => (
+            <div
+              key={dashboard.id}
+              className="col-span-1 col-start-auto row-span-1 row-start-auto"
+            >
+              <Link href={`/dashboard/${dashboard.id}`}>
+                <button
+                  type="button"
+                  className="flex w-full items-center justify-between gap-8 rounded-8 border border-gray-200 px-20 py-20 font-bold text-black-800 hover:border-gray-400 md:py-24 md:text-18"
                 >
-                  {dashboard.title}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </nav>
+                  <div className="flex items-center">
+                    <ColorCircle
+                      color={colorMapping[dashboard.color] || 'bg-gray-400'}
+                      size="sm"
+                    />
+                    <p className="ml-10">{dashboard.title}</p>
+                  </div>
+                  <Image
+                    src="/icon/arrow_forward.svg"
+                    width={20}
+                    height={20}
+                    alt="대쉬보드 바로가기 버튼"
+                  />
+                </button>
+              </Link>
+            </div>
+          ))}
+      </section>
+      <section className="ml-40 flex w-260 items-center justify-end md:w-504 lg:w-1022">
+        <p className="black-800 mr-12 text-14 font-normal md:mr-16">
+          {totalPages} 페이지 중 {page}
+        </p>
+        <button type="button" onClick={handlePreviousPage}>
+          <Image
+            src="/icon/dashboard-pagenation-left.svg"
+            width={40}
+            height={40}
+            alt="대시보드 왼쪽 화살표 버튼"
+          />
+        </button>
+        <button type="button" onClick={handleNextPage}>
+          <Image
+            src="/icon/dashboard-pagenation-right.svg"
+            width={40}
+            height={40}
+            alt="대시보드 오른쪽 화살표 버튼"
+          />
+        </button>
+      </section>
+
       <Modal isOpen={modalState.isOpen} onClose={handleCloseModal}>
         <div className="h-300 w-327 px-20 py-28 pt-32 md:h-334 md:w-540 md:px-28 md:pb-28">
           <p className="black-800 mb-24 text-24 font-bold lg:mb-32">
@@ -175,7 +200,7 @@ export default function Sidemenu() {
               <input
                 {...register('dashboardName', { required: 'true' })}
                 type="text"
-                className="block h-42 w-full rounded-md border pl-16 pr-40 text-14 outline-none md:h-48 md:text-16"
+                className="mt-12 block h-42 w-full rounded-md border pl-16 pr-40 text-14 outline-none md:h-48 md:text-16"
               />
             </label>
             <div className="mt-24 flex space-x-10 md:mt-28">
