@@ -118,6 +118,8 @@ export default function Column({ dashboardId }: ColumnProps) {
           assigneeUserId: currentCard.assignee.id,
           title: currentCard.title,
           description: currentCard.description,
+          dueDate: currentCard.dueDate,
+          tags: currentCard.tags,
         };
 
         const result = await editCard({ cardId, formValue });
