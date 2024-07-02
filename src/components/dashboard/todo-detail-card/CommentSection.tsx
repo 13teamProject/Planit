@@ -79,7 +79,7 @@ export default function CommentSection({
           </button>
         </div>
       </form>
-      <div className="custom-scrollbar h-130 w-full overflow-auto">
+      <div className="custom-scrollbar h-110 w-full overflow-auto">
         {comments.map((comment) => (
           <Comment
             key={comment.id}
@@ -88,7 +88,7 @@ export default function CommentSection({
             handleModify={handleModifyComment}
           />
         ))}
-        <div ref={commentsEnd} className="h-10" />
+        <div ref={commentsEnd} className="h-20" />
         {loading && <div>Loading...</div>}
         {error && <div>Error</div>}
       </div>

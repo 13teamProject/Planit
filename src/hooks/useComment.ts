@@ -1,6 +1,8 @@
 import { deleteComment, getComments, putComment } from '@/app/api/comments';
 import { Comment } from '@planit-types';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+
+import { useIntersectionObserver } from './useIntersectionObserver';
 
 type LoadCommentsProps = {
   cardId: number;
@@ -11,8 +13,6 @@ export function useComment({ cardId }: LoadCommentsProps) {
   const [cursorId, setCursorId] = useState<number | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [hasMore, setHasMore] = useState<boolean>(true);
-  const commentsEnd = useRef<HTMLDivElement>(null);
-  const observer = useRef<IntersectionObserver | null>(null);
 
   const loadComments = useCallback(async () => {
     if (loading || !hasMore) return;
@@ -69,22 +69,17 @@ export function useComment({ cardId }: LoadCommentsProps) {
     loadComments();
   }, [cardId]);
 
-  useEffect(() => {
-    const handleObserver = (entities: IntersectionObserverEntry[]) => {
-      const target = entities[0];
+  // commentsEnd 변수에 useIntersectionObserver 훅을 호출하여 반환된 ref를 할당.
+  // 요소가 뷰포트에 들어왔고, 로딩 중이 아니며 더 불러올 댓글이 있을 경우 loadComments 함수를 호출하여 댓글을 불러옴.
+  const commentsEnd = useIntersectionObserver<HTMLDivElement>(
+    (entries) => {
+      const target = entries[0];
       if (target.isIntersecting && !loading && hasMore) {
         loadComments();
       }
-    };
-
-    if (observer.current) observer.current.disconnect();
-    observer.current = new IntersectionObserver(handleObserver, {
-      threshold: 1.0,
-    });
-    if (commentsEnd.current) observer.current.observe(commentsEnd.current);
-
-    return () => observer.current?.disconnect();
-  }, [loading, hasMore, loadComments]);
+    },
+    [loading, hasMore, loadComments],
+  );
 
   return {
     comments,
