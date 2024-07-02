@@ -40,9 +40,9 @@ declare module '@planit-types' {
     title: string;
     description: string;
     tags: string[];
-    dueDate: string;
+    dueDate: string | null;
     assignee: Assignee;
-    imageUrl: string;
+    imageUrl: string | null;
     teamId: string;
     columnId: number;
     createdAt: string;
@@ -54,8 +54,8 @@ declare module '@planit-types' {
     assigneeUserId: number;
     title: string;
     description: string;
-    dueDate?: string;
-    tags?: string[];
+    dueDate: string | null;
+    tags: string[];
     imageUrl?: string | null;
   };
 
@@ -67,6 +67,24 @@ declare module '@planit-types' {
     dueDate?: string;
     assignee: Assignee;
     imageUrl?: string;
+    teamId: string;
+    columnId: number;
+    createdAt: string;
+    updatedAt: string;
+  };
+
+  export type GetCardResponse = {
+    id: number;
+    title: string;
+    description: string;
+    tags: string[];
+    dueDate: string;
+    assignee: {
+      nickname: string;
+      id: number;
+      profileImageUrl: string;
+    };
+    imageUrl: string;
     teamId: string;
     columnId: number;
     createdAt: string;

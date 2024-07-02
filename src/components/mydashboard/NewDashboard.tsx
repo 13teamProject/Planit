@@ -2,8 +2,9 @@
 
 import { getDashboards, postDashboards } from '@/app/api/dashboards';
 import ColorCircle from '@/components/commons/circle/ColorCircle';
+import { PAGE_SIZE } from '@/constants/globalConstants';
 import useDeviceState from '@/hooks/useDeviceState';
-import { Dashboard } from '@planit-types';
+import { ColorMapping, Dashboard, FormValues, ModalState } from '@planit-types';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -13,19 +14,6 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import Button from '../commons/button';
 import BarButton from '../commons/button/BarButton';
 import Modal from '../commons/modal';
-
-type ColorMapping = {
-  [key: string]: string;
-};
-
-type ModalState = {
-  isOpen: boolean;
-  message: string;
-};
-
-type FormValues = {
-  dashboardName: string;
-};
 
 const colorMapping: ColorMapping = {
   '#5534DA': 'bg-violet-dashboard',
@@ -59,7 +47,7 @@ export default function NewDashboard() {
   const router = useRouter();
 
   const fetchDashboard = async (currentPage: number) => {
-    const response = await getDashboards('pagination', currentPage, 5);
+    const response = await getDashboards('pagination', currentPage, PAGE_SIZE);
     const fetchedDashboards: Dashboard[] = response.dashboards.map(
       (data: Dashboard) => ({
         id: data.id,
@@ -73,7 +61,6 @@ export default function NewDashboard() {
     );
     setDashboards(fetchedDashboards);
 
-    // 페이지네이션 - 전체 아이템 계산
     const totalItemsResponse = await getDashboards(
       'pagination',
       1,
@@ -82,9 +69,7 @@ export default function NewDashboard() {
     const totalItemsCount = totalItemsResponse.dashboards.length;
     setTotalItems(totalItemsCount);
 
-    // 페이지네이션 - 한 페이지 당 아이템 수 계산
-    const pageSize = 5;
-    const calculatedTotalPages = Math.ceil(totalItemsCount / pageSize);
+    const calculatedTotalPages = Math.ceil(totalItemsCount / PAGE_SIZE);
     setTotalPages(calculatedTotalPages);
   };
 
@@ -120,7 +105,7 @@ export default function NewDashboard() {
         userId: response.userId,
       };
 
-      setDashboards((prevDashboards) => [...prevDashboards, newDashboard]);
+      // setDashboards((prevDashboards) => [...prevDashboards, newDashboard]);
       fetchDashboard(page);
       setModalState({ ...modalState, isOpen: false });
       router.push(`/dashboard/${response.id}`);
@@ -204,76 +189,75 @@ export default function NewDashboard() {
           />
         </button>
       </section>
-      {modalState.isOpen && (
-        <Modal isOpen={modalState.isOpen} onClose={handleCloseModal}>
-          <div className="h-300 w-327 px-20 py-28 pt-32 md:h-334 md:w-540 md:px-28 md:pb-28">
-            <p className="black-800 mb-24 text-24 font-bold lg:mb-32">
-              새로운 대시보드
-            </p>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <label className="mb-10 text-18 font-medium">
-                대시보드 이름
-                <input
-                  {...register('dashboardName', { required: 'true' })}
-                  type="text"
-                  className="mt-12 block h-42 w-full rounded-md border pl-16 pr-40 text-14 outline-none md:h-48 md:text-16"
-                />
-              </label>
-              <div className="mt-24 flex space-x-10 md:mt-28">
-                {colors.map((color) => (
-                  <div
-                    key={color}
-                    onClick={() => setSelectedColor(color)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' || e.key === ' ') {
-                        setSelectedColor(color);
-                      }
-                    }}
-                    tabIndex={0}
-                    role="button"
-                    className="relative transform cursor-pointer transition-transform duration-200 ease-in-out hover:scale-110"
-                  >
-                    <ColorCircle color={colorMapping[color]} size="lg" />
-                    {selectedColor === color && (
-                      <Image
-                        src="/icon/check-icon.svg"
-                        width={15}
-                        height={15}
-                        alt="대시보드 색상 선택"
-                        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform"
-                      />
-                    )}
-                  </div>
-                ))}
-              </div>
-              <div className="mt-18 flex justify-end md:mt-28">
-                <Button
-                  text="취소"
-                  type="button"
-                  cancel
-                  onClick={handleCloseModal}
-                  styles="h-42 md:h-48 py-10 px-54 text-16 md:py-14 md:text-18 md:px-46 md:py-10 mr-12"
+
+      <Modal isOpen={modalState.isOpen} onClose={handleCloseModal}>
+        <div className="h-300 w-327 px-20 py-28 pt-32 md:h-334 md:w-540 md:px-28 md:pb-28">
+          <p className="black-800 mb-24 text-24 font-bold lg:mb-32">
+            새로운 대시보드
+          </p>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <label className="mb-10 text-18 font-medium">
+              대시보드 이름
+              <input
+                {...register('dashboardName', { required: 'true' })}
+                type="text"
+                className="mt-12 block h-42 w-full rounded-md border pl-16 pr-40 text-14 outline-none md:h-48 md:text-16"
+              />
+            </label>
+            <div className="mt-24 flex space-x-10 md:mt-28">
+              {colors.map((color) => (
+                <div
+                  key={color}
+                  onClick={() => setSelectedColor(color)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      setSelectedColor(color);
+                    }
+                  }}
+                  tabIndex={0}
+                  role="button"
+                  className="relative transform cursor-pointer transition-transform duration-200 ease-in-out hover:scale-110"
                 >
-                  취소
-                </Button>
-                <Button
-                  text="생성"
-                  type="submit"
-                  cancel={false}
-                  disabled={!watch('dashboardName') || !selectedColor}
-                  styles={`h-42 py-10 px-54 text-16 md:h-48 md:py-12 md:text-18 md:px-46 md:py-14 ${
-                    !watch('dashboardName') || !selectedColor
-                      ? 'bg-gray-300 cursor-not-allowed'
-                      : ''
-                  }`}
-                >
-                  생성
-                </Button>
-              </div>
-            </form>
-          </div>
-        </Modal>
-      )}
+                  <ColorCircle color={colorMapping[color]} size="lg" />
+                  {selectedColor === color && (
+                    <Image
+                      src="/icon/check-icon.svg"
+                      width={15}
+                      height={15}
+                      alt="대시보드 색상 선택"
+                      className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform"
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
+            <div className="mt-18 flex justify-end md:mt-28">
+              <Button
+                text="취소"
+                type="button"
+                cancel
+                onClick={handleCloseModal}
+                styles="h-42 md:h-48 py-10 px-54 text-16 md:py-14 md:text-18 md:px-46 md:py-10 mr-12"
+              >
+                취소
+              </Button>
+              <Button
+                text="생성"
+                type="submit"
+                cancel={false}
+                disabled={!watch('dashboardName') || !selectedColor}
+                styles={`h-42 py-10 px-54 text-16 md:h-48 md:py-12 md:text-18 md:px-46 md:py-14 ${
+                  !watch('dashboardName') || !selectedColor
+                    ? 'bg-gray-300 cursor-not-allowed'
+                    : ''
+                }`}
+              >
+                생성
+              </Button>
+            </div>
+          </form>
+        </div>
+      </Modal>
     </>
   );
 }

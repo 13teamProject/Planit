@@ -16,6 +16,7 @@ import { CreateCardRequest, Member } from '@planit-types';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 type Props = {
   isOpen: boolean;
@@ -64,8 +65,11 @@ export default function CreateCardModal({
 
     const res = await postCreateCard(reqBody);
 
-    if ('message' in res) alert(res.message);
-    console.log(res);
+    if ('message' in res) {
+      toast.error(res.message);
+      return;
+    }
+
     onClose();
     reset();
   };
@@ -77,7 +81,7 @@ export default function CreateCardModal({
       const memberRes = await getMembers({ dashboardId });
 
       if ('message' in memberRes) {
-        alert(memberRes.message);
+        toast.error(memberRes.message);
         return;
       }
 

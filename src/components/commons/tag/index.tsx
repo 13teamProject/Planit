@@ -1,7 +1,8 @@
 'use client';
 
 import classNames from 'classnames';
-import { KeyboardEvent, ReactNode } from 'react';
+import Image from 'next/image';
+import { ReactNode } from 'react';
 
 type TagProps = {
   color: string;
@@ -23,13 +24,13 @@ export default function Tag({
     toss: 'bg-toss-blue-light text-toss-blue',
     blue: 'bg-blue-light-chip text-blue-chip',
     green: 'bg-green-light-chip text-green-chip',
-    orange: 'bg-orange-light-chip text-purple-chip',
+    orange: 'bg-orange-light-chip text-orange-chip',
     pink: 'bg-pink-light-chip text-pink-chip',
     red: 'bg-red-light-chip text-red-chip',
     purple: 'bg-purple-light-chip text-purple-chip',
   };
   const sizeClass = classNames(
-    'text-12 inline-flex items-center rounded px-8 py-4',
+    'text-12 inline-flex items-center rounded px-8 py-4 max-w-full',
     {
       'text-12': size === 'lg',
       'text-10': size === 'sm',
@@ -37,23 +38,24 @@ export default function Tag({
   );
 
   if (deleteTag) {
-    const handleKeyboard = (e: KeyboardEvent<HTMLSpanElement>) => {
-      if (e.key === 'Backspace' || e.key === 'Delete') {
-        // eslint-disable-next-line no-alert
-        alert('해당 태그를 삭제하시겠습니까?');
-        deleteTag();
-      }
-    };
-
     return (
-      <span
-        role="button"
-        onKeyUp={handleKeyboard}
+      <button
+        type="button"
+        onClick={deleteTag}
         tabIndex={0}
-        className={`${colorVariants[color]} ${roundClass} ${sizeClass} focus:outline focus:outline-[1.5px]`}
+        className={`${colorVariants[color]} ${roundClass} ${sizeClass} group/tag relative`}
       >
         {children}
-      </span>
+        <div className="invisible absolute inset-0 flex items-center justify-center rounded bg-[#f5f5f5] bg-opacity-80 outline-none group-hover/tag:visible">
+          <Image
+            src="/icon/close_red.svg"
+            alt="x"
+            width={12}
+            height={12}
+            className="rounded-full bg-white"
+          />
+        </div>
+      </button>
     );
   }
 

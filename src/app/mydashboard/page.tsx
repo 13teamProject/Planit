@@ -14,7 +14,6 @@ export default function MyDashBoardPage() {
           <DashBoardHeader isDashboard={false} />
         </Suspense>
         <div className="flex-1">
-          {' '}
           <NewDashboard />
         </div>
       </div>

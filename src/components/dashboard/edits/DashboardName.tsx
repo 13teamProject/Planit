@@ -23,6 +23,7 @@ export default function DashboardName({ params }: { params: { id: number } }) {
     isOpen: false,
     message: '',
   });
+
   const colorMapping: ColorMapping = {
     '#7AC555': 'bg-green-dashboard',
     '#5534DA': 'bg-violet-dashboard',
@@ -84,7 +85,7 @@ export default function DashboardName({ params }: { params: { id: number } }) {
       <form className="overflow-hidden" onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-34 flex items-center justify-between">
           <h3 className="text-20 font-bold">{dashboardData?.title}</h3>
-          <div className="flex gap-10">
+          <div className="flex gap-5 md:gap-10">
             {Object.entries(colorMapping).map(([hexColor, tailwindClass]) => (
               <button
                 type="button"
@@ -108,7 +109,10 @@ export default function DashboardName({ params }: { params: { id: number } }) {
           </div>
         </div>
 
-        <label htmlFor="title" className="mb-10 inline-block text-18">
+        <label
+          htmlFor="title"
+          className="mb-10 inline-block text-16 md:text-18"
+        >
           대시보드 이름
         </label>
         <Input
@@ -121,7 +125,7 @@ export default function DashboardName({ params }: { params: { id: number } }) {
         <Button
           type="submit"
           text="변경"
-          styles="px-30 py-8 mt-24 text-14 float-right"
+          styles="px-25 md:px-30 py-8 mt-24 text-12 md:text-14 float-right"
         />
       </form>
 
