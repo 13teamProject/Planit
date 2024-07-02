@@ -40,9 +40,12 @@ export default function Profile() {
   }
 
   return (
-    <div className="w-full max-w-620 rounded-md bg-white px-28 pb-28 pt-32">
-      <h3 className="mb-32 text-24 font-bold">프로필</h3>
-      <form className="flex gap-18" onSubmit={handleSubmit(onSubmit)}>
+    <div className="w-full max-w-620 rounded-md bg-white p-20 md:px-28 md:pb-28 md:pt-32">
+      <h3 className="mb-24 text-20 font-bold md:mb-32 md:text-24">프로필</h3>
+      <form
+        className="gap-18 overflow-hidden md:flex"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <ImageInput
           control={control}
           name="profileImageUrl"
@@ -50,15 +53,18 @@ export default function Profile() {
           fetchFn={uploadProfileImage}
           defaultValue={userInfo.profileImageUrl}
         />
-        <div className="w-full">
+        <div className="mt-24 w-full md:mt-0">
           <p className="mb-10 text-18">이메일</p>
           <input
             type="text"
-            className="mb-20 block h-42 w-full rounded-md border pl-16 pr-40 text-16 text-gray-300 outline-none"
+            className="mb-16 block h-42 w-full rounded-md border pl-16 pr-40 text-16 text-gray-300 outline-none md:mb-20"
             defaultValue={userInfo.email}
             readOnly
           />
-          <label htmlFor="nickname" className="mb-10 inline-block text-18">
+          <label
+            htmlFor="nickname"
+            className="mb-10 inline-block text-16 md:text-18"
+          >
             닉네임
           </label>
           <Input
@@ -72,7 +78,7 @@ export default function Profile() {
           <Button
             type="submit"
             text="저장"
-            styles="px-30 py-8 mt-24 float-right text-14"
+            styles="px-30 py-8 mt-24 float-right text-12 md:text-14"
           />
         </div>
       </form>

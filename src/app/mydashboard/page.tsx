@@ -2,6 +2,7 @@
 
 import DashBoardHeader from '@/components/commons/layout/DashboardHeader';
 import Sidemenu from '@/components/commons/layout/Sidemenu';
+import NewDashboard from '@/components/mydashboard/NewDashboard';
 import { Suspense } from 'react';
 
 export default function MyDashBoardPage() {
@@ -10,9 +11,11 @@ export default function MyDashBoardPage() {
       <Sidemenu />
       <div className="flex flex-1 flex-col">
         <Suspense>
-          <DashBoardHeader isDashboard />
+          <DashBoardHeader isDashboard={false} />
         </Suspense>
-        <div className="flex-1">내용 작성</div>
+        <div className="flex-1">
+          <NewDashboard />
+        </div>
       </div>
     </div>
   );

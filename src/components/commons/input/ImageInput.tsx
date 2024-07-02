@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import Image from 'next/image';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 type ProfileImageResponse = {
   profileImageUrl: string;
@@ -117,7 +118,7 @@ function ImageInput(props: ImageInputProps | CardImageInputProps) {
       res = await fetchFn(file);
 
       if ('message' in res) {
-        alert(res.message);
+        toast.error(res.message);
         return;
       }
       onChange(res.profileImageUrl);
@@ -126,7 +127,7 @@ function ImageInput(props: ImageInputProps | CardImageInputProps) {
       res = await fetchFn({ columnId, image: file });
 
       if ('message' in res) {
-        alert(res.message);
+        toast.error(res.message);
         return;
       }
       onChange(res.imageUrl);

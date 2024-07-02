@@ -4,7 +4,6 @@ import { editCard, postCardImage } from '@/app/api/cards-goni';
 import { getColumns } from '@/app/api/columns';
 import { getMembers } from '@/app/api/members';
 import Button from '@/components/commons/button';
-import ColorCircle from '@/components/commons/circle/ColorCircle';
 import ProfileCircle from '@/components/commons/circle/ProfileCircle';
 import Input from '@/components/commons/input';
 import DateInput from '@/components/commons/input/DateInput';
@@ -24,6 +23,7 @@ import {
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 type Props = {
   isOpen: boolean;
@@ -38,9 +38,9 @@ export type EditCardInputs = {
   assignee: number;
   title: string;
   description: string;
-  dueDate?: Date;
-  tags?: string[];
-  image?: string | null;
+  dueDate: Date | null;
+  tags: string[];
+  image: string | null;
 };
 
 export default function EditCardModal({
@@ -54,13 +54,16 @@ export default function EditCardModal({
   const [statusList, setStatusList] = useState<Column[]>([]);
   const [members, setMembers] = useState<Member[]>([]);
 
-  const { register, handleSubmit, control } = useForm<EditCardInputs>({
+  const { register, handleSubmit, control, reset } = useForm<EditCardInputs>({
     defaultValues: {
       columnId: currentCardData.columnId,
       assignee: currentCardData.assignee.id,
       title: currentCardData.title,
       description: currentCardData.description,
-      dueDate: new Date(currentCardData.dueDate),
+      dueDate:
+        currentCardData.dueDate !== null
+          ? new Date(currentCardData.dueDate)
+          : null,
       tags: currentCardData.tags,
       image: currentCardData.imageUrl,
     },
@@ -90,9 +93,13 @@ export default function EditCardModal({
       formValue: reqBody,
     });
 
-    if ('message' in res) alert(res.message);
-    console.log(res);
+    if ('message' in res) {
+      toast.error(res.message);
+      return;
+    }
+
     onClose();
+    reset();
   };
 
   useEffect(() => {
@@ -105,12 +112,12 @@ export default function EditCardModal({
       ]);
 
       if ('message' in columnRes) {
-        alert(columnRes.message);
+        toast.error(columnRes.message);
         return;
       }
 
       if ('message' in memberRes) {
-        alert(memberRes.message);
+        toast.error(memberRes.message);
         return;
       }
 
@@ -152,22 +159,12 @@ export default function EditCardModal({
                 name="columnId"
                 control={control}
                 defaultValue={
-                  <Tag round color="orange" size="sm">
-                    <div className="md:gap-4-4 flex items-center gap-3">
-                      <ColorCircle size="xs" color="bg-orange-dashboard" />
-                      {currentStatus?.title}
-                    </div>
-                  </Tag>
+                  <Tag type="round" text={currentStatus?.title as string} />
                 }
               >
                 {statusList.map((status) => (
                   <DropdownInput.Option key={status.id} id={status.id}>
-                    <Tag round color="orange" size="sm">
-                      <div className="md:gap-4-4 flex items-center gap-3">
-                        <ColorCircle size="xs" color="bg-orange-dashboard" />
-                        {status.title}
-                      </div>
-                    </Tag>
+                    <Tag type="round" text={status.title} />
                   </DropdownInput.Option>
                 ))}
               </DropdownInput>
@@ -240,7 +237,9 @@ export default function EditCardModal({
             control={control}
             placeholder="날짜를 입력해 주세요"
             name="dueDate"
-            defaultValue={new Date(currentCardData.dueDate)}
+            defaultValue={
+              currentCardData.dueDate && new Date(currentCardData.dueDate)
+            }
           />
           <label
             htmlFor="tags"

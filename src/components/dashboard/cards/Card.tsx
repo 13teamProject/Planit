@@ -51,9 +51,7 @@ const Card: React.FC<CardProps> = React.memo(
           <div className="md:flex md:w-full md:gap-16 lg:block">
             <div className="flex flex-wrap gap-6">
               {card.tags.map((tag) => (
-                <Tag key={tag} color="green" size="sm">
-                  {tag}
-                </Tag>
+                <Tag key={tag} text={tag} />
               ))}
             </div>
             <div className="flex flex-grow items-baseline justify-between pt-8">

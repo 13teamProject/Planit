@@ -1,65 +1,71 @@
 'use client';
 
-import classNames from 'classnames';
-import { KeyboardEvent, ReactNode } from 'react';
+import { getTagColor } from '@/utils/color';
+import Image from 'next/image';
 
-type TagProps = {
-  color: string;
-  size: 'lg' | 'sm';
-  round?: boolean;
-  children: ReactNode;
+import ColorCircle from '../circle/ColorCircle';
+
+type RoundTagProps = {
+  type: 'round';
+  text: string;
+};
+
+type DefalutTagProps = {
+  type?: 'default';
+  text: string;
   deleteTag?: () => void;
 };
 
-export default function Tag({
-  color,
-  round,
-  size,
-  deleteTag,
-  children,
-}: TagProps) {
-  const roundClass = round ? 'rounded-full' : 'rounded';
-  const colorVariants: { [key: string]: string } = {
-    toss: 'bg-toss-blue-light text-toss-blue',
-    blue: 'bg-blue-light-chip text-blue-chip',
-    green: 'bg-green-light-chip text-green-chip',
-    orange: 'bg-orange-light-chip text-orange-chip',
-    pink: 'bg-pink-light-chip text-pink-chip',
-    red: 'bg-red-light-chip text-red-chip',
-    purple: 'bg-purple-light-chip text-purple-chip',
-  };
-  const sizeClass = classNames(
-    'text-12 inline-flex items-center rounded px-8 py-4 max-w-full',
-    {
-      'text-12': size === 'lg',
-      'text-10': size === 'sm',
-    },
+export default function Tag(props: RoundTagProps | DefalutTagProps) {
+  const { type = 'default', text } = props;
+
+  if (type === 'round') return <RoundTag text={text} />;
+
+  const { deleteTag } = props as DefalutTagProps;
+  return <DefaultTag text={text} deleteTag={deleteTag} />;
+}
+
+function RoundTag({ text }: { text: string }) {
+  return (
+    <span className="inline-flex max-w-full items-center rounded-full bg-toss-blue-light px-8 py-4 text-10 text-toss-blue md:text-12">
+      <div className="md:gap-4-4 flex items-center gap-3">
+        <ColorCircle size="xs" color="bg-toss-blue" />
+        {text}
+      </div>
+    </span>
   );
+}
+
+function DefaultTag({ text, deleteTag }: Omit<DefalutTagProps, 'type'>) {
+  const tagColor = getTagColor(text);
 
   if (deleteTag) {
-    const handleKeyboard = (e: KeyboardEvent<HTMLSpanElement>) => {
-      if (e.key === 'Backspace' || e.key === 'Delete') {
-        // eslint-disable-next-line no-alert
-        alert('해당 태그를 삭제하시겠습니까?');
-        deleteTag();
-      }
-    };
-
     return (
-      <span
-        role="button"
-        onKeyUp={handleKeyboard}
+      <button
+        type="button"
+        onClick={deleteTag}
         tabIndex={0}
-        className={`${colorVariants[color]} ${roundClass} ${sizeClass} focus:outline focus:outline-[1.5px]`}
+        className={`group/tag relative inline-flex max-w-full items-center rounded px-8 py-4 text-12 md:text-12 ${tagColor}`}
       >
-        {children}
-      </span>
+        {text}
+        <div className="invisible absolute inset-0 flex items-center justify-center rounded bg-[#f5f5f5] bg-opacity-80 outline-none group-hover/tag:visible">
+          <Image
+            src="/icon/close_red.svg"
+            alt="x"
+            width={12}
+            height={12}
+            className="rounded-full bg-white"
+          />
+        </div>
+      </button>
     );
   }
 
   return (
-    <span className={`${colorVariants[color]} ${roundClass} ${sizeClass}`}>
-      {children}
+    <span
+      className={`inline-flex max-w-full items-center rounded px-8 py-4 text-12 md:text-12 ${tagColor}`}
+    >
+      {text}
     </span>
   );
 }

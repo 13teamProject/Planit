@@ -44,6 +44,7 @@ type Dashboard = {
 type User = {
   id: number;
   nickname: string;
+  profileImageUrl: string | null;
 };
 
 export default function DashBoardHeader({
@@ -84,7 +85,7 @@ export default function DashBoardHeader({
       setDashboardId(dashboardid);
 
       // 대시보드 id, title 데이터
-      const response = await getDashboards();
+      const response = await getDashboards('infiniteScroll', 1, 9); // 데이터 size 수정 필요
       const fetchedDashboards = response.dashboards.map((data: Dashboard) => ({
         id: data.id,
         title: data.title,
@@ -93,7 +94,7 @@ export default function DashBoardHeader({
 
       // URL의 id와 일치하는 대시보드의 타이틀
       const currentDashboard = fetchedDashboards.find(
-        (dashboard) => String(dashboard.id) === dashboardid,
+        (dashboard: Dashboard) => String(dashboard.id) === dashboardid,
       );
       if (currentDashboard) {
         setCurrentTitle(currentDashboard.title);
@@ -116,8 +117,8 @@ export default function DashBoardHeader({
     fetchUser();
   }, []);
 
+  // Profile Circle toggle
   const toggleProfiles = () => {
-    // Profile Circle toggle
     if (window.innerWidth >= 1200) {
       setIsExpanded(!isExpanded);
       setMaxVisible(!isExpanded ? PROFILES.length : 4);
@@ -192,6 +193,7 @@ export default function DashBoardHeader({
                   }
                 }}
                 className="focus:outline-none"
+                aria-label="프로필 추가 버튼"
               >
                 <div className="flex size-34 transform cursor-pointer items-center justify-center rounded-full bg-pink-400 text-white ring-2 ring-white transition-transform duration-200 ease-in-out hover:scale-110 md:size-38">
                   +{extraCount}

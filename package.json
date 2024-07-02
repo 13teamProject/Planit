@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbo",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -17,6 +17,7 @@
     "react-datepicker": "^7.1.0",
     "react-dom": "^18",
     "react-hook-form": "^7.52.0",
+    "react-toastify": "^10.0.5",
     "yup": "^1.4.0",
     "zustand": "^4.5.2"
   },

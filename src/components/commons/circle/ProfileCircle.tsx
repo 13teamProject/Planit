@@ -11,7 +11,10 @@ type Props = {
 };
 
 export default function ProfileCircle({ styles, data }: Props) {
-  const { profileImageUrl, nickname } = data;
+  const { profileImageUrl, nickname } = data || {
+    profileImageUrl: null,
+    nickname: '',
+  };
 
   return (
     <div
