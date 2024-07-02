@@ -2,6 +2,7 @@
 
 import { getDashboards, postDashboards } from '@/app/api/dashboards';
 import { getMyInivations, respondToInvitation } from '@/app/api/inivations';
+import useDeviceState from '@/hooks/useDeviceState';
 import { DashboardFormData, Invitation } from '@planit-types';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
@@ -16,6 +17,7 @@ export default function InviteDashboard() {
     [],
   );
   const [currentPage, setCurrentPage] = useState(1);
+  const device = useDeviceState();
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
@@ -116,33 +118,28 @@ export default function InviteDashboard() {
             />
           </div>
 
-          <table className="mt-24 w-full table-fixed border-collapse">
-            <thead className="sm:hidden md:table-header-group lg:table-header-group">
-              <tr className="text-16 text-gray-300">
-                <th className="w-1/3 px-4 py-2 text-left">이름</th>
-                <th className="w-1/3 px-4 py-2 text-left">초대자</th>
-                <th className="w-1/3 px-4 py-2 text-left">수락 여부</th>
-              </tr>
-            </thead>
-            <tbody>
+          {device === 'mobile' ? (
+            <div className="mt-24 w-full">
               {filteredInvitations.map((invitation) => (
-                <tr
+                <div
                   key={invitation.id}
-                  className="h-120 border-b-1 align-middle md:h-70 lg:h-72"
+                  className="mb-4 border-b-1 pb-16 pt-16 align-middle"
                 >
-                  <td className="w-1/3 px-4 py-2 align-middle">
+                  <div className="px-4 py-2 text-17">
+                    <p className="mr-28 inline text-17 text-gray-300">이름</p>
                     {invitation.dashboard.title}
-                  </td>
-                  <td className="w-1/3 px-4 py-2 align-middle">
+                  </div>
+                  <div className="px-4 py-2">
+                    <p className="mr-28 inline text-17 text-gray-300">초대자</p>
                     {invitation.inviter.nickname}
-                  </td>
-                  <td className="w-1/3 px-4 py-2 align-middle">
-                    <div className="flex">
+                  </div>
+                  <div className="px-4 py-2 text-1">
+                    <div className="mt-2 flex">
                       <Button
                         text="수락"
                         type="submit"
                         cancel={false}
-                        styles="flex items-center justify-center w-109 h-28 md:w-72 md:h-35 lg:w-84 lg:h-40 text-16 md:text-18 mr-12"
+                        styles="flex items-center justify-center w-109 h-28 text-16 mr-12"
                         onClick={() =>
                           handleInvitationResponse(invitation.id, true)
                         }
@@ -153,7 +150,7 @@ export default function InviteDashboard() {
                         text="거절"
                         type="button"
                         cancel
-                        styles="flex items-center justify-center w-109 h-28 md:w-72 md:h-35 lg:w-84 lg:h-40 text-16 md:text-18 mr-12"
+                        styles="flex items-center justify-center w-109 h-28 text-16 mr-12"
                         onClick={() =>
                           handleInvitationResponse(invitation.id, false)
                         }
@@ -161,11 +158,62 @@ export default function InviteDashboard() {
                         거절
                       </Button>
                     </div>
-                  </td>
-                </tr>
+                  </div>
+                </div>
               ))}
-            </tbody>
-          </table>
+            </div>
+          ) : (
+            <table className="mt-24 w-full table-fixed border-collapse">
+                <thead className="table-header-group lg:table-header-group">
+                  <tr className="text-16 text-gray-300">
+                    <th className="w-1/3 px-4 py-2 text-left">이름</th>
+                    <th className="w-1/3 px-4 py-2 text-left">초대자</th>
+                    <th className="w-1/3 px-4 py-2 text-left">수락 여부</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredInvitations.map((invitation) => (
+                    <tr
+                      key={invitation.id}
+                      className="h-120 border-b-1 align-middle md:h-70 lg:h-72"
+                    >
+                      <td className="w-1/3 px-4 py-2 align-middle">
+                        {invitation.dashboard.title}
+                      </td>
+                      <td className="w-1/3 px-4 py-2 align-middle">
+                        {invitation.inviter.nickname}
+                      </td>
+                      <td className="w-1/3 px-4 py-2 align-middle">
+                        <div className="flex">
+                          <Button
+                            text="수락"
+                            type="submit"
+                            cancel={false}
+                            styles="flex items-center justify-center w-109 h-28 md:w-72 md:h-35 lg:w-84 lg:h-40 text-16 md:text-18 mr-12"
+                            onClick={() =>
+                              handleInvitationResponse(invitation.id, true)
+                            }
+                          >
+                            수락
+                          </Button>
+                          <Button
+                            text="거절"
+                            type="button"
+                            cancel
+                            styles="flex items-center justify-center w-109 h-28 md:w-72 md:h-35 lg:w-84 lg:h-40 text-16 md:text-18 mr-12"
+                            onClick={() =>
+                              handleInvitationResponse(invitation.id, false)
+                            }
+                          >
+                            거절
+                          </Button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+          )}
         </div>
       )}
       {!isInvited && (
