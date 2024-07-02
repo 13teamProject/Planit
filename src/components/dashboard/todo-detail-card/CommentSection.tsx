@@ -2,6 +2,7 @@
 
 import { postComment } from '@/app/api/comments';
 import { useComment } from '@/hooks/useComment';
+import Image from 'next/image';
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { toast } from 'react-toastify';
 
@@ -78,14 +79,31 @@ export default function CommentSection({
         </div>
       </form>
       <div className="custom-scrollbar h-60 min-h-58 w-full overflow-auto md:h-110">
-        {comments.map((comment) => (
-          <Comment
-            key={comment.id}
-            commentData={comment}
-            handleDelete={handleDeleteComment}
-            handleModify={handleModifyComment}
-          />
-        ))}
+        {comments.length > 0 ? (
+          comments.map((comment) => (
+            <Comment
+              key={comment.id}
+              commentData={comment}
+              handleDelete={handleDeleteComment}
+              handleModify={handleModifyComment}
+            />
+          ))
+        ) : (
+          <div className="lg:450 flex h-50 items-center justify-center md:h-100 md:w-420">
+            <div className="w-35 md:w-60">
+              <Image
+                src="/image/empty-comment-logo.png"
+                width={45}
+                height={45}
+                layout="responsive"
+                alt="댓글 비었을 때 로고"
+              />
+            </div>
+            <p className="pl-10 text-14 text-toss-blue-light md:text-16">
+              첫 댓글을 남겨주세요!
+            </p>
+          </div>
+        )}
         <div ref={commentsEnd} className="h-10" />
         {loading && <div>Loading...</div>}
       </div>

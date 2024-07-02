@@ -11,7 +11,7 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
-const cardId = '8684';
+const cardId = '8702';
 
 // 추후 설정 예정
 // params: { cardId: string }
