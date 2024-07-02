@@ -82,9 +82,9 @@ declare module '@planit-types' {
     title: string;
     description: string;
     tags: string[];
-    dueDate: string;
+    dueDate: string | null;
     assignee: Assignee;
-    imageUrl: string;
+    imageUrl: string | null;
     teamId: string;
     columnId: number;
     dashboardId: number;
