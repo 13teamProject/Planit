@@ -1,51 +1,51 @@
-import { getCardId } from '@/app/api/getCards';
 import ProfileCircle from '@/components/commons/circle/ProfileCircle';
 import Tag from '@/components/commons/tag';
 import { GetCardResponse as CardType } from '@planit-types';
 import Image from 'next/image';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 type CardProps = {
-  cardId: number;
+  card: CardType;
+  columnId: number;
   columnTitle: string;
+  onDragStart: (cardId: number, columnId: number) => void;
+  onDragOver: (e: React.DragEvent) => void;
+  onDrop: (e: React.DragEvent) => void;
+  isDragging: boolean;
 };
 
-export default function Card({ cardId, columnTitle }: CardProps) {
-  const [card, setCard] = useState<CardType | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-
-  useEffect(() => {
-    const fetchCard = async () => {
-      try {
-        const cardData = await getCardId({ cardId });
-        setCard(cardData);
-      } catch (err) {
-        throw new Error('데이터를 받는 중에 오류가 발생했습니다.');
-      } finally {
-        setLoading(false);
-      }
+const Card: React.FC<CardProps> = React.memo(
+  ({
+    card,
+    columnId,
+    columnTitle,
+    onDragStart,
+    onDragOver,
+    onDrop,
+    isDragging,
+  }) => {
+    const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
+      onDragStart(card.id, columnId);
+      e.dataTransfer.setData('cardId', card.id.toString());
+      e.dataTransfer.setData('sourceColumnId', columnId.toString());
     };
 
-    fetchCard();
-  }, [card]);
+    // 날짜 포맷팅: YYYY-MM-DD HH:MM -> YYYY.MM.DD
+    const formattedDueDate = card.dueDate.split(' ')[0].replace(/-/g, '.');
 
-  if (loading) return <div>로딩중...</div>;
-  if (!card) return <div>카드가 없습니다.</div>;
-
-  // 날짜 포맷팅: YYYY-MM-DD HH:MM -> YYYY.MM.DD
-  const formattedDueDate = card.dueDate.split(' ')[0].replace(/-/g, '.');
-
-  return (
-    <div>
+    return (
       <div
-        key={card.id}
-        className="mt-20 min-h-100 cursor-pointer rounded-8 border border-gray-200 bg-white p-10 hover:border-gray-400 sm:block md:flex md:gap-20 md:p-20 lg:block"
+        draggable
+        onDragStart={handleDragStart}
+        onDragOver={onDragOver}
+        onDrop={onDrop}
+        className={`mt-20 min-h-100 cursor-grab rounded-8 border bg-white p-10 transition-all duration-200 ${isDragging ? 'border-blue-500 opacity-50' : 'border-gray-200 hover:border-gray-400'} active:cursor-grabbing sm:block md:flex md:gap-20 md:p-20 lg:block`}
       >
-        {card.imageUrl ? (
+        {card.imageUrl && (
           <div className="relative aspect-video bg-green-light-chip sm:w-full md:w-200 lg:w-full">
             <Image src={card.imageUrl} alt={card.title} layout="fill" />
           </div>
-        ) : null}
+        )}
         <div className="flex flex-grow flex-col justify-between">
           <h1 className="py-4 sm:text-14 md:text-16">{card.title}</h1>
           <div className="md:flex md:w-full md:gap-16 lg:block">
@@ -75,6 +75,10 @@ export default function Card({ cardId, columnTitle }: CardProps) {
           </div>
         </div>
       </div>
-    </div>
-  );
-}
+    );
+  },
+);
+
+Card.displayName = 'Card';
+
+export default Card;
