@@ -55,7 +55,13 @@ export default function EditCardModal({
   const [statusList, setStatusList] = useState<Column[]>([]);
   const [members, setMembers] = useState<Member[]>([]);
 
-  const { register, handleSubmit, control, reset } = useForm<EditCardInputs>({
+  const {
+    register,
+    handleSubmit,
+    control,
+    reset,
+    formState: { isValid },
+  } = useForm<EditCardInputs>({
     defaultValues: {
       columnId: currentCardData.columnId,
       assignee: currentCardData.assignee?.id,
@@ -302,6 +308,7 @@ export default function EditCardModal({
               onClick={handleSubmit(onSubmit)}
               styles="py-12 px-54 text-16 md:py-14 md:text-18 md:px-46 md:py-14"
               text="수정"
+              disabled={!isValid}
             />
           </div>
         </form>

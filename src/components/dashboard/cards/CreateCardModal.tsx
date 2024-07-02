@@ -41,8 +41,13 @@ export default function CreateCardModal({
   columnId,
 }: Props) {
   const [members, setMembers] = useState<Member[]>([]);
-  const { register, handleSubmit, control, reset } =
-    useForm<CreateCardInputs>();
+  const {
+    register,
+    handleSubmit,
+    control,
+    reset,
+    formState: { isValid },
+  } = useForm<CreateCardInputs>();
 
   const onSubmit: SubmitHandler<CreateCardInputs> = async ({
     assignee,
@@ -206,6 +211,7 @@ export default function CreateCardModal({
           <Button
             onClick={handleSubmit(onSubmit)}
             styles="py-12 px-54 text-16 md:py-14 md:text-18 md:px-46 md:py-14"
+            disabled={!isValid}
             text="생성"
           />
         </div>
