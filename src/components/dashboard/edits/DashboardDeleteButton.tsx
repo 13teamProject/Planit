@@ -5,7 +5,7 @@ import Button from '@/components/commons/button';
 import Modal from '@/components/commons/modal';
 import { ContentModalState } from '@planit-types';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 export default function DashboardDeleteButton({
   params,
@@ -34,7 +34,7 @@ export default function DashboardDeleteButton({
   // 대시보드 삭제
   const handleDashboardDelete = async () => {
     // deleteDashboard API 호출
-    await deleteDashboard(params.id.toString());
+    const res = await deleteDashboard(params.id.toString());
     setModalState({ isOpen: true, message: '대시보드가 삭제되었습니다.' });
   };
   return (

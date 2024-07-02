@@ -15,6 +15,7 @@ import { ContentModalState, EmailRequest, Invitation } from '@planit-types';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 export default function DashboardInvitation({
   params,
@@ -31,6 +32,7 @@ export default function DashboardInvitation({
   const resolver = yupResolver(emailValidationSchema);
   const {
     register,
+    reset,
     handleSubmit,
     formState: { errors },
   } = useForm<EmailRequest>({
@@ -67,10 +69,7 @@ export default function DashboardInvitation({
       size: PAGE_SIZE,
     });
     if ('message' in fetchedDashboardInvitation) {
-      setModalState({
-        isOpen: true,
-        message: fetchedDashboardInvitation.message,
-      });
+      toast.error(fetchedDashboardInvitation.message);
     } else {
       setInvitaionData(fetchedDashboardInvitation.invitations);
       setTotalPages(
@@ -84,12 +83,11 @@ export default function DashboardInvitation({
     const response = await postInvitation(email, params.id);
 
     if ('message' in response) {
-      setModalState({ isOpen: true, message: response.message });
+      toast.error(response.message);
     } else {
-      setModalState({
-        isOpen: true,
-        message: '초대가 완료되었습니다.',
-      });
+      handleClose();
+      toast.success('초대가 완료되었습니다.');
+      reset();
       await fetchDashboardInvitation(currentPage);
     }
   };
@@ -99,17 +97,11 @@ export default function DashboardInvitation({
     const successDeleteMember = await deleteInvitation(invitationId, params.id);
 
     if ('message' in successDeleteMember) {
-      setModalState({
-        isOpen: true,
-        message: successDeleteMember.message,
-      });
+      toast.error(successDeleteMember.message);
     } else {
       // 구성원 목록에서 해당 유저 삭제후 리스트업
       await fetchDashboardInvitation(currentPage);
-      setModalState({
-        isOpen: true,
-        message: '초대 취소가 완료되었습니다.',
-      });
+      toast.success('초대 취소가 완료되었습니다.');
     }
   };
 
@@ -179,52 +171,39 @@ export default function DashboardInvitation({
 
       <Modal isOpen={modalState.isOpen} onClose={handleClose}>
         <div className="m-auto w-330 px-20 pb-29 pt-26 text-right text-18 md:w-540 md:px-33">
-          {modalState.isContent ? (
-            <div className="text-left">
-              <h3 className="mb-24 text-20 font-bold md:mb-30 md:text-24">
-                초대하기
-              </h3>
-              <p className="mb-10 text-16 md:text-18">이메일</p>
-              <form onSubmit={handleSubmit(onSubmit)}>
-                <Input
-                  id="email"
-                  type="text"
-                  placeholder="이메일을 입력해 주세요"
-                  size="lg"
-                  register={{ ...register('email', { required: true }) }}
-                  error={'email' in errors}
-                />
-                <span
-                  className={`pt-8 text-14 text-red-500 ${errors.email?.message ? 'block' : 'hidden'}`}
-                >
-                  {errors.email?.message}
-                </span>
-                <div className="mt-24 flex justify-end gap-12 md:mt-28">
-                  <Button
-                    text="취소"
-                    onClick={handleClose}
-                    styles="border !border-gray-200 !bg-white basis-1/2 md:basis-auto px-30 py-8 text-14 !text-toss-blue"
-                  />
-                  <Button
-                    type="submit"
-                    text="초대"
-                    styles="px-30 py-8 text-14  basis-1/2 md:basis-auto "
-                  />
-                </div>
-              </form>
-            </div>
-          ) : (
-            <>
-              <p className="pb-47 pt-50 text-center">{modalState.message}</p>
-              <span className="flex justify-center md:justify-end">
-                <Button
-                  styles="w-138 h-42 md:w-120 md:h-48"
-                  text="확인"
-                  onClick={handleClose}
-                />
+          <div className="text-left">
+            <h3 className="mb-24 text-20 font-bold md:mb-30 md:text-24">
+              초대하기
+            </h3>
+            <p className="mb-10 text-16 md:text-18">이메일</p>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <Input
+                id="email"
+                type="text"
+                placeholder="이메일을 입력해 주세요"
+                size="lg"
+                register={{ ...register('email', { required: true }) }}
+                error={'email' in errors}
+              />
+              <span
+                className={`pt-8 text-14 text-red-500 ${errors.email?.message ? 'block' : 'hidden'}`}
+              >
+                {errors.email?.message}
               </span>
-            </>
-          )}
+              <div className="mt-24 flex justify-end gap-12 md:mt-28">
+                <Button
+                  text="취소"
+                  onClick={handleClose}
+                  styles="border !border-gray-200 !bg-white basis-1/2 md:basis-auto px-30 py-8 text-14 !text-toss-blue"
+                />
+                <Button
+                  type="submit"
+                  text="초대"
+                  styles="px-30 py-8 text-14  basis-1/2 md:basis-auto "
+                />
+              </div>
+            </form>
+          </div>
         </div>
       </Modal>
     </div>
