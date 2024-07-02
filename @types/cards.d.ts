@@ -35,21 +35,6 @@ declare module '@planit-types' {
     imageUrl: string;
   };
 
-  export type TodoDetailsCardResponse = {
-    id: number;
-    title: string;
-    description: string;
-    tags: string[];
-    dueDate: string;
-    assignee: Assignee;
-    imageUrl: string;
-    teamId: string;
-    columnId: number;
-    dashboardId: number;
-    createdAt: string;
-    updatedAt: string;
-  };
-
   export type EditCardRequest = {
     columnId: number;
     assigneeUserId: number;
@@ -92,3 +77,18 @@ declare module '@planit-types' {
     updatedAt: string;
   };
 }
+
+export type TodoDetailsCardResponse = {
+  id: number;
+  title: string;
+  description: string;
+  tags: string[];
+  dueDate: string;
+  assignee: Assignee;
+  imageUrl: string;
+  teamId: string;
+  columnId: number;
+  dashboardId: number;
+  createdAt: string;
+  updatedAt: string;
+};

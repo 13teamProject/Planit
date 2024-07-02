@@ -5,25 +5,8 @@ import {
   BadRequest,
   LoginProps,
   SignUpProps,
-  SignUpResult,
   UserInfoResponse,
 } from '@planit-types';
-
-// 회원가입
-export async function handleSignUp({
-  email,
-  password,
-  nickname,
-}: SignUpProps): Promise<SignUpResult> {
-  try {
-    return await signUpUser({ email, password, nickname });
-  } catch (error) {
-    if (error instanceof Error) {
-      return { message: error.message };
-    }
-    return { message: '회원가입 중 알 수 없는 오류가 발생했습니다.' };
-  }
-}
 
 // 로그인
 export async function handleLogin({

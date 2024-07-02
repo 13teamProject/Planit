@@ -1,7 +1,7 @@
 export default function Terms() {
   return (
-    <div className="flex h-250 flex-col gap-20 overflow-auto rounded-8 border border-gray-200 p-10 after:mt-15 md:h-420">
-      <section>
+    <div className="custom-scrollbar flex h-250 flex-col gap-20 overflow-auto rounded-8 border border-gray-200 p-10 after:mt-15 md:h-420">
+      <section className="pt-10">
         <h3 className="mb-10 text-16 font-bold md:text-20">환영합니다! 🎉</h3>
         <p className="mb-10 text-justify text-14 font-medium md:text-18">
           플랜잇 서비스를 이용해 주셔서 감사합니다. 본 약관은 플랜잇 서비스의
