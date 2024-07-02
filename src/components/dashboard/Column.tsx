@@ -8,7 +8,7 @@ import { GetCardResponse } from '@planit-types';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 
-import Card from '../cards/Card';
+import Card from './Card';
 
 type ColumnProps = {
   dashboardId: number;
