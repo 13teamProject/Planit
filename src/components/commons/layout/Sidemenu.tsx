@@ -4,8 +4,8 @@ import { SCROLL_SIZE } from '@/constants/globalConstants';
 import {
   ColorMapping,
   Dashboard,
+  DashboardFormValues,
   DashboardResponse,
-  FormValues,
   ModalState,
 } from '@planit-types';
 import Image from 'next/image';
@@ -65,8 +65,8 @@ export default function Sidemenu() {
     handleSubmit,
     watch,
     formState: { isValid },
-  } = useForm<FormValues>({ mode: 'onChange' });
-  const onSubmit: SubmitHandler<FormValues> = async (data) => {
+  } = useForm<DashboardFormValues>({ mode: 'onChange' });
+  const onSubmit: SubmitHandler<DashboardFormValues> = async (data) => {
     try {
       const formData = {
         title: data.dashboardName,

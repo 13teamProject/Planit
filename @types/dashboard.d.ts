@@ -1,5 +1,5 @@
 declare module '@planit-types' {
-
+  // 공통
   export type Dashboard = {
     id: number;
     title: string;
@@ -9,6 +9,21 @@ declare module '@planit-types' {
     createdByMe: boolean;
     userId: number;
   };
+
+  export type DashboardFormValues = {
+    dashboardName: string;
+  };
+
+  export type EmailRequest = {
+    email: string;
+  };
+
+  // 대시보드 생성
+  export type DashboardFormData = {
+    title: string;
+    color: string;
+  };
+
   export type DashboardResponse = {
     id: number;
     title: string;
@@ -17,65 +32,16 @@ declare module '@planit-types' {
     updatedAt: string;
     createdByMe: boolean;
     userId: number;
-    cursorId: number;
-    totalCount: number;
-    dashboards: Array<{
-      id: number;
-      title: string;
-      color: string;
-      createdAt: string;
-      updatedAt: string;
-      createdByMe: boolean;
-      userId: number;
-    }>;
   };
 
+  // 대시보드 목록 조회
   export type DashboardListResponse = {
-    dashboards: DashboardResponse[];
+    cursorId: number | null;
+    totalCount: number;
+    dashboards: Dashboard[];
   };
 
-  export type DashboardUpdateData = {
-    title: string;
-    color: string;
-  };
-
-  export type DashboardFormData = {
-    title: string;
-    color: string;
-  };
-
-  export type DashboardEditRequest = {
-    title: string;
-    color: string;
-  };
-  export type DashboardEditResponse = {
-    id: number;
-    title: string;
-    color: string;
-    createdAt: string;
-    updatedAt: string;
-    userId: number;
-    createdByMe: boolean;
-  };
-
-  type FormValues = {
-    dashboardName: string;
-  };
-
-  type SuccessMessage = {
-    success: true;
-  };
-
-  export type DashboardEditResponse = {
-    id: number;
-    title: string;
-    color: string;
-    createdAt: string;
-    updatedAt: string;
-    userId: number;
-    createdByMe: boolean;
-  };
-
+  // 대시보드 상세 조회
   export type GetDashboardIdResponse = {
     id: number;
     title: string;
@@ -86,14 +52,29 @@ declare module '@planit-types' {
     userId: number;
   };
 
-  export type ColorMapping = {
-    [key: string]: string;
+  // 대시보드 수정
+  export type DashboardUpdateData = {
+    title: string;
+    color: string;
   };
 
-  export type EmailRequest = {
-    email: string;
+  // FIXME: 중복
+  export type DashboardEditRequest = {
+    title: string;
+    color: string;
   };
 
+  export type DashboardEditResponse = {
+    id: number;
+    title: string;
+    color: string;
+    createdAt: string;
+    updatedAt: string;
+    userId: number;
+    createdByMe: boolean;
+  };
+
+  // 대시보드 초대하기
   export type Invitation = {
     id: number;
     teamId: string;
@@ -116,6 +97,7 @@ declare module '@planit-types' {
     updatedAt: string;
   };
 
+  // 대시보드 초대 불러오기
   export type DashboardInvitationResponse = {
     totalCount: number;
     invitations: Invitation[];

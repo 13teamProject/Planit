@@ -4,7 +4,12 @@ import { getDashboards, postDashboards } from '@/app/api/dashboards';
 import ColorCircle from '@/components/commons/circle/ColorCircle';
 import { PAGE_SIZE } from '@/constants/globalConstants';
 import useDeviceState from '@/hooks/useDeviceState';
-import { ColorMapping, Dashboard, FormValues, ModalState } from '@planit-types';
+import {
+  ColorMapping,
+  Dashboard,
+  DashboardFormValues,
+  ModalState,
+} from '@planit-types';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -86,8 +91,8 @@ export default function NewDashboard() {
     handleSubmit,
     watch,
     formState: { isValid },
-  } = useForm<FormValues>({ mode: 'onChange' });
-  const onSubmit: SubmitHandler<FormValues> = async (data) => {
+  } = useForm<DashboardFormValues>({ mode: 'onChange' });
+  const onSubmit: SubmitHandler<DashboardFormValues> = async (data) => {
     try {
       const formData = {
         title: data.dashboardName,

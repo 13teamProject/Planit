@@ -32,9 +32,6 @@ export default function Card({ cardId, columnTitle }: CardProps) {
   if (loading) return <div>로딩중...</div>;
   if (!card) return <div>카드가 없습니다.</div>;
 
-  // 날짜 포맷팅: YYYY-MM-DD HH:MM -> YYYY.MM.DD
-  const formattedDueDate = card.dueDate.split(' ')[0].replace(/-/g, '.');
-
   return (
     <div>
       <div
@@ -56,19 +53,25 @@ export default function Card({ cardId, columnTitle }: CardProps) {
             </div>
             <div className="flex flex-grow items-baseline justify-between pt-8">
               <div className="flex items-baseline gap-4">
-                <div className="relative h-14 w-14">
-                  <Image
-                    src="/icon/calendar_gray.svg"
-                    alt="calendar"
-                    layout="fill"
-                    className="absolute"
-                  />
-                </div>
-                <p className="flex-grow text-gray-300 sm:text-10 md:text-12">
-                  {formattedDueDate}
-                </p>
+                {card.dueDate && (
+                  <>
+                    <div className="relative h-14 w-14">
+                      <Image
+                        src="/icon/calendar_gray.svg"
+                        alt="calendar"
+                        layout="fill"
+                        className="absolute"
+                      />
+                    </div>
+                    <p className="flex-grow text-gray-300 sm:text-10 md:text-12">
+                      {card.dueDate.split(' ')[0].replace(/-/g, '.')}
+                    </p>
+                  </>
+                )}
               </div>
-              <ProfileCircle styles="size-24" data={card.assignee} />
+              {card.assignee && (
+                <ProfileCircle styles="size-24" data={card.assignee} />
+              )}
             </div>
           </div>
         </div>

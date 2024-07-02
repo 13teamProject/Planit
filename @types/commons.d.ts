@@ -1,6 +1,14 @@
 declare module '@planit-types' {
+  type SuccessMessage = {
+    success: true;
+  };
+
   export type ErrorMessage = {
     message: string;
+  };
+
+  export type ColorMapping = {
+    [key: string]: string;
   };
 
   export type ModalState = {
