@@ -5,7 +5,7 @@ import {
   SignUpResult,
 } from '@planit-types';
 
-import { API_URL, createFetchRequestOptions } from './baseUrl';
+import { API_URL } from './baseUrl';
 
 // 회원가입 데이터 전송
 export async function signUpUser({
@@ -13,7 +13,14 @@ export async function signUpUser({
   password,
   nickname,
 }: SignUpProps): Promise<SignUpResult> {
-  const obj = createFetchRequestOptions('POST', {
+  const obj: RequestInit = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+
+  obj.body = JSON.stringify({
     email,
     password,
     nickname,
@@ -38,7 +45,14 @@ export async function loginUser({
   email,
   password,
 }: LoginProps): Promise<LoginResponse> {
-  const obj = createFetchRequestOptions('POST', {
+  const obj: RequestInit = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+
+  obj.body = JSON.stringify({
     email,
     password,
   });
