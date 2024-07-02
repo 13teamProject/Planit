@@ -1,61 +1,44 @@
 import { getCookie } from '@/utils/cookies';
 import {
   DashboardEditResponse,
+  DashboardFormData,
   DashboardInvitationResponse,
+  DashboardListResponse,
+  DashboardResponse,
+  DashboardUpdateData,
   EmailRequest,
   ErrorMessage,
   Invitation,
+  SuccessMessage,
 } from '@planit-types';
 
 export const API_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
-type DashboardResponse = {
-  cursorId: number;
-  totalCount: number;
-  dashboards: Array<{
-    id: number;
-    title: string;
-    color: string;
-    createdAt: string;
-    updatedAt: string;
-    createdByMe: boolean;
-    userId: number;
-  }>;
-};
-
-type DashboardUpdateData = {
-  title: string;
-  color: string;
-};
-
-type DashboardFormData = {
-  title: string;
-  color: string;
-};
-
-type SuccessMessage = {
-  success: true;
-};
-
 // 대시보드 목록 조회 - GET
-export async function getDashboards(): Promise<DashboardResponse> {
+export async function getDashboards(
+  navigationMethod: string,
+  page: number,
+  size: number,
+): Promise<DashboardListResponse> {
   try {
     const token = getCookie('accessToken');
-    const response = await fetch(
-      `${API_URL}/dashboards?navigationMethod=infiniteScroll`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      },
-    );
+    const params = new URLSearchParams({
+      navigationMethod: navigationMethod.toString(),
+      size: size.toString(),
+      page: page.toString(),
+    });
+    const response = await fetch(`${API_URL}/dashboards?${params}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
 
     if (!response.ok) {
       throw new Error(`HTTP error: ${response.status}`);
     }
 
-    const body: DashboardResponse = await response.json();
+    const body: DashboardListResponse = await response.json();
     return body;
   } catch (error) {
-    console.error('Failed to get data : ', error);
+    console.error('Failed to get dashboards : ', error);
     throw error;
   }
 }
@@ -80,10 +63,6 @@ export async function postDashboards(
     }
 
     const body: DashboardResponse = await response.json();
-
-    if (!body.dashboards) {
-      throw new Error('No dashboards found in the response');
-    }
     return body;
   } catch (error) {
     console.error('Failed to post data : ', error);
