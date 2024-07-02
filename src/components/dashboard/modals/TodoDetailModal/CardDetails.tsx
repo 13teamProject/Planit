@@ -15,9 +15,11 @@ export default function CardDetails({ data, progressTitle }: Props) {
         <div className="w-1/2 md:w-full">
           <h2 className="pb-4 text-10 font-bold md:pb-6 md:text-12">담당자</h2>
           <div className="flex items-center gap-8">
-            <ProfileCircle data={assignee} styles="size-26 md:size-34" />
+            {assignee && (
+              <ProfileCircle data={assignee} styles="size-26 md:size-34" />
+            )}
             <span className="text-12 text-black-800 md:text-14">
-              {assignee.nickname}
+              {assignee ? assignee.nickname : '없음'}
             </span>
           </div>
         </div>
@@ -25,7 +27,7 @@ export default function CardDetails({ data, progressTitle }: Props) {
           <h2 className="pb-4 text-10 font-bold text-black-800 md:pb-6 md:text-12">
             마감일
           </h2>
-          <time className="text-12 md:text-14">{dueDate}</time>
+          <time className="text-12 md:text-14">{dueDate ?? '없음'}</time>
         </div>
       </div>
 

@@ -120,7 +120,7 @@ function DropdownInput({
       >
         <ToggleButton />
         {isOpen && (
-          <div className="absolute top-48 z-50 w-full rounded-md border border-gray-200 bg-white md:top-56">
+          <div className="absolute top-48 z-50 h-160 w-full overflow-y-auto rounded-md border border-gray-400 bg-white md:top-56">
             {children}
           </div>
         )}
