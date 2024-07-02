@@ -1,10 +1,10 @@
 'use client';
 
-import { getCards } from '@/app/api/getCards';
-import { Column as ColumnType, getColumns } from '@/app/api/getColumns';
+import { getCards } from '@/app/api/cards';
+import { getColumns } from '@/app/api/columns';
 import BarButton from '@/components/commons/button/BarButton';
 import ColorCircle from '@/components/commons/circle/ColorCircle';
-import { GetCardResponse } from '@planit-types';
+import { Column as ColumnType, GetCardResponse } from '@planit-types';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 

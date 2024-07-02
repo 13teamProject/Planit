@@ -1,7 +1,7 @@
 'use client';
 
-import { editCard, postCardImage } from '@/app/api/cards-goni';
-import { getColumns } from '@/app/api/columns';
+import { editCard, postCardImage } from '@/app/api/cards';
+import { getColumnList } from '@/app/api/columns';
 import { getMembers } from '@/app/api/members';
 import Button from '@/components/commons/button';
 import ProfileCircle from '@/components/commons/circle/ProfileCircle';
@@ -112,7 +112,7 @@ export default function EditCardModal({
 
     (async () => {
       const [columnRes, memberRes] = await Promise.all([
-        getColumns(dashboardId),
+        getColumnList(dashboardId),
         getMembers({ dashboardId }),
       ]);
 

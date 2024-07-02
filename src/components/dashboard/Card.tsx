@@ -1,4 +1,4 @@
-import { getCardId } from '@/app/api/getCards';
+import { getCardId } from '@/app/api/cards';
 import ProfileCircle from '@/components/commons/circle/ProfileCircle';
 import Tag from '@/components/commons/tag';
 import { GetCardResponse as CardType } from '@planit-types';
