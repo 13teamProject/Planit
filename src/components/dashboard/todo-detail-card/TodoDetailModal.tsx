@@ -6,9 +6,10 @@ import EditCardModal from '@/components/dashboard/cards/EditCardModal';
 import CardDetails from '@/components/dashboard/todo-detail-card/CardDetails';
 import CommentSection from '@/components/dashboard/todo-detail-card/CommentSection';
 import DropDownSelectBox from '@/components/dashboard/todo-detail-card/DropDownSelectBox';
-import { TodoDetailsCardResponse } from '@planit-types';
+import { ErrorMessage, TodoDetailsCardResponse } from '@planit-types';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 const cardId = '8684';
 
@@ -26,7 +27,8 @@ export default function TodoDetailModal({
   todoModalOnClose,
   todoModalIsOpen,
 }: Props) {
-  const [cardDetails, setCardDetails] = useState<TodoDetailsCardResponse>();
+  const [cardDetails, setCardDetails] =
+    useState<TodoDetailsCardResponse | null>();
   const [selectBoxIsOpen, setSelectBoxIsOpen] = useState(false);
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
 
@@ -42,10 +44,14 @@ export default function TodoDetailModal({
 
   useEffect(() => {
     const fetchTodoCard = async () => {
-      const data = await getTodoCardDetails(cardId);
-      setCardDetails(data);
+      const data: TodoDetailsCardResponse | ErrorMessage =
+        await getTodoCardDetails(cardId);
+      if ('message' in data) {
+        toast.error(data.message);
+      } else {
+        setCardDetails(data);
+      }
     };
-
     if (!editModalIsOpen) fetchTodoCard();
   }, [cardId, editModalIsOpen]);
 
@@ -77,6 +83,7 @@ export default function TodoDetailModal({
                     openEditModal={openEditModal}
                     id={id}
                     setSelectBoxIsOpen={setSelectBoxIsOpen}
+                    todoModalOnClose={todoModalOnClose}
                   />
                 </span>
               )}

@@ -1,61 +1,67 @@
 import { getCookie } from '@/utils/cookies';
-import { TodoDetailsCardResponse } from '@planit-types';
+import {
+  ErrorMessage,
+  SuccessMessage,
+  TodoDetailsCardResponse,
+} from '@planit-types';
 
 import { API_URL } from './baseUrl';
 
 // 할 일 카드 정보 가져오기
 export async function getTodoCardDetails(
   boardId: string,
-): Promise<TodoDetailsCardResponse> {
+): Promise<TodoDetailsCardResponse | ErrorMessage> {
   const token = getCookie('accessToken');
 
+  const obj: RequestInit = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
   try {
-    const url = `${API_URL}/cards/${boardId}`;
+    const res = await fetch(`${API_URL}/cards/${boardId}`, obj);
+    const data = await res.json();
 
-    const res = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    if (!res.ok) throw new Error(`${data.message}`);
 
-    if (!res.ok) {
-      const errorData = await res.json();
-      throw new Error(errorData.message || `HTTP error! status: ${res.status}`);
-    }
-    return await res.json();
+    return data;
   } catch (err) {
-    throw new Error('데이터를 받는 중에 오류가 발생했습니다.');
+    if (err instanceof Error) {
+      return { message: err.message };
+    }
+
+    return { message: '카드 데이터를 받는 중 알 수 없는 오류가 발생했습니다.' };
   }
 }
 
 // 할 일 카드 삭제
 export async function deleteTodoCardDetails(
   cardId: number,
-): Promise<string | null> {
+): Promise<SuccessMessage | ErrorMessage> {
   const token = getCookie('accessToken');
 
+  const obj: RequestInit = {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
   try {
-    const res = await fetch(`${API_URL}/comments/${cardId}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (res.status === 204) {
-      alert('할 일 카드가 삭제되었습니다.');
-      return null;
-    }
+    const res = await fetch(`${API_URL}/cards/${cardId}`, obj);
 
     if (!res.ok) {
-      const errorData = await res.json();
-      return errorData.message || `HTTP error! status: ${res.status}`;
+      const data = await res.json();
+      return { message: data.message };
     }
-    return null;
+
+    return { success: true };
   } catch (err) {
-    return '데이터를 삭제하는 중에 오류가 발생했습니다.';
+    if (err instanceof Error) {
+      return { message: err.message };
+    }
+    return { message: '카드 삭제 중 알 수 없는 오류가 발생했습니다.' };
   }
 }
