@@ -15,7 +15,6 @@ export default function MyDashBoardPage() {
           <DashBoardHeader isDashboard={false} />
         </Suspense>
         <div className="flex-1 overflow-auto">
-          {' '}
           <NewDashboard />
           <InviteDashboard />
         </div>
