@@ -1,6 +1,7 @@
 import { deleteComment, getComments, putComment } from '@/app/api/comments';
-import { Comment } from '@planit-types';
+import { Comment, CommentResponse, ErrorMessage } from '@planit-types';
 import { useCallback, useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 import { useIntersectionObserver } from './useIntersectionObserver';
 
@@ -17,8 +18,13 @@ export function useComment({ cardId }: LoadCommentsProps) {
   const loadComments = useCallback(async () => {
     if (loading || !hasMore) return;
     setLoading(true);
-    try {
-      const res = await getComments({ cardId, cursorId });
+    const res: CommentResponse | ErrorMessage = await getComments({
+      cardId,
+      cursorId,
+    });
+    if ('message' in res) {
+      toast.error(res.message);
+    } else {
       const nextCursor = res.cursorId ?? null;
       setComments((prevComments) => {
         const newComments = res.comments.filter(
@@ -31,13 +37,17 @@ export function useComment({ cardId }: LoadCommentsProps) {
       });
       setCursorId(nextCursor);
       setHasMore(res.comments.length > 0 && nextCursor !== null);
-    } finally {
-      setLoading(false);
     }
+    setLoading(false);
   }, [cardId, cursorId, loading, hasMore]);
 
   const handleDeleteComment = async (commentId: number) => {
-    await deleteComment(commentId);
+    const res = await deleteComment(commentId);
+    if ('message' in res) {
+      toast.error(res.message);
+      return;
+    }
+    toast.success('성공적으로 삭제되었습니다.');
     setComments((prevComments) =>
       prevComments.filter((comment) => comment.id !== commentId),
     );
@@ -45,6 +55,11 @@ export function useComment({ cardId }: LoadCommentsProps) {
 
   const handleModifyComment = async (commentId: number, content: string) => {
     const newComment = await putComment(commentId, content);
+    if ('message' in newComment) {
+      toast.error(newComment.message);
+      return;
+    }
+
     setComments((prevComments) =>
       prevComments.map((comment) => {
         if (comment.id === commentId) {

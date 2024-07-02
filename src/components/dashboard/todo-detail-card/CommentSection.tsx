@@ -3,6 +3,7 @@
 import { postComment } from '@/app/api/comments';
 import { useComment } from '@/hooks/useComment';
 import { ChangeEvent, FormEvent, useState } from 'react';
+import { toast } from 'react-toastify';
 
 import Comment from './Comment';
 
@@ -27,7 +28,6 @@ export default function CommentSection({
   } = useComment({
     cardId,
   });
-  const [error, setError] = useState('');
   const [content, setContent] = useState('');
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -37,20 +37,18 @@ export default function CommentSection({
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    try {
-      const newComment = await postComment({
-        content,
-        cardId,
-        columnId,
-        dashboardId,
-      });
-      if (newComment) {
-        setContent('');
-        await handleNewComment(newComment);
-      }
-    } catch (err) {
-      setError('댓글 작성에 실패했습니다.');
+    const newComment = await postComment({
+      content,
+      cardId,
+      columnId,
+      dashboardId,
+    });
+    if ('message' in newComment) {
+      toast.error(newComment.message);
+      return;
     }
+    setContent('');
+    await handleNewComment(newComment);
   };
 
   return (
@@ -90,7 +88,6 @@ export default function CommentSection({
         ))}
         <div ref={commentsEnd} className="h-20" />
         {loading && <div>Loading...</div>}
-        {error && <div>Error</div>}
       </div>
     </div>
   );

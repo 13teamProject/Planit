@@ -22,7 +22,7 @@ export function useIntersectionObserver<T extends HTMLElement>(
     if (observer.current) observer.current.disconnect();
 
     observer.current = new IntersectionObserver(callback, {
-      threshold: 1.0,
+      threshold: 0.5,
     });
 
     if (ref.current) observer.current.observe(ref.current);
