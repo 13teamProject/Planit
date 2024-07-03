@@ -34,7 +34,6 @@ export async function getDashboards(
     if (!response.ok) {
       throw new Error(`HTTP error: ${response.status}`);
     }
-
     const body: DashboardListResponse = await response.json();
     return body;
   } catch (error) {
@@ -42,7 +41,6 @@ export async function getDashboards(
     throw error;
   }
 }
-
 // 대시보드 생성 - POST
 export async function postDashboards(
   formData: DashboardFormData,
@@ -59,17 +57,18 @@ export async function postDashboards(
     });
 
     if (!response.ok) {
-      throw new Error(`HTTP error: ${response.status}`);
+      const errorBody = await response.json();
+      console.error('Server error:', errorBody);
+      throw new Error(`HTTP error: ${response.status}, ${errorBody.message}`);
     }
 
     const body: DashboardResponse = await response.json();
     return body;
   } catch (error) {
-    console.error('Failed to post data : ', error);
+    console.error('Failed to post data:', error);
     throw error;
   }
 }
-
 // 대시보드 상세 조회 - GET
 export async function getDashboradDetail(
   dashboardId: number,

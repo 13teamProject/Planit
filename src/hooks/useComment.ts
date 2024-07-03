@@ -1,6 +1,9 @@
 import { deleteComment, getComments, putComment } from '@/app/api/comments';
-import { Comment } from '@planit-types';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { Comment, CommentResponse, ErrorMessage } from '@planit-types';
+import { useCallback, useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+
+import { useIntersectionObserver } from './useIntersectionObserver';
 
 type LoadCommentsProps = {
   cardId: number;
@@ -11,14 +14,17 @@ export function useComment({ cardId }: LoadCommentsProps) {
   const [cursorId, setCursorId] = useState<number | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [hasMore, setHasMore] = useState<boolean>(true);
-  const commentsEnd = useRef<HTMLDivElement>(null);
-  const observer = useRef<IntersectionObserver | null>(null);
 
   const loadComments = useCallback(async () => {
     if (loading || !hasMore) return;
     setLoading(true);
-    try {
-      const res = await getComments({ cardId, cursorId });
+    const res: CommentResponse | ErrorMessage = await getComments({
+      cardId,
+      cursorId,
+    });
+    if ('message' in res) {
+      toast.error(res.message);
+    } else {
       const nextCursor = res.cursorId ?? null;
       setComments((prevComments) => {
         const newComments = res.comments.filter(
@@ -31,13 +37,17 @@ export function useComment({ cardId }: LoadCommentsProps) {
       });
       setCursorId(nextCursor);
       setHasMore(res.comments.length > 0 && nextCursor !== null);
-    } finally {
-      setLoading(false);
     }
+    setLoading(false);
   }, [cardId, cursorId, loading, hasMore]);
 
   const handleDeleteComment = async (commentId: number) => {
-    await deleteComment(commentId);
+    const res = await deleteComment(commentId);
+    if ('message' in res) {
+      toast.error(res.message);
+      return;
+    }
+    toast.success('성공적으로 삭제되었습니다.');
     setComments((prevComments) =>
       prevComments.filter((comment) => comment.id !== commentId),
     );
@@ -45,6 +55,11 @@ export function useComment({ cardId }: LoadCommentsProps) {
 
   const handleModifyComment = async (commentId: number, content: string) => {
     const newComment = await putComment(commentId, content);
+    if ('message' in newComment) {
+      toast.error(newComment.message);
+      return;
+    }
+
     setComments((prevComments) =>
       prevComments.map((comment) => {
         if (comment.id === commentId) {
@@ -69,22 +84,17 @@ export function useComment({ cardId }: LoadCommentsProps) {
     loadComments();
   }, [cardId]);
 
-  useEffect(() => {
-    const handleObserver = (entities: IntersectionObserverEntry[]) => {
-      const target = entities[0];
+  // commentsEnd 변수에 useIntersectionObserver 훅을 호출하여 반환된 ref를 할당.
+  // 요소가 뷰포트에 들어왔고, 로딩 중이 아니며 더 불러올 댓글이 있을 경우 loadComments 함수를 호출하여 댓글을 불러옴.
+  const commentsEnd = useIntersectionObserver<HTMLDivElement>(
+    (entries) => {
+      const target = entries[0];
       if (target.isIntersecting && !loading && hasMore) {
         loadComments();
       }
-    };
-
-    if (observer.current) observer.current.disconnect();
-    observer.current = new IntersectionObserver(handleObserver, {
-      threshold: 1.0,
-    });
-    if (commentsEnd.current) observer.current.observe(commentsEnd.current);
-
-    return () => observer.current?.disconnect();
-  }, [loading, hasMore, loadComments]);
+    },
+    [loading, hasMore, loadComments],
+  );
 
   return {
     comments,

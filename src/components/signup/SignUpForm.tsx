@@ -1,6 +1,6 @@
 'use client';
 
-import { handleSignUpAndLogin } from '@/service/authService';
+import { signUpUser } from '@/app/api/auth';
 import { authValidationSchema } from '@/utils/validation/schema';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AuthInputs, ModalState } from '@planit-types';
@@ -48,7 +48,7 @@ export default function SignUpForm() {
     password,
     nickname,
   }) => {
-    const response = await handleSignUpAndLogin({ email, password, nickname });
+    const response = await signUpUser({ email, password, nickname });
     if ('message' in response) {
       setModalState({ isOpen: true, message: response.message });
     } else {
@@ -153,13 +153,13 @@ export default function SignUpForm() {
       <Modal isOpen={termsModalState} onClose={handleTermsOpenClose}>
         <div className="h-400 w-340 px-28 py-28 text-center text-18 md:h-600 md:w-600">
           <div className="pb-10 md:pb-30">
-            <h2 className="mb-10 text-20 font-bold md:text-25">
+            <h2 className="mb-10 text-20 font-bold md:text-23">
               플랜잇 서비스 이용약관
             </h2>
             <Terms />
           </div>
           <Button
-            styles="w-138 h-42 md:w-120 md:h-48"
+            styles="text-14 mt-8 w-130 h-40 md:w-120 md:h-48 md:mt-0 md:text-16"
             text="확인"
             onClick={handleTermsOpenClose}
           />

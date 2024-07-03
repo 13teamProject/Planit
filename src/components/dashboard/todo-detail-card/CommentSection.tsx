@@ -2,7 +2,9 @@
 
 import { postComment } from '@/app/api/comments';
 import { useComment } from '@/hooks/useComment';
+import Image from 'next/image';
 import { ChangeEvent, FormEvent, useState } from 'react';
+import { toast } from 'react-toastify';
 
 import Comment from './Comment';
 
@@ -27,7 +29,6 @@ export default function CommentSection({
   } = useComment({
     cardId,
   });
-  const [error, setError] = useState('');
   const [content, setContent] = useState('');
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -37,24 +38,22 @@ export default function CommentSection({
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    try {
-      const newComment = await postComment({
-        content,
-        cardId,
-        columnId,
-        dashboardId,
-      });
-      if (newComment) {
-        setContent('');
-        await handleNewComment(newComment);
-      }
-    } catch (err) {
-      setError('댓글 작성에 실패했습니다.');
+    const newComment = await postComment({
+      content,
+      cardId,
+      columnId,
+      dashboardId,
+    });
+    if ('message' in newComment) {
+      toast.error(newComment.message);
+      return;
     }
+    setContent('');
+    await handleNewComment(newComment);
   };
 
   return (
-    <div className="flex flex-col gap-10">
+    <div className="flex flex-col gap-8">
       <form
         className="w-full md:max-w-420 lg:max-w-450"
         onSubmit={handleSubmit}
@@ -79,18 +78,34 @@ export default function CommentSection({
           </button>
         </div>
       </form>
-      <div className="h-130 w-full overflow-scroll">
-        {comments.map((comment) => (
-          <Comment
-            key={comment.id}
-            commentData={comment}
-            handleDelete={handleDeleteComment}
-            handleModify={handleModifyComment}
-          />
-        ))}
+      <div className="custom-scrollbar h-60 min-h-58 w-full overflow-auto md:h-110">
+        {comments.length > 0 ? (
+          comments.map((comment) => (
+            <Comment
+              key={comment.id}
+              commentData={comment}
+              handleDelete={handleDeleteComment}
+              handleModify={handleModifyComment}
+            />
+          ))
+        ) : (
+          <div className="lg:450 flex h-50 items-center justify-center md:h-100 md:w-420">
+            <div className="w-35 md:w-60">
+              <Image
+                src="/image/empty-comment-logo.png"
+                width={45}
+                height={45}
+                layout="responsive"
+                alt="댓글 비었을 때 로고"
+              />
+            </div>
+            <p className="pl-10 text-14 text-toss-blue-light md:text-16">
+              첫 댓글을 남겨주세요!
+            </p>
+          </div>
+        )}
         <div ref={commentsEnd} className="h-10" />
         {loading && <div>Loading...</div>}
-        {error && <div>Error</div>}
       </div>
     </div>
   );
