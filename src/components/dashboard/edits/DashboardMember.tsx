@@ -117,11 +117,20 @@ export default function DashboardMember({
               {member.nickname}
             </p>
           </div>
-          <Button
-            text="삭제"
-            onClick={() => handleDeleteMember(member.id)}
-            styles="px-15 py-7 md:px-30 md:py-8 border text-12 md:text-14  !border-gray-200 !bg-white !text-toss-blue"
-          />
+          {member.isOwner === true ? (
+            <Image
+              src="/icon/crown.svg"
+              width={20}
+              height={16}
+              alt="대시보드 주인"
+            />
+          ) : (
+            <Button
+              text="삭제"
+              onClick={() => handleDeleteMember(member.id)}
+              styles="px-15 py-7 md:px-30 md:py-8 border text-12 md:text-14  !border-gray-200 !bg-white !text-toss-blue"
+            />
+          )}
         </div>
       ))}
     </div>

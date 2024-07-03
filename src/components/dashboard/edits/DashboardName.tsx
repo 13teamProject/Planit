@@ -70,9 +70,13 @@ export default function DashboardName({ params }: { params: { id: number } }) {
   return (
     <div className="w-full max-w-620 rounded-md bg-white px-28 pb-28 pt-32">
       <form className="overflow-hidden" onSubmit={handleSubmit(onSubmit)}>
-        <div className="mb-34 flex items-center justify-between">
-          <h3 className="text-20 font-bold">{dashboardData?.title}</h3>
-          <div className="flex gap-5 md:gap-10">
+        <div className="mb-34 items-center justify-between md:flex">
+          <div className="max-w-360">
+            <h3 className="line-clamp-1 text-20 font-bold">
+              {dashboardData?.title}
+            </h3>
+          </div>
+          <div className="mt-10 flex justify-end gap-5 md:mt-0 md:justify-normal md:gap-10">
             {Object.entries(colorMapping).map(([hexColor, tailwindClass]) => (
               <button
                 type="button"
