@@ -3,11 +3,11 @@
 import { deleteMember, getMembers } from '@/app/api/members';
 import Button from '@/components/commons/button';
 import ProfileCircle from '@/components/commons/circle/ProfileCircle';
-import Modal from '@/components/commons/modal';
 import { PAGE_SIZE } from '@/constants/globalConstants';
-import { Member, ModalState } from '@planit-types';
+import { Member } from '@planit-types';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 export default function DashboardMember({
   params,
@@ -15,35 +15,19 @@ export default function DashboardMember({
   params: { id: number };
 }) {
   const [members, setMembers] = useState<Member[]>([]);
-  const [modalState, setModalState] = useState<ModalState>({
-    isOpen: false,
-    message: '',
-  });
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-
-  // 모달 닫기
-  const handleClose = () => {
-    setModalState({ ...modalState, isOpen: false });
-  };
 
   // 구성원 삭제
   const handleDeleteMember = async (memberId: number) => {
     const successDeleteMember = await deleteMember(memberId);
 
     if ('message' in successDeleteMember) {
-      setModalState({
-        isOpen: true,
-        message: successDeleteMember.message,
-      });
+      toast.error(successDeleteMember.message);
     } else {
       // 구성원 목록에서 해당 유저 삭제후 리스트업
       await fetchDashboardMember(currentPage);
-
-      setModalState({
-        isOpen: true,
-        message: '구성원 삭제가 완료되었습니다.',
-      });
+      toast.success('구성원 삭제가 완료되었습니다.');
     }
   };
 
@@ -65,10 +49,7 @@ export default function DashboardMember({
       size: PAGE_SIZE,
     });
     if ('message' in fetchedDashboardMember) {
-      setModalState({
-        isOpen: true,
-        message: fetchedDashboardMember.message,
-      });
+      toast.error(fetchedDashboardMember.message);
     } else {
       setMembers(fetchedDashboardMember.members);
       setTotalPages(Math.ceil(fetchedDashboardMember.totalCount / PAGE_SIZE));
@@ -143,19 +124,6 @@ export default function DashboardMember({
           />
         </div>
       ))}
-
-      <Modal isOpen={modalState.isOpen} onClose={handleClose}>
-        <div className="m-auto px-54 pb-29 pt-26 text-right text-18 md:w-540 md:px-33">
-          <p className="pb-47 pt-50 text-center">{modalState.message}</p>
-          <span className="flex justify-center md:justify-end">
-            <Button
-              styles="w-138 h-42 md:w-120 md:h-48"
-              text="확인"
-              onClick={handleClose}
-            />
-          </span>
-        </div>
-      </Modal>
     </div>
   );
 }

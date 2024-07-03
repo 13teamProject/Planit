@@ -1,11 +1,11 @@
 import { getDashboards, postDashboards } from '@/app/api/dashboards';
 import ColorCircle from '@/components/commons/circle/ColorCircle';
 import { SCROLL_SIZE } from '@/constants/globalConstants';
+import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
 import {
   ColorMapping,
   Dashboard,
   DashboardFormValues,
-  DashboardResponse,
   ModalState,
 } from '@planit-types';
 import Image from 'next/image';
@@ -36,42 +36,52 @@ export const colors = [
 ];
 
 export default function Sidemenu() {
-  const [dashboards, setDashboards] = useState<Dashboard[]>([]);
   const [modalState, setModalState] = useState<ModalState>({
     isOpen: false,
     message: '',
   });
   const [selectedColor, setSelectedColor] = useState<string>(colors[0]);
-  const [page, setPage] = useState<number>(1);
+  const router = useRouter();
 
-  const fetchDashboard = async () => {
-    const response = await getDashboards('infiniteScroll', 1, SCROLL_SIZE);
-    setDashboards(
-      response.dashboards.map((data: DashboardResponse) => ({
-        id: data.id,
-        title: data.title,
-        color: data.color,
-        createdAt: data.createdAt,
-        updatedAt: data.updatedAt,
-        createdByMe: data.createdByMe,
-        userId: data.userId,
-      })),
-    );
+  const handleOpenModal = () => {
+    setModalState({ isOpen: true, message: '안녕하세요' });
   };
 
-  const router = useRouter();
+  const handleCloseModal = () => {
+    setModalState({ ...modalState, isOpen: false });
+  };
+
+  const fetchDashboards = async (page: number) => {
+    const response = await getDashboards('infiniteScroll', page, SCROLL_SIZE);
+    return response.dashboards.map((data: Dashboard) => ({
+      id: data.id,
+      title: data.title,
+      color: data.color,
+      createdAt: data.createdAt,
+      updatedAt: data.updatedAt,
+      createdByMe: data.createdByMe,
+      userId: data.userId,
+    }));
+  };
+
+  const { items: dashboards, endRef } = useInfiniteScroll<Dashboard>({
+    fetchItems: fetchDashboards,
+    pageSize: SCROLL_SIZE,
+  });
+
   const {
     register,
     handleSubmit,
     watch,
     formState: { isValid },
   } = useForm<DashboardFormValues>({ mode: 'onChange' });
+
   const onSubmit: SubmitHandler<DashboardFormValues> = async (data) => {
     try {
-      const formData = {
+      const formData: Dashboard = {
         title: data.dashboardName,
         color: selectedColor,
-      };
+      } as Dashboard;
       const response = await postDashboards(formData);
 
       const newDashboard: Dashboard = {
@@ -83,26 +93,12 @@ export default function Sidemenu() {
         createdByMe: response.createdByMe,
         userId: response.userId,
       };
-
-      fetchDashboard();
       setModalState({ ...modalState, isOpen: false });
       router.push(`/dashboard/${response.id}`);
     } catch (error) {
       console.error('Failed to create dashboard:', error);
     }
   };
-
-  const handleOpenModal = () => {
-    setModalState({ isOpen: true, message: '안녕하세요' });
-  };
-
-  const handleCloseModal = () => {
-    setModalState({ ...modalState, isOpen: false });
-  };
-
-  useEffect(() => {
-    fetchDashboard();
-  }, []);
 
   return (
     <>
@@ -161,6 +157,7 @@ export default function Sidemenu() {
                 </Link>
               </li>
             ))}
+            <div ref={endRef} />
           </ul>
         </div>
       </nav>

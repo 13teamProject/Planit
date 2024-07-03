@@ -6,11 +6,12 @@ import EditCardModal from '@/components/dashboard/modals/EditCardModal';
 import CardDetails from '@/components/dashboard/modals/TodoDetailModal/CardDetails';
 import CommentSection from '@/components/dashboard/modals/TodoDetailModal/CommentSection';
 import DropDownSelectBox from '@/components/dashboard/modals/TodoDetailModal/DropDownSelectBox';
-import { TodoDetailsCardResponse } from '@planit-types';
+import { ErrorMessage, TodoDetailsCardResponse } from '@planit-types';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
-const cardId = '8684';
+const cardId = '8702';
 
 // 추후 설정 예정
 // params: { cardId: string }
@@ -26,7 +27,8 @@ export default function TodoDetailModal({
   todoModalOnClose,
   todoModalIsOpen,
 }: Props) {
-  const [cardDetails, setCardDetails] = useState<TodoDetailsCardResponse>();
+  const [cardDetails, setCardDetails] =
+    useState<TodoDetailsCardResponse | null>();
   const [selectBoxIsOpen, setSelectBoxIsOpen] = useState(false);
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
 
@@ -42,10 +44,14 @@ export default function TodoDetailModal({
 
   useEffect(() => {
     const fetchTodoCard = async () => {
-      const data = await getTodoCardDetails(cardId);
-      setCardDetails(data);
+      const data: TodoDetailsCardResponse | ErrorMessage =
+        await getTodoCardDetails(cardId);
+      if ('message' in data) {
+        toast.error(data.message);
+      } else {
+        setCardDetails(data);
+      }
     };
-
     if (!editModalIsOpen) fetchTodoCard();
   }, [cardId, editModalIsOpen]);
 
@@ -57,9 +63,9 @@ export default function TodoDetailModal({
   return (
     <>
       <Modal isOpen={todoModalIsOpen} onClose={() => {}}>
-        <div className="flex h-730 w-full flex-col gap-16 px-28 py-32 md:w-680 lg:w-730">
-          <div className="grid md:flex md:justify-between selection:md:flex-col">
-            <h1 className="order-2 pt-3 text-20 font-bold md:order-1 md:text-24">
+        <div className="mb-28 flex max-h-730 w-327 flex-col overflow-hidden px-28 pt-30 md:w-680 md:gap-16 lg:w-730">
+          <div className="grid md:flex md:justify-between md:pb-8 selection:md:flex-col">
+            <h1 className="order-2 py-10 text-20 font-bold md:order-1 md:text-24">
               {title}
             </h1>
             <div className="order-1 flex justify-end gap-24 md:order-2">
@@ -77,6 +83,7 @@ export default function TodoDetailModal({
                     openEditModal={openEditModal}
                     id={id}
                     setSelectBoxIsOpen={setSelectBoxIsOpen}
+                    todoModalOnClose={todoModalOnClose}
                   />
                 </span>
               )}
@@ -91,11 +98,13 @@ export default function TodoDetailModal({
             </div>
           </div>
           <CardDetails data={cardDetails} progressTitle={progressTitle} />
-          <CommentSection
-            cardId={id}
-            columnId={columnId}
-            dashboardId={dashboardId}
-          />
+          <div className="flex-1">
+            <CommentSection
+              cardId={id}
+              columnId={columnId}
+              dashboardId={dashboardId}
+            />
+          </div>
         </div>
       </Modal>
       <EditCardModal

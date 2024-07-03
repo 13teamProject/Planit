@@ -2,8 +2,10 @@ import { getCookie } from '@/utils/cookies';
 import {
   Comment,
   CommentResponse,
+  ErrorMessage,
   GetCommentRequest,
   PostCommentRequest,
+  SuccessMessage,
 } from '@planit-types';
 
 import { API_URL } from './baseUrl';
@@ -13,7 +15,7 @@ export async function getComments({
   cursorId,
   cardId,
   size = 5,
-}: GetCommentRequest): Promise<CommentResponse> {
+}: GetCommentRequest): Promise<CommentResponse | ErrorMessage> {
   const token = getCookie('accessToken');
   const params = new URLSearchParams({
     size: size.toString(),
@@ -23,32 +25,38 @@ export async function getComments({
   if (cursorId && cursorId !== null) {
     params.append('cursorId', cursorId.toString());
   }
-
   const url = `${API_URL}/comments?${params}`;
+  const obj: RequestInit = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    cache: 'no-store',
+  };
 
   try {
-    const res = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      cache: 'no-store',
-    });
+    const res = await fetch(url, obj);
+    const data = await res.json();
 
-    if (!res.ok) {
-      const errorData = await res.json();
-      throw new Error(errorData.message || `HTTP error! status: ${res.status}`);
+    if (!res.ok) throw new Error(`${data.message}`);
+
+    return data;
+  } catch (err) {
+    if (err instanceof Error) {
+      return { message: err.message };
     }
 
-    return await res.json();
-  } catch (err) {
-    throw new Error('데이터를 받는 중에 오류가 발생했습니다.');
+    return {
+      message: '댓글 데이터를 불러오는 중 알 수 없는 오류가 발생했습니다.',
+    };
   }
 }
 
 // 댓글 삭제
-export async function deleteComment(commentId: number): Promise<string | null> {
+export async function deleteComment(
+  commentId: number,
+): Promise<SuccessMessage | ErrorMessage> {
   const token = getCookie('accessToken');
 
   try {
@@ -60,18 +68,17 @@ export async function deleteComment(commentId: number): Promise<string | null> {
       },
     });
 
-    if (res.status === 204) {
-      alert('댓글이 삭제되었습니다.');
-      return null;
+    if (!res.ok) {
+      const data = await res.json();
+      return { message: data.message };
     }
 
-    if (!res.ok) {
-      const errorData = await res.json();
-      return errorData.message || `HTTP error! status: ${res.status}`;
-    }
-    return null;
+    return { success: true };
   } catch (err) {
-    return '데이터를 삭제하는 중에 오류가 발생했습니다.';
+    if (err instanceof Error) {
+      return { message: err.message };
+    }
+    return { message: '댓글 삭제 중 알 수 없는 오류가 발생했습니다.' };
   }
 }
 
@@ -81,7 +88,7 @@ export async function postComment({
   cardId,
   columnId,
   dashboardId,
-}: PostCommentRequest): Promise<Comment> {
+}: PostCommentRequest): Promise<Comment | ErrorMessage> {
   const token = getCookie('accessToken');
 
   const obj: RequestInit = {
@@ -101,15 +108,17 @@ export async function postComment({
 
   try {
     const res = await fetch(`${API_URL}/comments`, obj);
+    const data = await res.json();
 
-    if (!res.ok) {
-      const errorData = await res.json();
-      throw new Error(errorData.message || `HTTP error! status: ${res.status}`);
+    if (!res.ok) throw new Error(`${data.message}`);
+
+    return data;
+  } catch (error) {
+    if (error instanceof Error) {
+      return { message: error.message };
     }
 
-    return await res.json();
-  } catch (err) {
-    throw new Error('데이터를 받는 중에 오류가 발생했습니다.');
+    return { message: '댓글 포스팅 중 알 수 없는 오류가 발생했습니다.' };
   }
 }
 
@@ -117,7 +126,7 @@ export async function postComment({
 export async function putComment(
   commentId: number,
   content: string,
-): Promise<Comment> {
+): Promise<Comment | ErrorMessage> {
   const token = getCookie('accessToken');
 
   const obj: RequestInit = {
@@ -134,13 +143,15 @@ export async function putComment(
 
   try {
     const res = await fetch(`${API_URL}/comments/${commentId}`, obj);
+    const data = await res.json();
 
-    if (!res.ok) {
-      const errorData = await res.json();
-      throw new Error(errorData.message || `HTTP error! status: ${res.status}`);
+    if (!res.ok) throw new Error(`${data.message}`);
+    return data;
+  } catch (error) {
+    if (error instanceof Error) {
+      return { message: error.message };
     }
-    return await res.json();
-  } catch (err) {
-    throw new Error('데이터를 수정하는 중에 오류가 발생했습니다.');
+
+    return { message: '댓글 수정 중 알 수 없는 오류가 발생했습니다.' };
   }
 }

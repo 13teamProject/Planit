@@ -1,5 +1,5 @@
 declare module '@planit-types' {
-  type SuccessMessage = {
+  export type SuccessMessage = {
     success: true;
   };
 
