@@ -9,7 +9,7 @@ import { API_URL } from './baseUrl';
 
 // 할 일 카드 정보 가져오기
 export async function getTodoCardDetails(
-  boardId: string,
+  cardId: number,
 ): Promise<TodoDetailsCardResponse | ErrorMessage> {
   const token = getCookie('accessToken');
 
@@ -22,7 +22,7 @@ export async function getTodoCardDetails(
   };
 
   try {
-    const res = await fetch(`${API_URL}/cards/${boardId}`, obj);
+    const res = await fetch(`${API_URL}/cards/${cardId}`, obj);
     const data = await res.json();
 
     if (!res.ok) throw new Error(`${data.message}`);
