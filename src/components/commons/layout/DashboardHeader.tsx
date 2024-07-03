@@ -78,6 +78,12 @@ export default function DashBoardHeader({
     mode: 'onChange',
   });
 
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   useEffect(() => {
     if (id) {
       setDashboardId(id);
@@ -256,23 +262,27 @@ export default function DashBoardHeader({
         {isDashboard && (
           <div className="flex">
             <p className="mr-8 text-20 font-bold sm:hidden lg:block">
-              {dashboardDetails?.title}
+              {isClient && window.location.pathname.startsWith('/edit')
+                ? '계정 관리'
+                : dashboardDetails?.title}
             </p>
-            {dashboardDetails?.createdByMe && (
-              <Image
-                className="sm:hidden lg:block"
-                src="/icon/crown.svg"
-                width={20}
-                height={20}
-                alt="내가 만든 대시보드 표시"
-              />
-            )}
+            {isClient &&
+              dashboardDetails?.createdByMe &&
+              !window.location.pathname.startsWith('/edit') && (
+                <Image
+                  className="sm:hidden lg:block"
+                  src="/icon/crown.svg"
+                  width={20}
+                  height={20}
+                  alt="내가 만든 대시보드 표시"
+                />
+              )}
           </div>
         )}
         <ul className="flex items-center">
           {isDashboard && dashboardDetails?.createdByMe && (
             <li className="pl-12">
-              <Link href={`/dashboard/edit/${dashboardId}`}>
+              <Link href={`/edit/${dashboardId}`}>
                 <button
                   type="button"
                   className="flex h-40 w-88 items-center justify-center rounded-8 border-1 border-gray-200 text-16 font-medium text-gray-400 hover:border-black-700"
