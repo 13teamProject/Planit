@@ -246,11 +246,12 @@ export default function DashBoardHeader({
             )}
           </li>
           {selectBoxIsOpen && (
-            <span className="absolute right-20 top-60 md:right-30 lg:right-63">
+            <span className="absolute right-20 top-60 md:right-36 md:top-63 lg:right-70">
               <DropDownSelectBox
                 items={dropdownList}
                 setSelectBoxIsOpen={setSelectBoxIsOpen}
                 exceptions={[buttonRef]}
+                size="lg"
               />
             </span>
           )}
