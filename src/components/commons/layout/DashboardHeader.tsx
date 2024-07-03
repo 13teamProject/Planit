@@ -2,10 +2,12 @@
 
 import { getDashboards } from '@/app/api/dashboards';
 import { getUsers } from '@/app/api/users';
+import DropDownSelectBox from '@/components/commons/dropdown';
+import { handleLogout } from '@/service/authService';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
 
 import ProfileCircle from '../circle/ProfileCircle';
 
@@ -57,8 +59,11 @@ export default function DashBoardHeader({
   const [dashboards, setDashboards] = useState<Dashboard[]>([]);
   const [currentTitle, setCurrentTitle] = useState('Title');
   const [dashboardId, setDashboardId] = useState<string>('9800'); // 9800 (임시 데이터)
-  const searchParams = useSearchParams();
   const [user, setUser] = useState<User | null>(null);
+  const [selectBoxIsOpen, setSelectBoxIsOpen] = useState(false);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
   useEffect(() => {
     const handleResize = () => {
@@ -128,6 +133,21 @@ export default function DashBoardHeader({
 
   const visibleProfiles = PROFILES.slice(0, maxVisible);
   const extraCount = PROFILES.length - maxVisible;
+
+  const logoutUser = () => {
+    handleLogout();
+    router.push('/');
+  };
+
+  const dropdownList = [
+    {
+      label: '마이페이지',
+      onClick: () => {
+        router.push('/mypage');
+      },
+    },
+    { label: '로그아웃', onClick: logoutUser },
+  ];
 
   return (
     <nav className="right-0 top-0 z-[998] flex h-70 w-full items-center justify-end border-1 border-l-0 border-b-gray-200 bg-white py-25 pr-12 md:pr-40 lg:justify-between lg:pe-80 lg:ps-40">
@@ -206,19 +226,35 @@ export default function DashBoardHeader({
         {isDashboard && (
           <div className="mx-12 h-38 border-l border-gray-200 md:mx-24 lg:mx-32" />
         )}
-        <li className="font-semibold">
-          <ProfileCircle
-            data={PROFILES[2]}
-            styles="size-34 md:size-38 bg-violet-dashboard"
-          />
-        </li>
-        <li className="pl-12">
-          {user && (
-            <p className="text-16 font-medium sm:hidden md:block lg:block">
-              {user.nickname}
-            </p>
+        <button
+          ref={buttonRef}
+          type="button"
+          className="flex cursor-pointer items-center"
+          onClick={() => setSelectBoxIsOpen((prev) => !prev)}
+        >
+          <li className="font-semibold">
+            <ProfileCircle
+              data={PROFILES[2]}
+              styles="size-34 md:size-38 bg-violet-dashboard"
+            />
+          </li>
+          <li className="pl-12">
+            {user && (
+              <p className="text-16 font-medium sm:hidden md:block lg:block">
+                {user.nickname}
+              </p>
+            )}
+          </li>
+          {selectBoxIsOpen && (
+            <span className="absolute right-20 top-60 md:right-30 lg:right-63">
+              <DropDownSelectBox
+                items={dropdownList}
+                setSelectBoxIsOpen={setSelectBoxIsOpen}
+                exceptions={[buttonRef]}
+              />
+            </span>
           )}
-        </li>
+        </button>
       </ul>
     </nav>
   );

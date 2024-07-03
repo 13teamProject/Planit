@@ -1,36 +1,64 @@
 'use client';
 
-import { getTodoCardDetails } from '@/app/api/cards';
+import { deleteTodoCardDetails, getTodoCardDetails } from '@/app/api/cards';
+import Button from '@/components/commons/button';
+import DropDownSelectBox from '@/components/commons/dropdown';
 import Modal from '@/components/commons/modal';
 import EditCardModal from '@/components/dashboard/cards/EditCardModal';
 import CardDetails from '@/components/dashboard/todo-detail-card/CardDetails';
 import CommentSection from '@/components/dashboard/todo-detail-card/CommentSection';
-import DropDownSelectBox from '@/components/dashboard/todo-detail-card/DropDownSelectBox';
 import { ErrorMessage, TodoDetailsCardResponse } from '@planit-types';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 
-const cardId = '8702';
-
-// 추후 설정 예정
-// params: { cardId: string }
-// const { cardId } = params;
-
+const cardId = 8733;
 const progressTitle = 'To do';
 
 type Props = {
   todoModalOnClose: () => void;
   todoModalIsOpen: boolean;
 };
+
 export default function TodoDetailModal({
   todoModalOnClose,
   todoModalIsOpen,
 }: Props) {
   const [cardDetails, setCardDetails] =
-    useState<TodoDetailsCardResponse | null>();
+    useState<TodoDetailsCardResponse | null>(null);
   const [selectBoxIsOpen, setSelectBoxIsOpen] = useState(false);
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
+  const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
+  const kebabRef = useRef<HTMLImageElement>(null);
+
+  const fetchTodoCard = async () => {
+    const data: TodoDetailsCardResponse | ErrorMessage =
+      await getTodoCardDetails(cardId);
+    if ('message' in data) {
+      toast.error(data.message);
+    } else {
+      setCardDetails(data);
+    }
+  };
+
+  const handleModalClose = (setter: (value: boolean) => void) => () => {
+    setter(false);
+  };
+
+  const handleDelete = async () => {
+    const res = await deleteTodoCardDetails(cardId);
+    if ('message' in res) {
+      toast.error(res.message);
+      return;
+    }
+    toast.success('성공적으로 삭제되었습니다.');
+    setDeleteModalIsOpen(false);
+    todoModalOnClose();
+  };
+
+  useEffect(() => {
+    if (!editModalIsOpen) fetchTodoCard();
+  }, [editModalIsOpen]);
 
   const openEditModal = () => {
     setEditModalIsOpen(true);
@@ -38,31 +66,23 @@ export default function TodoDetailModal({
     todoModalOnClose();
   };
 
-  const handleEditModalClose = () => {
-    setEditModalIsOpen(false);
+  const handleKebabClick = () => {
+    setSelectBoxIsOpen((prev) => !prev);
   };
-
-  useEffect(() => {
-    const fetchTodoCard = async () => {
-      const data: TodoDetailsCardResponse | ErrorMessage =
-        await getTodoCardDetails(cardId);
-      if ('message' in data) {
-        toast.error(data.message);
-      } else {
-        setCardDetails(data);
-      }
-    };
-    if (!editModalIsOpen) fetchTodoCard();
-  }, [cardId, editModalIsOpen]);
 
   if (!cardDetails) {
     return <div />;
   }
 
   const { title, id, columnId, dashboardId } = cardDetails;
+  const dropdownList = [
+    { label: '수정하기', onClick: openEditModal },
+    { label: '삭제하기', onClick: () => setDeleteModalIsOpen(true) },
+  ];
+
   return (
     <>
-      <Modal isOpen={todoModalIsOpen} onClose={() => {}}>
+      <Modal isOpen={todoModalIsOpen} onClose={todoModalOnClose}>
         <div className="mb-28 flex max-h-730 w-327 flex-col overflow-hidden px-28 pt-30 md:w-680 md:gap-16 lg:w-730">
           <div className="grid md:flex md:justify-between md:pb-8 selection:md:flex-col">
             <h1 className="order-2 py-10 text-20 font-bold md:order-1 md:text-24">
@@ -70,20 +90,20 @@ export default function TodoDetailModal({
             </h1>
             <div className="order-1 flex justify-end gap-24 md:order-2">
               <Image
+                ref={kebabRef}
                 className="cursor-pointer"
                 src="/icon/kebab.svg"
                 width={28}
                 height={28}
                 alt="드롭다운 케밥"
-                onClick={() => setSelectBoxIsOpen((prev) => !prev)}
+                onClick={handleKebabClick}
               />
               {selectBoxIsOpen && (
                 <span className="absolute top-70">
                   <DropDownSelectBox
-                    openEditModal={openEditModal}
-                    id={id}
+                    items={dropdownList}
                     setSelectBoxIsOpen={setSelectBoxIsOpen}
-                    todoModalOnClose={todoModalOnClose}
+                    exceptions={[kebabRef]}
                   />
                 </span>
               )}
@@ -109,11 +129,32 @@ export default function TodoDetailModal({
       </Modal>
       <EditCardModal
         isOpen={editModalIsOpen}
-        onClose={handleEditModalClose}
+        onClose={handleModalClose(setEditModalIsOpen)}
         dashboardId={dashboardId}
         columnId={columnId}
         currentCardData={cardDetails}
       />
+      <Modal
+        isOpen={deleteModalIsOpen}
+        onClose={handleModalClose(setDeleteModalIsOpen)}
+      >
+        <div className="modal-content m-auto px-54 pb-29 pt-26 text-right text-18 md:w-540 md:px-33">
+          <p className="pb-47 pt-50 text-center">삭제하시겠습니까?</p>
+          <span className="flex justify-center gap-5 md:justify-end">
+            <Button
+              styles="w-138 h-42 md:w-120 md:h-48"
+              text="취소"
+              onClick={handleModalClose(setDeleteModalIsOpen)}
+              cancel
+            />
+            <Button
+              styles="w-138 h-42 md:w-120 md:h-48"
+              text="확인"
+              onClick={handleDelete}
+            />
+          </span>
+        </div>
+      </Modal>
     </>
   );
 }
