@@ -4,25 +4,20 @@ import { getDashboradDetail, updateDashboard } from '@/app/api/dashboards';
 import Button from '@/components/commons/button';
 import ColorCircle from '@/components/commons/circle/ColorCircle';
 import Input from '@/components/commons/input';
-import Modal from '@/components/commons/modal';
 import {
   ColorMapping,
   DashboardEditRequest,
   DashboardEditResponse,
-  ModalState,
 } from '@planit-types';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 export default function DashboardName({ params }: { params: { id: number } }) {
   const { register, handleSubmit, reset } = useForm<DashboardEditRequest>();
   const [selectedColor, setSelectedColor] = useState<string>();
   const [dashboardData, setDashboardData] = useState<DashboardEditResponse>();
-  const [modalState, setModalState] = useState<ModalState>({
-    isOpen: false,
-    message: '',
-  });
 
   const colorMapping: ColorMapping = {
     '#7AC555': 'bg-green-dashboard',
@@ -37,11 +32,6 @@ export default function DashboardName({ params }: { params: { id: number } }) {
     setSelectedColor(color);
   };
 
-  // 모달 닫기
-  const handleClose = () => {
-    setModalState({ ...modalState, isOpen: false });
-  };
-
   const onSubmit: SubmitHandler<DashboardEditRequest> = async (data) => {
     if (selectedColor) {
       // 리퀘스트 정보에 맞게 설정
@@ -50,18 +40,15 @@ export default function DashboardName({ params }: { params: { id: number } }) {
       const result = await updateDashboard(params.id, editRequest);
 
       if ('message' in result) {
-        setModalState({ isOpen: true, message: result.message });
+        toast.error(result.message);
       } else {
-        setModalState({
-          isOpen: true,
-          message: '대시보드 정보를 수정했습니다.',
-        });
+        toast.success('대시보드 정보를 수정했습니다');
         setDashboardData(result);
         reset();
       }
     } else {
       // 색상 선택 안했을 때
-      setModalState({ isOpen: true, message: '색상을 선택해주세요.' });
+      toast.error('색상을 선택해주세요.');
     }
   };
 
@@ -70,7 +57,7 @@ export default function DashboardName({ params }: { params: { id: number } }) {
       const fetchedDashboard = await getDashboradDetail(params.id);
 
       if ('message' in fetchedDashboard) {
-        setModalState({ isOpen: true, message: fetchedDashboard.message });
+        toast.error(fetchedDashboard.message);
       } else {
         // 초기 컬러 설정
         setSelectedColor(fetchedDashboard.color);
@@ -128,19 +115,6 @@ export default function DashboardName({ params }: { params: { id: number } }) {
           styles="px-25 md:px-30 py-8 mt-24 text-12 md:text-14 float-right"
         />
       </form>
-
-      <Modal isOpen={modalState.isOpen} onClose={handleClose}>
-        <div className="m-auto px-54 pb-29 pt-26 text-right text-18 md:w-540 md:px-33">
-          <p className="pb-47 pt-50 text-center">{modalState.message}</p>
-          <span className="flex justify-center md:justify-end">
-            <Button
-              styles="w-138 h-42 md:w-120 md:h-48"
-              text="확인"
-              onClick={handleClose}
-            />
-          </span>
-        </div>
-      </Modal>
     </div>
   );
 }
