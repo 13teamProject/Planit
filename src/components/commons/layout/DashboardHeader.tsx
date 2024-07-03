@@ -147,31 +147,9 @@ export default function DashBoardHeader({
     }
   };
 
-  // 초대 취소 핸들러
-  const handleCancelInvitation = async (invitationId: number) => {
-    const successDeleteMember = await deleteInvitation(
-      invitationId,
-      parseInt(dashboardId, 10),
-    );
-
-    if ('message' in successDeleteMember) {
-      setModalState({
-        isOpen: true,
-        message: successDeleteMember.message,
-      });
-    } else {
-      // 구성원 목록에서 해당 유저 삭제후 리스트업
-      await fetchDashboardInvitation(currentPage);
-      setModalState({
-        isOpen: true,
-        message: '초대 취소가 완료되었습니다.',
-      });
-    }
-  };
-
   useEffect(() => {
     fetchDashboardInvitation(currentPage);
-    fetchMembers(); // Fetch members on component mount
+    fetchMembers();
   }, [currentPage, dashboardId]);
 
   useEffect(() => {
@@ -218,10 +196,7 @@ export default function DashBoardHeader({
         );
 
         if (currentDashboard) {
-          setDashboardDetails(currentDashboard); // currentDashboard 상태 설정
-
-          console.log(currentDashboard.id);
-          console.log(currentDashboard.createdByMe);
+          setDashboardDetails(currentDashboard);
         }
       }
     }
