@@ -8,6 +8,7 @@ import {
   DashboardUpdateData,
   EmailRequest,
   ErrorMessage,
+  GetDashboardIdResponse,
   Invitation,
   SuccessMessage,
 } from '@planit-types';
@@ -96,6 +97,32 @@ export async function getDashboradDetail(
     return { message: '대시보드 정보 조회 중 알 수 없는 오류가 발생했습니다.' };
   }
 }
+
+type GetDashboardIdParams = {
+  dashboardId: number;
+};
+
+// FIXME: 중복
+export async function getDashboardId({
+  dashboardId,
+}: GetDashboardIdParams): Promise<GetDashboardIdResponse> {
+  try {
+    const token = getCookie('accessToken');
+    const response = await fetch(`${API_URL}/dashboards/${dashboardId}/`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error: ${response.status}`);
+    }
+
+    const body: GetDashboardIdResponse = await response.json();
+    return body;
+  } catch (err) {
+    throw new Error('데이터를 받는 중에 오류가 발생했습니다.');
+  }
+}
+
 // 대시보드 수정 - PUT
 export async function updateDashboard(
   dashboardId: number,

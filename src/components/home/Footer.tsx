@@ -1,13 +1,13 @@
 'use client';
 
-import Terms from '@/components/signup/Terms';
+import Terms from '@/components/auth/Terms';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { boolean } from 'yup';
 
-import Button from '../button';
-import Modal from '../modal';
+import Button from '../commons/button';
+import Modal from '../commons/modal';
 
 export default function Footer() {
   const [modalState, setModalState] = useState({ isOpen: false });

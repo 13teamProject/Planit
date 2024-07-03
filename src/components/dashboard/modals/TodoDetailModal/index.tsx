@@ -2,10 +2,10 @@
 
 import { getTodoCardDetails } from '@/app/api/cards';
 import Modal from '@/components/commons/modal';
-import EditCardModal from '@/components/dashboard/cards/EditCardModal';
-import CardDetails from '@/components/dashboard/todo-detail-card/CardDetails';
-import CommentSection from '@/components/dashboard/todo-detail-card/CommentSection';
-import DropDownSelectBox from '@/components/dashboard/todo-detail-card/DropDownSelectBox';
+import EditCardModal from '@/components/dashboard/modals/EditCardModal';
+import CardDetails from '@/components/dashboard/modals/TodoDetailModal/CardDetails';
+import CommentSection from '@/components/dashboard/modals/TodoDetailModal/CommentSection';
+import DropDownSelectBox from '@/components/dashboard/modals/TodoDetailModal/DropDownSelectBox';
 import { ErrorMessage, TodoDetailsCardResponse } from '@planit-types';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';

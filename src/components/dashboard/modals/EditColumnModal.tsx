@@ -1,4 +1,4 @@
-import { deleteColumn, editColumn, getColumns } from '@/app/api/columns';
+import { deleteColumn, editColumn, getColumnList } from '@/app/api/columns';
 import Button from '@/components/commons/button';
 import Input from '@/components/commons/input';
 import Modal from '@/components/commons/modal';
@@ -27,7 +27,13 @@ export default function EditColumnModal({
   const [columnList, setColumnList] = useState<Column[]>([]);
   const [error, setError] = useState('');
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const { register, handleSubmit, reset, watch } = useForm<EditColumnInputs>({
+  const {
+    register,
+    handleSubmit,
+    reset,
+    watch,
+    formState: { isValid },
+  } = useForm<EditColumnInputs>({
     defaultValues: {
       columnTitle: columnData.title,
     },
@@ -67,7 +73,7 @@ export default function EditColumnModal({
     if (!isOpen) return;
 
     (async () => {
-      const columnRes = await getColumns(dashboardId);
+      const columnRes = await getColumnList(dashboardId);
 
       if ('message' in columnRes) {
         toast.error(columnRes.message);
@@ -131,6 +137,7 @@ export default function EditColumnModal({
                 onClick={handleSubmit(onSubmit)}
                 styles="py-8 px-54 text-16 md:py-10 md:text-18 md:px-46 md:py-10"
                 text="변경"
+                disabled={!isValid || !!error}
               />
             </div>
           </div>

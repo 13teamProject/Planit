@@ -1,6 +1,6 @@
 'use client';
 
-import { postCardImage, postCreateCard } from '@/app/api/cards-goni';
+import { postCardImage, postCreateCard } from '@/app/api/cards';
 import { getMembers } from '@/app/api/members';
 import Button from '@/components/commons/button';
 import ProfileCircle from '@/components/commons/circle/ProfileCircle';
@@ -26,12 +26,12 @@ type Props = {
 };
 
 export type CreateCardInputs = {
-  assignee: number;
+  assignee?: number;
   title: string;
   description: string;
   dueDate?: Date;
   tags?: string[];
-  image?: string | null;
+  image?: string;
 };
 
 export default function CreateCardModal({
@@ -41,8 +41,13 @@ export default function CreateCardModal({
   columnId,
 }: Props) {
   const [members, setMembers] = useState<Member[]>([]);
-  const { register, handleSubmit, control, reset } =
-    useForm<CreateCardInputs>();
+  const {
+    register,
+    handleSubmit,
+    control,
+    reset,
+    formState: { isValid },
+  } = useForm<CreateCardInputs>();
 
   const onSubmit: SubmitHandler<CreateCardInputs> = async ({
     assignee,
@@ -72,6 +77,7 @@ export default function CreateCardModal({
 
     onClose();
     reset();
+    toast.success('카드를 생성하였습니다.');
   };
 
   useEffect(() => {
@@ -91,7 +97,7 @@ export default function CreateCardModal({
 
   return (
     <Modal isOpen={isOpen} onClose={() => {}}>
-      <form className="custom-scrollbar max-h-734 w-340 overflow-x-hidden overflow-y-scroll p-20 md:max-h-845 md:min-w-506 md:p-24">
+      <form className="custom-scrollbar max-h-800 w-340 overflow-y-auto p-20 md:max-h-900 md:min-w-506 md:p-24">
         <div className="mb-18 flex items-center justify-between md:mb-22">
           <h1 className="text-20 font-bold">할 일 생성</h1>
           <Image
@@ -119,10 +125,7 @@ export default function CreateCardModal({
           {members.map((member) => (
             <DropdownInput.Option key={member.userId} id={member.userId}>
               <div className="flex items-center gap-6">
-                <ProfileCircle
-                  data={member}
-                  styles="size-26 text-14 bg-toss-blue-light"
-                />
+                <ProfileCircle data={member} styles="size-26 text-14" />
                 {member.nickname}
               </div>
             </DropdownInput.Option>
@@ -187,7 +190,7 @@ export default function CreateCardModal({
           columnId={columnId}
           fetchFn={postCardImage}
         />
-        <div className="mt-18 flex gap-12 md:mt-28 md:justify-end">
+        <div className="mt-18 flex justify-between gap-12 md:mt-28 md:justify-end">
           <Button
             onClick={() => {
               onClose();
@@ -199,6 +202,7 @@ export default function CreateCardModal({
           <Button
             onClick={handleSubmit(onSubmit)}
             styles="py-12 px-54 text-16 md:py-14 md:text-18 md:px-46 md:py-14"
+            disabled={!isValid}
             text="생성"
           />
         </div>

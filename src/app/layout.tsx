@@ -1,8 +1,7 @@
 import ToastProvider from '@/components/commons/toast';
+import '@/styles/globals.css';
 import { Metadata } from 'next';
 import localFont from 'next/font/local';
-
-import './globals.css';
 
 const customFont = localFont({
   src: [

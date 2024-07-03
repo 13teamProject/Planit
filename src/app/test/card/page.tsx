@@ -1,8 +1,8 @@
 'use client';
 
 import BarButton from '@/components/commons/button/BarButton';
-import CreateCardModal from '@/components/dashboard/cards/CreateCardModal';
-import EditCardModal from '@/components/dashboard/cards/EditCardModal';
+import CreateCardModal from '@/components/dashboard/modals/CreateCardModal';
+import EditCardModal from '@/components/dashboard/modals/EditCardModal';
 import { useState } from 'react';
 
 const CURRENT_CARD_DATA = {
