@@ -125,10 +125,7 @@ export default function CreateCardModal({
           {members.map((member) => (
             <DropdownInput.Option key={member.userId} id={member.userId}>
               <div className="flex items-center gap-6">
-                <ProfileCircle
-                  data={member}
-                  styles="size-26 text-14 bg-toss-blue-light"
-                />
+                <ProfileCircle data={member} styles="size-26 text-14" />
                 {member.nickname}
               </div>
             </DropdownInput.Option>

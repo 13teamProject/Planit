@@ -192,7 +192,7 @@ export default function EditCardModal({
                     <div className="flex items-center gap-6">
                       <ProfileCircle
                         data={currentCardData.assignee}
-                        styles="size-26 text-14 bg-toss-blue-light"
+                        styles="size-26 text-14"
                       />
                       {currentCardData.assignee.nickname}
                     </div>
@@ -204,10 +204,7 @@ export default function EditCardModal({
                 {members.map((member) => (
                   <DropdownInput.Option key={member.userId} id={member.userId}>
                     <div className="flex items-center gap-6">
-                      <ProfileCircle
-                        data={member}
-                        styles="size-26 text-14 bg-toss-blue-light"
-                      />
+                      <ProfileCircle data={member} styles="size-26 text-14" />
                       {member.nickname}
                     </div>
                   </DropdownInput.Option>
