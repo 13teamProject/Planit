@@ -1,8 +1,8 @@
 'use client';
 
 import BarButton from '@/components/commons/button/BarButton';
-import ColumnSettingButton from '@/components/dashboard/columns/ColumnSettingButton';
-import CreateColumnModal from '@/components/dashboard/columns/CreateColumnModal';
+import ColumnSettingButton from '@/components/dashboard/ColumnSettingButton';
+import CreateColumnModal from '@/components/dashboard/modals/CreateColumnModal';
 import { useState } from 'react';
 
 const COLUMN_DATA = {
