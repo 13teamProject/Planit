@@ -6,14 +6,17 @@ import {
   getDashboards,
   postInvitation,
 } from '@/app/api/dashboards';
+import { getMembers } from '@/app/api/members';
 import { getUsers } from '@/app/api/users';
+// Import the getMembers API
 import Button from '@/components/commons/button';
 import Input from '@/components/commons/input';
 import Modal from '@/components/commons/modal';
 import { PAGE_SIZE, SCROLL_SIZE } from '@/constants/globalConstants';
 import { emailValidationSchema } from '@/utils/validation/schema';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { EmailRequest, Invitation } from '@planit-types';
+import { EmailRequest, Invitation, Member } from '@planit-types';
+// Import the Member type
 import Image from 'next/image';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
@@ -21,33 +24,6 @@ import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import ProfileCircle from '../circle/ProfileCircle';
-
-const PROFILES = [
-  {
-    nickname: 'Y',
-    profileImageUrl: null,
-  },
-  {
-    nickname: 'C',
-    profileImageUrl: null,
-  },
-  {
-    nickname: 'K',
-    profileImageUrl: null,
-  },
-  {
-    nickname: 'J',
-    profileImageUrl: null,
-  },
-  {
-    nickname: 'P',
-    profileImageUrl: null,
-  },
-  {
-    nickname: 'L',
-    profileImageUrl: null,
-  },
-];
 
 type Dashboard = {
   id: number;
@@ -84,6 +60,7 @@ export default function DashBoardHeader({
   const { id } = useParams(); // URL의 id 파라미터 추출
   const [dashboardId, setDashboardId] = useState(String(id));
   const [user, setUser] = useState<User | null>(null);
+  const [members, setMembers] = useState<Member[]>([]); // Add state for members
   const [modalState, setModalState] = useState<ContentModalState>({
     isOpen: false,
     message: '',
@@ -137,6 +114,18 @@ export default function DashBoardHeader({
     }
   };
 
+  // 멤버 목록 조회
+  const fetchMembers = async () => {
+    const response = await getMembers({
+      dashboardId: parseInt(dashboardId, 10),
+    });
+    if ('message' in response) {
+      console.error(response.message);
+    } else {
+      setMembers(response.members);
+    }
+  };
+
   // 초대하기
   const onSubmit: SubmitHandler<EmailRequest> = async (email) => {
     const response = await postInvitation(email, parseInt(dashboardId, 10));
@@ -176,7 +165,8 @@ export default function DashBoardHeader({
 
   useEffect(() => {
     fetchDashboardInvitation(currentPage);
-  }, [currentPage]);
+    fetchMembers(); // Fetch members on component mount
+  }, [currentPage, dashboardId]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -186,7 +176,7 @@ export default function DashBoardHeader({
       } else if (window.innerWidth < 1200) {
         newSize = 2; // 태블릿 (md)
       } else {
-        newSize = isExpanded ? PROFILES.length : 4; // PC (lg 이상)
+        newSize = isExpanded ? members.length : 4; // PC (lg 이상)
       }
       setMaxVisible(newSize);
     };
@@ -195,7 +185,7 @@ export default function DashBoardHeader({
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, [isExpanded]);
+  }, [isExpanded, members.length]);
 
   useEffect(() => {
     async function fetchDashboard() {
@@ -250,12 +240,12 @@ export default function DashBoardHeader({
   const toggleProfiles = () => {
     if (window.innerWidth >= 1200) {
       setIsExpanded(!isExpanded);
-      setMaxVisible(!isExpanded ? PROFILES.length : 4);
+      setMaxVisible(!isExpanded ? members.length : 4);
     }
   };
 
-  const visibleProfiles = PROFILES.slice(0, maxVisible);
-  const extraCount = PROFILES.length - maxVisible;
+  const visibleProfiles = members.slice(0, maxVisible);
+  const extraCount = members.length - maxVisible;
 
   return (
     <>
@@ -282,7 +272,7 @@ export default function DashBoardHeader({
         <ul className="flex items-center">
           {isDashboard && dashboardDetails?.createdByMe && (
             <li className="pl-12">
-              <Link href={`/dashboard/${dashboardId}/edit`}>
+              <Link href={`/dashboard/edit/${dashboardId}`}>
                 <button
                   type="button"
                   className="flex h-40 w-88 items-center justify-center rounded-8 border-1 border-gray-200 text-16 font-medium text-gray-400 hover:border-black-700"
@@ -320,9 +310,12 @@ export default function DashBoardHeader({
           {isDashboard && (
             <div className="flex font-semibold">
               {visibleProfiles.map((profile) => (
-                <li key={profile.nickname}>
+                <li key={profile.id}>
                   <ProfileCircle
-                    data={profile}
+                    data={{
+                      nickname: profile.nickname[0],
+                      profileImageUrl: profile.profileImageUrl,
+                    }}
                     styles="size-34 md:size-38 bg-orange-400"
                   />
                 </li>
@@ -351,7 +344,10 @@ export default function DashBoardHeader({
           )}
           <li className="font-semibold">
             <ProfileCircle
-              data={PROFILES[2]}
+              data={{
+                nickname: user?.nickname[0] || '',
+                profileImageUrl: user?.profileImageUrl || null,
+              }}
               styles="size-34 md:size-38 bg-violet-dashboard"
             />
           </li>
