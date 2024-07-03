@@ -146,10 +146,19 @@ export default function Sidemenu() {
                 />
                 <Link
                   href={`/dashboard/${dashboard.id}`}
-                  className="text-18 font-medium text-gray-400 hover:text-black sm:hidden md:block md:pl-16 md:text-16 lg:block lg:pl-16"
+                  className="mr-6 text-18 font-medium text-gray-400 hover:text-black sm:hidden md:block md:pl-16 md:text-16 lg:block lg:pl-16"
                 >
                   {dashboard.title}
                 </Link>
+                {dashboard?.createdByMe && (
+                  <Image
+                    className="mb-3 sm:hidden lg:block"
+                    src="/icon/crown.svg"
+                    width={15}
+                    height={15}
+                    alt="내가 만든 대시보드 표시"
+                  />
+                )}
               </li>
             ))}
             <div ref={endRef} />

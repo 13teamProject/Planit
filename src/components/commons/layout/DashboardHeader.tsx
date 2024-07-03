@@ -10,13 +10,13 @@ import { getUsers } from '@/app/api/users';
 import Button from '@/components/commons/button';
 import Input from '@/components/commons/input';
 import Modal from '@/components/commons/modal';
-import { PAGE_SIZE } from '@/constants/globalConstants';
+import { PAGE_SIZE, SCROLL_SIZE } from '@/constants/globalConstants';
 import { emailValidationSchema } from '@/utils/validation/schema';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { EmailRequest, Invitation } from '@planit-types';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
@@ -52,6 +52,11 @@ const PROFILES = [
 type Dashboard = {
   id: number;
   title: string;
+  color: string;
+  createdAt: string;
+  updatedAt: string;
+  createdByMe: boolean;
+  userId: number;
 };
 
 type User = {
@@ -73,10 +78,11 @@ export default function DashBoardHeader({
 }) {
   const [maxVisible, setMaxVisible] = useState(4);
   const [isExpanded, setIsExpanded] = useState(false);
-  const [dashboards, setDashboards] = useState<Dashboard[]>([]);
-  const [currentTitle, setCurrentTitle] = useState('Title');
-  const [dashboardId, setDashboardId] = useState<string>('9800'); // 9800 (임시 데이터)
-  const searchParams = useSearchParams();
+  const [dashboardDetails, setDashboardDetails] = useState<Dashboard | null>(
+    null,
+  );
+  const { id } = useParams(); // URL의 id 파라미터 추출
+  const [dashboardId, setDashboardId] = useState(String(id));
   const [user, setUser] = useState<User | null>(null);
   const [modalState, setModalState] = useState<ContentModalState>({
     isOpen: false,
@@ -94,6 +100,12 @@ export default function DashBoardHeader({
     resolver,
     mode: 'onChange',
   });
+
+  useEffect(() => {
+    if (id) {
+      setDashboardId(id);
+    }
+  }, [id]);
 
   // 모달 닫기
   const handleClose = () => {
@@ -187,34 +199,44 @@ export default function DashBoardHeader({
 
   useEffect(() => {
     async function fetchDashboard() {
-      const dashboardid = searchParams.get('dashboardid') || '9800'; // 9800 (임시 데이터)
-      setDashboardId(dashboardid);
+      if (dashboardId) {
+        console.log(dashboardId);
 
-      // 대시보드 id, title 데이터
-      const response = await getDashboards('infiniteScroll', 1, 9); // 데이터 size 수정 필요
-      const fetchedDashboards = response.dashboards.map((data: Dashboard) => ({
-        id: data.id,
-        title: data.title,
-      }));
-      setDashboards(fetchedDashboards);
+        // 대시보드 id, title 데이터
+        const response = await getDashboards('infiniteScroll', 1, SCROLL_SIZE);
+        const fetchedDashboards = response.dashboards.map(
+          (data: Dashboard) => ({
+            id: data.id,
+            title: data.title,
+            color: data.color,
+            createdAt: data.createdAt,
+            updatedAt: data.updatedAt,
+            createdByMe: data.createdByMe,
+            userId: data.userId,
+          }),
+        );
 
-      // URL의 id와 일치하는 대시보드의 타이틀
-      const currentDashboard = fetchedDashboards.find(
-        (dashboard: Dashboard) => String(dashboard.id) === dashboardid,
-      );
-      if (currentDashboard) {
-        setCurrentTitle(currentDashboard.title);
+        // URL의 id와 일치하는 대시보드를 찾음
+        const currentDashboard = fetchedDashboards.find(
+          (dashboard: Dashboard) => String(dashboard.id) === dashboardId,
+        );
+
+        if (currentDashboard) {
+          setDashboardDetails(currentDashboard); // currentDashboard 상태 설정
+
+          console.log(currentDashboard.id);
+          console.log(currentDashboard.createdByMe);
+        }
       }
     }
 
     fetchDashboard();
-  }, [searchParams]);
+  }, [dashboardId]);
 
   useEffect(() => {
     async function fetchUser() {
       try {
         const userData = await getUsers();
-        console.log(`User ID: ${userData.id}`);
         setUser(userData);
       } catch (error) {
         console.error('Failed to fetch user:', error);
@@ -242,10 +264,23 @@ export default function DashBoardHeader({
           <p className="text-20 font-bold sm:hidden lg:block">내 대시보드</p>
         )}
         {isDashboard && (
-          <p className="text-20 font-bold sm:hidden lg:block">{currentTitle}</p>
+          <div className="flex">
+            <p className="mr-8 text-20 font-bold sm:hidden lg:block">
+              {dashboardDetails?.title}
+            </p>
+            {dashboardDetails?.createdByMe && (
+              <Image
+                className="sm:hidden lg:block"
+                src="/icon/crown.svg"
+                width={20}
+                height={20}
+                alt="내가 만든 대시보드 표시"
+              />
+            )}
+          </div>
         )}
         <ul className="flex items-center">
-          {isDashboard && (
+          {isDashboard && dashboardDetails?.createdByMe && (
             <li className="pl-12">
               <Link href={`/dashboard/${dashboardId}/edit`}>
                 <button
