@@ -96,7 +96,7 @@ export default function CreateCardModal({
 
   return (
     <Modal isOpen={isOpen} onClose={() => {}}>
-      <form className="max-h-734 w-327 overflow-y-auto p-20 md:max-h-845 md:min-w-506 md:p-24">
+      <form className="custom-scrollbar max-h-734 w-340 overflow-x-hidden overflow-y-scroll p-20 md:max-h-845 md:min-w-506 md:p-24">
         <div className="mb-18 flex items-center justify-between md:mb-22">
           <h1 className="text-20 font-bold">할 일 생성</h1>
           <Image
@@ -108,7 +108,6 @@ export default function CreateCardModal({
             onClick={onClose}
           />
         </div>
-
         <label
           htmlFor="assignee"
           className="mb-8 block text-14 text-black-800 md:text-16"
@@ -134,7 +133,6 @@ export default function CreateCardModal({
             </DropdownInput.Option>
           ))}
         </DropdownInput>
-
         <label
           htmlFor="title"
           className="mb-8 mt-18 block text-14 text-black-800 md:mt-20 md:text-16"
@@ -147,7 +145,6 @@ export default function CreateCardModal({
           placeholder="제목을 입력해 주세요"
           register={{ ...register('title', { required: true }) }}
         />
-
         <label
           htmlFor="description"
           className="mb-8 mt-18 block text-14 text-black-800 md:mt-20 md:text-16"
@@ -159,7 +156,6 @@ export default function CreateCardModal({
           placeholder="설명을 입력해 주세요"
           register={{ ...register('description', { required: true }) }}
         />
-
         <label
           htmlFor="dueDate"
           className="mb-8 mt-18 block text-14 text-black-800 md:mt-20 md:text-16"
@@ -171,7 +167,6 @@ export default function CreateCardModal({
           placeholder="날짜를 입력해 주세요"
           name="dueDate"
         />
-
         <label
           htmlFor="tags"
           className="mb-8 mt-18 block text-14 text-black-800 md:mt-20 md:text-16"
@@ -184,7 +179,6 @@ export default function CreateCardModal({
           name="tags"
           control={control}
         />
-
         <label
           htmlFor="image"
           className="mb-8 mt-18 block text-14 text-black-800 md:mt-20 md:text-16"
@@ -198,7 +192,6 @@ export default function CreateCardModal({
           columnId={columnId}
           fetchFn={postCardImage}
         />
-
         <div className="mt-18 flex gap-12 md:mt-28 md:justify-end">
           <Button
             onClick={() => {

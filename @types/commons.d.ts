@@ -3,6 +3,10 @@ declare module '@planit-types' {
     message: string;
   };
 
+  type SuccessMessage = {
+    success: true;
+  };
+
   export type ModalState = {
     isOpen: boolean;
     message: string;

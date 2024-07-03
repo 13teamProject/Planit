@@ -24,12 +24,31 @@
   }
 
   html {
-    -ms-overflow-style: none; /* 인터넷 익스플로러 */
-    scrollbar-width: none; /* 파이어폭스 */
-    overflow: scroll;
-    ::-webkit-scrollbar {
-      display: none;
-    }
+    scrollbar-width: none;
+    /* @apply overflow-; */
+  }
+
+  .custom-scrollbar {
+    -ms-overflow-style: auto; /* 인터넷 익스플로러 */
+    scrollbar-width: auto; /* 파이어폭스 */
+    overflow: auto; /* 스크롤바를 자동으로 표시 */
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 10px;
+    height: 0px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgb(218, 233, 254, 0.6);
+    opacity: 0.4;
+    border-radius: 14px;
+    scrollbar-width: auto; /* 파이어폭스 */
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: #fff;
+    border-radius: 10px;
   }
 }
 

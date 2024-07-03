@@ -99,14 +99,11 @@ function TagInput({ onChange, defaultValue, ...args }: TagInputProps) {
           {[...tagList].reverse().map((tag: string) => (
             <Tag
               key={tag}
-              size="lg"
-              color="toss"
+              text={tag}
               deleteTag={() => {
                 filterTagList(tag);
               }}
-            >
-              {tag}
-            </Tag>
+            />
           ))}
         </div>
       )}

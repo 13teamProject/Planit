@@ -4,7 +4,6 @@ import { editCard, postCardImage } from '@/app/api/cards-goni';
 import { getColumns } from '@/app/api/columns';
 import { getMembers } from '@/app/api/members';
 import Button from '@/components/commons/button';
-import ColorCircle from '@/components/commons/circle/ColorCircle';
 import ProfileCircle from '@/components/commons/circle/ProfileCircle';
 import Input from '@/components/commons/input';
 import DateInput from '@/components/commons/input/DateInput';
@@ -141,7 +140,7 @@ export default function EditCardModal({
   return (
     <Modal isOpen={isOpen} onClose={() => {}}>
       {isLoaded && (
-        <form className="max-h-890 w-327 overflow-y-auto p-20 md:min-w-[506px] md:p-24">
+        <form className="custom-scrollbar max-h-734 w-340 overflow-x-hidden overflow-y-scroll p-20 md:max-h-845 md:min-w-506 md:p-24">
           <div className="mb-18 flex items-center justify-between md:mb-22">
             <h1 className="text-20 font-bold">할 일 수정</h1>
             <Image
@@ -166,22 +165,12 @@ export default function EditCardModal({
                 name="columnId"
                 control={control}
                 defaultValue={
-                  <Tag round color="orange" size="sm">
-                    <div className="md:gap-4-4 flex items-center gap-3">
-                      <ColorCircle size="xs" color="bg-orange-dashboard" />
-                      {currentStatus?.title}
-                    </div>
-                  </Tag>
+                  <Tag type="round" text={currentStatus?.title as string} />
                 }
               >
                 {statusList.map((status) => (
                   <DropdownInput.Option key={status.id} id={status.id}>
-                    <Tag round color="orange" size="sm">
-                      <div className="md:gap-4-4 flex items-center gap-3">
-                        <ColorCircle size="xs" color="bg-orange-dashboard" />
-                        {status.title}
-                      </div>
-                    </Tag>
+                    <Tag type="round" text={status.title} />
                   </DropdownInput.Option>
                 ))}
               </DropdownInput>

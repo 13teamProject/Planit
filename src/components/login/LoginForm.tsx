@@ -5,7 +5,7 @@ import { authValidationSchema } from '@/utils/validation/schema';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   AuthInputs,
-  BadRequest,
+  LoginResult,
   ModalState,
   UserInfoResponse,
 } from '@planit-types';
@@ -40,7 +40,7 @@ export default function LoginForm() {
   });
 
   const onSubmit: SubmitHandler<AuthInputs> = async ({ email, password }) => {
-    const response: UserInfoResponse | BadRequest = await handleLogin({
+    const response: LoginResult = await handleLogin({
       email,
       password,
     });

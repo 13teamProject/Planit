@@ -108,6 +108,7 @@ export default function DashBoardHeader({
     async function fetchUser() {
       try {
         const userData = await getUsers();
+        console.log(`User ID: ${userData.id}`);
         setUser(userData);
       } catch (error) {
         console.error('Failed to fetch user:', error);

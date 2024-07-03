@@ -3,13 +3,12 @@
 import { editUserPassword } from '@/app/api/users';
 import { passwordValidationSchema } from '@/utils/validation/schema';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { ModalState, UpdateUserPassword } from '@planit-types';
-import { useState } from 'react';
+import { UpdateUserPassword } from '@planit-types';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 import Button from '../commons/button';
 import Input from '../commons/input';
-import Modal from '../commons/modal';
 
 type PasswordChangeForm = {
   password: string;
@@ -27,15 +26,6 @@ export default function Password() {
     resolver,
     mode: 'onChange',
   });
-  const [modalState, setModalState] = useState<ModalState>({
-    isOpen: false,
-    message: '',
-  });
-
-  // 모달 닫기
-  const handleClose = () => {
-    setModalState({ ...modalState, isOpen: false });
-  };
 
   // 유저 비밀번호 수정
   const onSubmit: SubmitHandler<PasswordChangeForm> = async (data) => {
@@ -46,13 +36,10 @@ export default function Password() {
     const successEditUserPassword = await editUserPassword(apiData);
 
     if ('message' in successEditUserPassword) {
-      setModalState({ isOpen: true, message: successEditUserPassword.message });
+      toast.error(successEditUserPassword.message);
     }
     if ('success' in successEditUserPassword) {
-      setModalState({
-        isOpen: true,
-        message: '비밀번호를 성공적으로 변경했습니다.',
-      });
+      toast.success('비밀번호를 성공적으로 변경했습니다');
       reset();
     }
   };
@@ -117,19 +104,6 @@ export default function Password() {
           styles="px-30 py-8 mt-24 float-right text-12 md:text-14"
         />
       </form>
-
-      <Modal isOpen={modalState.isOpen} onClose={handleClose}>
-        <div className="m-auto px-54 pb-29 pt-26 text-right text-18 md:w-540 md:px-33">
-          <p className="pb-47 pt-50 text-center">{modalState.message}</p>
-          <span className="flex justify-center md:justify-end">
-            <Button
-              styles="w-138 h-42 md:w-120 md:h-48"
-              text="확인"
-              onClick={handleClose}
-            />
-          </span>
-        </div>
-      </Modal>
     </div>
   );
 }
