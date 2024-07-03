@@ -2,35 +2,25 @@
 
 import { editUserInfo, uploadProfileImage } from '@/app/api/users';
 import { useAuthStore } from '@/store/authStore';
-import type { ModalState, UpdateUser } from '@planit-types';
-import { useState } from 'react';
+import type { UpdateUser } from '@planit-types';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 import Button from '../commons/button';
 import Input from '../commons/input';
 import ImageInput from '../commons/input/ImageInput';
-import Modal from '../commons/modal';
 
 export default function Profile() {
   const { register, handleSubmit, control } = useForm<UpdateUser>();
   const { userInfo, changeUserInfo } = useAuthStore();
 
-  const [modalState, setModalState] = useState<ModalState>({
-    isOpen: false,
-    message: '',
-  });
-
-  const handleClose = () => {
-    setModalState({ ...modalState, isOpen: false });
-  };
-
   const onSubmit: SubmitHandler<UpdateUser> = async (data) => {
     const result = await editUserInfo(data);
 
     if ('message' in result) {
-      setModalState({ isOpen: true, message: result.message });
+      toast.error(result.message);
     } else {
-      setModalState({ isOpen: true, message: '프로필을 수정했습니다.' });
+      toast.success('프로필을 수정했습니다.');
       changeUserInfo(result);
     }
   };
@@ -82,19 +72,6 @@ export default function Profile() {
           />
         </div>
       </form>
-
-      <Modal isOpen={modalState.isOpen} onClose={handleClose}>
-        <div className="m-auto px-54 pb-29 pt-26 text-right text-18 md:w-540 md:px-33">
-          <p className="pb-47 pt-50 text-center">{modalState.message}</p>
-          <span className="flex justify-center md:justify-end">
-            <Button
-              styles="w-138 h-42 md:w-120 md:h-48"
-              text="확인"
-              onClick={handleClose}
-            />
-          </span>
-        </div>
-      </Modal>
     </div>
   );
 }
