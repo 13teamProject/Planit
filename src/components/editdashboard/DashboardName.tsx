@@ -15,7 +15,12 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 export default function DashboardName({ params }: { params: { id: number } }) {
-  const { register, handleSubmit, reset } = useForm<DashboardEditRequest>();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { isValid },
+  } = useForm<DashboardEditRequest>();
   const [selectedColor, setSelectedColor] = useState<string>();
   const [dashboardData, setDashboardData] = useState<DashboardEditResponse>();
 
@@ -117,6 +122,7 @@ export default function DashboardName({ params }: { params: { id: number } }) {
         <Button
           type="submit"
           text="변경"
+          disabled={!isValid}
           styles="px-25 md:px-30 py-8 mt-24 text-12 md:text-14 float-right"
         />
       </form>
