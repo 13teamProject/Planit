@@ -27,7 +27,13 @@ export default function EditColumnModal({
   const [columnList, setColumnList] = useState<Column[]>([]);
   const [error, setError] = useState('');
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const { register, handleSubmit, reset, watch } = useForm<EditColumnInputs>({
+  const {
+    register,
+    handleSubmit,
+    reset,
+    watch,
+    formState: { isValid },
+  } = useForm<EditColumnInputs>({
     defaultValues: {
       columnTitle: columnData.title,
     },
@@ -131,6 +137,7 @@ export default function EditColumnModal({
                 onClick={handleSubmit(onSubmit)}
                 styles="py-8 px-54 text-16 md:py-10 md:text-18 md:px-46 md:py-10"
                 text="변경"
+                disabled={!isValid || !!error}
               />
             </div>
           </div>
