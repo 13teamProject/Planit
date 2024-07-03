@@ -12,6 +12,7 @@ import { toast } from 'react-toastify';
 
 import Card from './Card';
 import ColumnSettingButton from './ColumnSettingButton';
+import CreateCardModal from './modals/CreateCardModal';
 
 type ColumnProps = {
   dashboardId: number;
@@ -22,7 +23,9 @@ type ColumnWithCards = ColumnType & {
 };
 
 export default function Column({ dashboardId }: ColumnProps) {
+  const [isCreateCardModalOpen, setIsCreateCardModalOpen] = useState(false);
   const [columns, setColumns] = useState<ColumnWithCards[]>([]);
+  const [activeColumnId, setActiveColumnId] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [draggingCard, setDraggingCard] = useState<number | null>(null);
@@ -50,6 +53,16 @@ export default function Column({ dashboardId }: ColumnProps) {
     }
     fetchColumnsAndCards();
   }, [columns]);
+
+  const openCreateCardModal = (columnId: number) => {
+    setActiveColumnId(columnId);
+    setIsCreateCardModalOpen(true);
+  };
+
+  const closeCreateCardModal = () => {
+    setActiveColumnId(0);
+    setIsCreateCardModalOpen(false);
+  };
 
   // 드래그 시작 시 현재 드래그 중인 카드의 ID 저장
   const handleDragStart = useCallback((cardId: number) => {
@@ -168,7 +181,8 @@ export default function Column({ dashboardId }: ColumnProps) {
               />
             </div>
           </div>
-          <BarButton />
+          <BarButton onClick={() => openCreateCardModal(column.id)} />
+
           <div className="sm:mb-12 md:mb-20 lg:flex-1 lg:overflow-y-auto">
             {column.cards.map((card, index) => (
               <React.Fragment key={card.id}>
@@ -196,6 +210,12 @@ export default function Column({ dashboardId }: ColumnProps) {
           </div>
         </div>
       ))}
+      <CreateCardModal
+        isOpen={isCreateCardModalOpen}
+        onClose={closeCreateCardModal}
+        dashboardId={dashboardId}
+        columnId={activeColumnId}
+      />
     </div>
   );
 }
