@@ -1,3 +1,5 @@
+import { ErrorMessage } from '@planit-types';
+
 declare module '@planit-types' {
   export type AuthInputs = {
     email: string;
@@ -16,16 +18,12 @@ declare module '@planit-types' {
     updatedAt: string;
   };
 
-  export type SignUpResult = UserInfoResponse | BadRequest;
+  export type SignUpResult = UserInfoResponse | ErrorMessage;
 
   export type SignUpProps = {
     email: string;
     password: string;
     nickname: string | undefined;
-  };
-
-  export type BadRequest = {
-    message: string;
   };
 
   export type LoginResponse = {
@@ -38,5 +36,5 @@ declare module '@planit-types' {
     password: string;
   };
 
-  export type LoginResult = LoginResponse | BadRequest;
+  export type LoginResult = LoginResponse | ErrorMessage;
 }
