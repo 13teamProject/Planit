@@ -49,7 +49,7 @@ export default function Column({ dashboardId }: ColumnProps) {
       }
     }
     fetchColumnsAndCards();
-  }, [dashboardId]);
+  }, [columns]);
 
   // 드래그 시작 시 현재 드래그 중인 카드의 ID 저장
   const handleDragStart = useCallback((cardId: number) => {

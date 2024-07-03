@@ -5,6 +5,7 @@ import BarButton from '@/components/commons/button/BarButton';
 import DashBoardHeader from '@/components/commons/layout/DashboardHeader';
 import Sidemenu from '@/components/commons/layout/Sidemenu';
 import Column from '@/components/dashboard/Column';
+import CreateColumnModal from '@/components/dashboard/modals/CreateColumnModal';
 import { GetDashboardIdResponse } from '@planit-types';
 import { useEffect, useState } from 'react';
 
@@ -18,6 +19,16 @@ export default function DashboardPage({
   const [dashboard, setDashboard] = useState<GetDashboardIdResponse | null>(
     null,
   );
+
+  const [isCreateColumnModalOpen, setIsCreateColumnModalOpen] = useState(false);
+
+  const openCreateColumnModal = () => {
+    setIsCreateColumnModalOpen(true);
+  };
+
+  const closeCreateColumnModal = () => {
+    setIsCreateColumnModalOpen(false);
+  };
 
   useEffect(() => {
     const fetchDashboardId = async () => {
@@ -45,10 +56,18 @@ export default function DashboardPage({
         <div className="w-full bg-gray-50 lg:flex lg:h-full lg:overflow-hidden">
           <Column key={dashboard.id} dashboardId={dashboard.id} />
           <div className="sm:w-full sm:p-12 md:w-full md:p-20 lg:w-500">
-            <BarButton text="새로운 컬럼 추가하기" />
+            <BarButton
+              onClick={openCreateColumnModal}
+              text="새로운 컬럼 추가하기"
+            />
           </div>
         </div>
       </div>
+      <CreateColumnModal
+        dashboardId={dashboard.id}
+        isOpen={isCreateColumnModalOpen}
+        onClose={closeCreateColumnModal}
+      />
     </div>
   );
 }
