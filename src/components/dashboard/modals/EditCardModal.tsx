@@ -105,6 +105,7 @@ export default function EditCardModal({
 
     onClose();
     reset();
+    toast.success('카드를 수정하였습니다.');
   };
 
   useEffect(() => {
@@ -140,7 +141,7 @@ export default function EditCardModal({
   return (
     <Modal isOpen={isOpen} onClose={() => {}}>
       {isLoaded && (
-        <form className="custom-scrollbar max-h-734 w-340 overflow-x-hidden overflow-y-scroll p-20 md:max-h-845 md:min-w-506 md:p-24">
+        <form className="custom-scrollbar max-h-900 w-340 overflow-y-auto p-20 md:min-w-506 md:p-24">
           <div className="mb-18 flex items-center justify-between md:mb-22">
             <h1 className="text-20 font-bold">할 일 수정</h1>
             <Image
@@ -281,7 +282,7 @@ export default function EditCardModal({
             defaultValue={currentCardData.imageUrl}
           />
 
-          <div className="mt-18 flex gap-12 md:mt-28 md:justify-end">
+          <div className="mt-18 flex justify-between gap-12 md:mt-28 md:justify-end">
             <Button
               onClick={() => {
                 onClose();
