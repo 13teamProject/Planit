@@ -1,6 +1,7 @@
 'use client';
 
 import { postComment } from '@/app/api/comments';
+import Spinner from '@/components/commons/spinner';
 import { useComment } from '@/hooks/useComment';
 import Image from 'next/image';
 import { ChangeEvent, FormEvent, useState } from 'react';
@@ -79,7 +80,13 @@ export default function CommentSection({
         </div>
       </form>
       <div className="custom-scrollbar h-60 min-h-58 w-full overflow-auto md:h-110">
-        {comments.length > 0 ? (
+        {loading && (
+          <div className="flex h-50 items-center justify-center md:h-100 md:w-420 lg:w-450">
+            <Spinner size={25} />
+          </div>
+        )}
+        {!loading &&
+          comments.length > 0 &&
           comments.map((comment) => (
             <Comment
               key={comment.id}
@@ -87,9 +94,9 @@ export default function CommentSection({
               handleDelete={handleDeleteComment}
               handleModify={handleModifyComment}
             />
-          ))
-        ) : (
-          <div className="lg:450 flex h-50 items-center justify-center md:h-100 md:w-420">
+          ))}
+        {!loading && comments.length === 0 && (
+          <div className="flex h-50 items-center justify-center md:h-100 md:w-420 lg:w-450">
             <div className="w-35 md:w-60">
               <Image
                 src="/image/empty-comment-logo.png"
@@ -105,7 +112,6 @@ export default function CommentSection({
           </div>
         )}
         <div ref={commentsEnd} className="h-10" />
-        {loading && <div>Loading...</div>}
       </div>
     </div>
   );
