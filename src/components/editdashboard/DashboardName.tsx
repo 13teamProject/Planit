@@ -20,8 +20,9 @@ export default function DashboardName({ params }: { params: { id: number } }) {
   const [dashboardData, setDashboardData] = useState<DashboardEditResponse>();
 
   const colorMapping: ColorMapping = {
-    '#7AC555': 'bg-green-dashboard',
     '#5534DA': 'bg-violet-dashboard',
+    '#D6173A': 'bg-red-dashboard',
+    '#7AC555': 'bg-green-dashboard',
     '#FFA500': 'bg-orange-dashboard',
     '#76A5EA': 'bg-blue-dashboard',
     '#E876EA': 'bg-pink-dashboard',
@@ -71,7 +72,7 @@ export default function DashboardName({ params }: { params: { id: number } }) {
     <div className="w-full max-w-620 rounded-md bg-white px-28 pb-28 pt-32">
       <form className="overflow-hidden" onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-34 items-center justify-between md:flex">
-          <div className="max-w-360">
+          <div className="w-full md:max-w-320">
             <h3 className="line-clamp-1 text-20 font-bold">
               {dashboardData?.title}
             </h3>
