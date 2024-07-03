@@ -7,11 +7,11 @@ import {
   EditCardRequest,
   GetCardResponse,
 } from '@planit-types';
-import Image from 'next/image';
 import React, { useCallback, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
 import Card from './Card';
+import ColumnSettingButton from './ColumnSettingButton';
 
 type ColumnProps = {
   dashboardId: number;
@@ -161,13 +161,12 @@ export default function Column({ dashboardId }: ColumnProps) {
                 {column.cards.length}
               </span>
             </div>
-            <Image
-              src="/icon/settings.svg"
-              alt="setting"
-              width={22}
-              height={22}
-              className="cursor-pointer transition duration-500 ease-in-out hover:rotate-45"
-            />
+            <div>
+              <ColumnSettingButton
+                dashboardId={dashboardId}
+                columnData={column}
+              />
+            </div>
           </div>
           <BarButton />
           <div className="sm:mb-12 md:mb-20 lg:flex-1 lg:overflow-y-auto">
