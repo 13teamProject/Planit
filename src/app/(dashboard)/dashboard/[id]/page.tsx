@@ -70,7 +70,7 @@ export default function DashboardPage({
             dashboardId={dashboard.id}
             onColumnUpdate={refreshData}
           />
-          <div className="sm:w-full sm:p-12 md:w-full md:p-20 lg:w-500">
+          <div className="sm:w-full sm:p-12 md:w-full md:p-20 lg:w-350">
             <BarButton
               onClick={openCreateColumnModal}
               text="새로운 컬럼 추가하기"

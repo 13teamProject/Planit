@@ -206,7 +206,7 @@ export default function Column({ dashboardId, onColumnUpdate }: ColumnProps) {
   if (loading) return <Spinner size={24} />;
 
   return (
-    <div className="w-full lg:flex lg:h-full lg:overflow-hidden">
+    <div className="w-full lg:flex lg:h-full lg:max-w-1200 lg:overflow-hidden lg:overflow-x-scroll lg:whitespace-nowrap">
       {columns.map((column) => (
         <div
           key={column.id}
@@ -214,10 +214,12 @@ export default function Column({ dashboardId, onColumnUpdate }: ColumnProps) {
           onDragOver={(e) => handleDragOver(e, column.id, column.cards.length)}
           onDrop={(e) => handleDrop(e, column.id, column.cards.length)}
         >
-          <div className="my-20 flex w-full items-center justify-between">
-            <div className="flex items-center justify-center gap-4">
+          <div className="my-20 flex w-full items-center justify-between lg:min-w-300">
+            <div className="flex items-center gap-4">
               <ColorCircle size="sm" color="bg-toss-blue" />
-              <h1 className="text-16 font-bold md:text-18">{column.title}</h1>
+              <h1 className="max-w-120 overflow-hidden text-ellipsis whitespace-nowrap text-16 font-bold md:text-18">
+                {column.title}
+              </h1>
               <span className="inline-flex h-20 w-20 items-center justify-center rounded-4 bg-gray-200 text-12 text-gray-400">
                 {column.cards.length}
               </span>
@@ -236,7 +238,7 @@ export default function Column({ dashboardId, onColumnUpdate }: ColumnProps) {
 
           <div className="no-scrollbar sm:mb-12 md:mb-20 lg:flex-1 lg:overflow-y-auto">
             {column.cards.length === 0 ? (
-              <div className="mt-20 flex h-100 w-full items-center justify-center">
+              <div className="mt-20 flex h-200 w-full items-center justify-center sm:h-150">
                 <div className="w-35 md:w-60">
                   <Image
                     src="/image/empty-comment-logo.png"
