@@ -1,3 +1,5 @@
+import { getProfileColor } from '@/utils/color';
+import classNames from 'classnames';
 import Image from 'next/image';
 
 type User = {
@@ -16,10 +18,16 @@ export default function ProfileCircle({ styles, data }: Props) {
     nickname: '',
   };
 
+  const classnames = classNames(
+    'relative flex transform cursor-pointer shadow-xl items-center justify-center rounded-full text-white ring-[1.5px] ring-white transition-transform duration-200 ease-in-out hover:scale-110',
+    styles,
+    {
+      [getProfileColor(nickname)]: profileImageUrl === null,
+    },
+  );
+
   return (
-    <div
-      className={`relative flex transform cursor-pointer items-center justify-center rounded-full text-white ring-2 ring-white transition-transform duration-200 ease-in-out hover:scale-110 ${styles}`}
-    >
+    <div className={classnames}>
       {profileImageUrl ? (
         <Image
           src={profileImageUrl}

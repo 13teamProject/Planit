@@ -1,14 +1,17 @@
-import { editCard } from '@/app/api/cards-goni';
-import { getCards } from '@/app/api/getCards';
-import { Column as ColumnType, getColumns } from '@/app/api/getColumns';
+import { editCard, getCards } from '@/app/api/cards';
+import { getColumns } from '@/app/api/columns';
 import BarButton from '@/components/commons/button/BarButton';
 import ColorCircle from '@/components/commons/circle/ColorCircle';
-import { EditCardRequest, GetCardResponse } from '@planit-types';
+import {
+  Column as ColumnType,
+  EditCardRequest,
+  GetCardResponse,
+} from '@planit-types';
 import Image from 'next/image';
 import React, { useCallback, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
-import Card from '../cards/Card';
+import Card from './Card';
 
 type ColumnProps = {
   dashboardId: number;
@@ -116,10 +119,10 @@ export default function Column({ dashboardId }: ColumnProps) {
 
         const formValue: EditCardRequest = {
           columnId: targetColumnId,
-          assigneeUserId: currentCard.assignee.id,
+          assigneeUserId: currentCard.assignee?.id,
           title: currentCard.title,
           description: currentCard.description,
-          dueDate: currentCard.dueDate,
+          dueDate: currentCard.dueDate ? currentCard.dueDate : undefined,
           tags: currentCard.tags,
         };
 

@@ -1,7 +1,7 @@
 'use client';
 
 import BarButton from '@/components/commons/button/BarButton';
-import TodoDetailModal from '@/components/dashboard/todo-detail-card/TodoDetailModal';
+import TodoDetailModal from '@/components/dashboard/modals/TodoDetailModal';
 import { useState } from 'react';
 
 export default function TodoDetailCard() {

@@ -2,7 +2,7 @@ import { Column } from '@planit-types';
 import Image from 'next/image';
 import { useState } from 'react';
 
-import EditColumnModal from './EditColumnModal';
+import EditColumnModal from './modals/EditColumnModal';
 
 type Props = {
   dashboardId: number;

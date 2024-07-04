@@ -1,6 +1,6 @@
 'use client';
 
-import { getColumns, postCreateColumn } from '@/app/api/columns';
+import { getColumnList, postCreateColumn } from '@/app/api/columns';
 import Button from '@/components/commons/button';
 import Input from '@/components/commons/input';
 import Modal from '@/components/commons/modal';
@@ -60,7 +60,7 @@ export default function CreateColumnModal({
     if (!isOpen) return;
 
     (async () => {
-      const columnRes = await getColumns(dashboardId);
+      const columnRes = await getColumnList(dashboardId);
 
       if ('message' in columnRes) {
         toast.error(columnRes.message);

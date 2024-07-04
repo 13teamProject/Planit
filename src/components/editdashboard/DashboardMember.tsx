@@ -111,7 +111,7 @@ export default function DashboardMember({
                 profileImageUrl: member.profileImageUrl,
                 nickname: member.nickname,
               }}
-              styles="size-34 md:size-38 bg-violet-dashboard"
+              styles="size-34 md:size-38"
             />
             <p className="md:text- 16 text-14 text-black-800">
               {member.nickname}

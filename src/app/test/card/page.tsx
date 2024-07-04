@@ -1,8 +1,8 @@
 'use client';
 
 import BarButton from '@/components/commons/button/BarButton';
-import CreateCardModal from '@/components/dashboard/cards/CreateCardModal';
-import EditCardModal from '@/components/dashboard/cards/EditCardModal';
+import CreateCardModal from '@/components/dashboard/modals/CreateCardModal';
+import EditCardModal from '@/components/dashboard/modals/EditCardModal';
 import { useState } from 'react';
 
 const CURRENT_CARD_DATA = {
@@ -11,7 +11,12 @@ const CURRENT_CARD_DATA = {
   description: 'dfdfdf',
   tags: [],
   dueDate: null,
-  assignee: null,
+  assignee: {
+    id: 4008,
+    nickname: 'gonidd',
+    profileImageUrl:
+      'https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/taskify/profile_image/6-13_4008_1719623361465.png',
+  },
   imageUrl: null,
   teamId: '6-13',
   dashboardId: 9768,
