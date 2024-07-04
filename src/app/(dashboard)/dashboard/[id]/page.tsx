@@ -42,9 +42,9 @@ export default function DashboardPage({
     fetchDashboardData();
   }, [fetchDashboardData]);
 
-  const refreshData = useCallback(() => {
+  const refreshData = () => {
     setRefreshTrigger((prev) => prev + 1);
-  }, []);
+  };
 
   const openCreateColumnModal = () => {
     setIsCreateColumnModalOpen(true);

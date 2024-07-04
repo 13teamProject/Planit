@@ -72,7 +72,6 @@ export default function Column({ dashboardId, onColumnUpdate }: ColumnProps) {
         }),
       );
       setColumns(columnsWithCards);
-      onColumnUpdate();
     } catch (err) {
       toast.error('데이터를 받아오는 중 오류 발생!');
     } finally {
@@ -82,7 +81,7 @@ export default function Column({ dashboardId, onColumnUpdate }: ColumnProps) {
 
   useEffect(() => {
     fetchColumnsAndCards();
-  }, [fetchColumnsAndCards, isCreateCardModalOpen, isEditColumnModalOpen]);
+  }, [isCreateCardModalOpen, isEditColumnModalOpen, onColumnUpdate]);
 
   const openCreateCardModal = (columnId: number) => {
     setActiveColumnId(columnId);
