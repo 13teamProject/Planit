@@ -2,7 +2,12 @@ import { getDashboards, postDashboards } from '@/app/api/dashboards';
 import ColorCircle from '@/components/commons/circle/ColorCircle';
 import { SCROLL_SIZE } from '@/constants/globalConstants';
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
-import { ColorMapping, Dashboard, FormValues, ModalState } from '@planit-types';
+import {
+  ColorMapping,
+  Dashboard,
+  DashboardFormValues,
+  ModalState,
+} from '@planit-types';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -69,9 +74,9 @@ export default function Sidemenu() {
     handleSubmit,
     watch,
     formState: { isValid, errors },
-  } = useForm<FormValues>({ mode: 'onChange' });
+  } = useForm<DashboardFormValues>({ mode: 'onChange' });
 
-  const onSubmit: SubmitHandler<FormValues> = async (data) => {
+  const onSubmit: SubmitHandler<DashboardFormValues> = async (data) => {
     try {
       const formData: Dashboard = {
         title: data.dashboardName,
@@ -97,7 +102,7 @@ export default function Sidemenu() {
 
   return (
     <>
-      <nav className="left-0 top-0 z-[999] h-screen w-67 overflow-y-auto border-1 border-r-gray-200 bg-white pl-20 pt-20 md:w-160 md:pl-18 lg:w-300 lg:pl-24">
+      <nav className="no-scrollbar fixed left-0 top-0 z-[999] h-screen w-67 overflow-y-auto border-1 border-r-gray-200 bg-white pl-20 pt-20 md:relative md:w-160 lg:w-300">
         <Link href="/" className="cursor-pointer">
           <Image
             className="md:hidden"
@@ -131,7 +136,7 @@ export default function Sidemenu() {
         </div>
 
         <div
-          className="overflow-y-auto"
+          className="no-scrollbar overflow-y-auto"
           style={{ maxHeight: 'calc(100vh - 150px)' }}
         >
           <ul className="mt-20 pr-10 lg:pr-12">
@@ -146,7 +151,7 @@ export default function Sidemenu() {
                 />
                 <Link
                   href={`/dashboard/${dashboard.id}`}
-                  className="mr-6 text-18 font-medium text-gray-400 hover:text-black sm:hidden md:block md:max-w-[10ch] md:overflow-hidden md:text-ellipsis md:whitespace-nowrap md:pl-16 md:text-16 lg:block lg:max-w-[20ch] lg:whitespace-normal lg:pl-16"
+                  className="mr-6 text-18 font-medium text-gray-400 hover:text-black sm:hidden md:block md:max-w-[10ch] md:overflow-hidden md:text-ellipsis md:whitespace-nowrap md:pl-16 md:text-16 lg:block lg:max-w-none lg:whitespace-normal lg:pl-16"
                 >
                   {dashboard.title}
                 </Link>

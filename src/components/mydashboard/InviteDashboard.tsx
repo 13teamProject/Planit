@@ -74,7 +74,7 @@ export default function InviteDashboard() {
   return (
     <>
       {isInvited && (
-        <div className="mb-120 ml-40 mt-24 h-830 w-260 overflow-y-scroll rounded-8 bg-white pl-24 pr-24 md:mt-40 md:h-600 md:w-504 md:pl-28 md:pr-28 lg:w-1022">
+        <div className="no-scrollbar mb-120 ml-40 mt-24 h-830 w-260 overflow-y-auto rounded-8 bg-white pl-24 pr-24 md:mt-40 md:h-600 md:w-504 md:pl-28 md:pr-28 lg:w-1022">
           <p className="pt-24 text-20 font-bold text-black-800 md:pt-32 md:text-24">
             초대받은 대시보드
           </p>

@@ -13,7 +13,7 @@ const PX_10 = createPxMap(10);
 const PX_100 = createPxMap(100);
 const PX_2000 = createPxMap(2000);
 
-const RANDOM_TAG_COLORS = [
+const TAG_COLORS = [
   'bg-zinc-900',
   'text-gray-50',
   'bg-gray-200',
@@ -46,6 +46,19 @@ const RANDOM_TAG_COLORS = [
   'text-violet-600',
 ];
 
+const PROFILE_COLORS = [
+  'bg-[#ffc85a]',
+  'bg-[#fdd446]',
+  'bg-[#9dd7ed]',
+  'bg-[#c4b1a2]',
+  'bg-[#f4d7da]',
+  'bg-[#a3c4a2]',
+  'bg-teal-400',
+  'bg-violet-400',
+  'bg-blue-400',
+  'bg-red-400',
+];
+
 const config: Config = {
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
@@ -53,7 +66,7 @@ const config: Config = {
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
     './node_modules/react-tailwindcss-datepicker/dist/index.esm.js',
   ],
-  safelist: RANDOM_TAG_COLORS,
+  safelist: [...TAG_COLORS, ...PROFILE_COLORS],
   theme: {
     extend: {
       fontFamily: {
@@ -110,6 +123,13 @@ const config: Config = {
         md: { min: '744px' },
         lg: { min: '1200px' },
         landing: { min: '1200px', max: '1670px' },
+      },
+      noScrollbar: {
+        '&::-webkit-scrollbar': {
+          display: 'none',
+        },
+        '-ms-overflow-style': 'none', // IE and Edge
+        'scrollbar-width': 'none', // Firefox
       },
     },
   },

@@ -1,7 +1,7 @@
-import DashboardDeleteButton from '@/components/dashboard/edits/DashboardDeleteButton';
-import DashboardInvitation from '@/components/dashboard/edits/DashboardInvitation';
-import DashboardMember from '@/components/dashboard/edits/DashboardMember';
-import DashboardName from '@/components/dashboard/edits/DashboardName';
+import DashboardDeleteButton from '@/components/editdashboard/DashboardDeleteButton';
+import DashboardInvitation from '@/components/editdashboard/DashboardInvitation';
+import DashboardMember from '@/components/editdashboard/DashboardMember';
+import DashboardName from '@/components/editdashboard/DashboardName';
 
 export default function Edit({ params }: { params: { id: number } }) {
   return (

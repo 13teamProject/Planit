@@ -33,3 +33,20 @@ const TAG_COLORS = [
 export function getTagColor(str: string) {
   return stringToColor(str, TAG_COLORS);
 }
+
+const PROFILE_COLORS = [
+  'bg-[#ffc85a]',
+  'bg-[#fdd446]',
+  'bg-[#9dd7ed]',
+  'bg-[#c4b1a2]',
+  'bg-[#f4d7da]',
+  'bg-[#a3c4a2]',
+  'bg-teal-400',
+  'bg-violet-400',
+  'bg-blue-400',
+  'bg-red-400',
+];
+
+export function getProfileColor(str: string) {
+  return stringToColor(str, PROFILE_COLORS);
+}

@@ -13,7 +13,7 @@ export default function ToastProvider({ children }: Props) {
   return (
     <>
       {children}
-      <ToastContainer autoClose={1000} hideProgressBar newestOnTop />
+      <ToastContainer autoClose={2500} hideProgressBar newestOnTop />
     </>
   );
 }
