@@ -174,17 +174,15 @@ export default function DashBoardHeader({
                 {dashboardName}
               </p>
             )}
-            {isClient &&
-              dashboards?.createdByMe &&
-              !window.location.pathname.startsWith('/edit') && (
-                <Image
-                  className="sm:hidden lg:block"
-                  src="/icon/crown.svg"
-                  width={20}
-                  height={20}
-                  alt="내가 만든 대시보드 표시"
-                />
-              )}
+            {isClient && dashboards?.createdByMe && (
+              <Image
+                className="sm:hidden lg:block"
+                src="/icon/crown.svg"
+                width={20}
+                height={20}
+                alt="내가 만든 대시보드 표시"
+              />
+            )}
           </div>
         )}
 
