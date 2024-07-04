@@ -32,7 +32,7 @@ export default function DashBoardHeader({
   params,
 }: {
   isDashboard: boolean;
-  params: { id: number };
+  params?: { id: number };
 }) {
   const router = useRouter();
   const { userInfo } = useAuthStore();
@@ -43,7 +43,7 @@ export default function DashBoardHeader({
   const [maxVisible, setMaxVisible] = useState(4);
   const [isExpanded, setIsExpanded] = useState(false);
   const [dashboards, setDashboards] = useState<Dashboard>();
-  const [selectedDashboardId] = useState<number>(params.id);
+  const [selectedDashboardId] = useState<number>(params ? params.id : 0);
   const [members, setMembers] = useState<Member[]>([]);
   const [isClient, setIsClient] = useState(false);
   const { dashboardName, setData } = useDashboardNameChange();
@@ -95,7 +95,6 @@ export default function DashBoardHeader({
   // 멤버 목록 조회
   const fetchMembers = async () => {
     if (!selectedDashboardId) return;
-
     const response = await getMembers({
       dashboardId: selectedDashboardId,
     });
@@ -233,7 +232,7 @@ export default function DashBoardHeader({
             <>
               <div className="flex font-semibold">
                 {visibleProfiles.map((profile) => (
-                  <li key={profile.id} className="-mr-1">
+                  <li key={profile.id} className="-mr-6">
                     <ProfileCircle
                       data={{
                         nickname: profile.nickname[0],

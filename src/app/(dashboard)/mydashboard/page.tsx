@@ -6,17 +6,13 @@ import InviteDashboard from '@/components/mydashboard/InviteDashboard';
 import NewDashboard from '@/components/mydashboard/NewDashboard';
 import { Suspense } from 'react';
 
-export default function MyDashBoardPage({
-  params,
-}: {
-  params: { id: number };
-}) {
+export default function MyDashBoardPage() {
   return (
     <div className="flex h-screen bg-gray-50">
       <Sidemenu />
       <div className="flex flex-1 flex-col">
         <Suspense>
-          <DashBoardHeader isDashboard={false} params={params} />
+          <DashBoardHeader isDashboard={false} />
         </Suspense>
         <div className="no-scrollbar flex-1 overflow-auto">
           <NewDashboard />
