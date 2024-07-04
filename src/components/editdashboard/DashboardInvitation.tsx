@@ -34,7 +34,7 @@ export default function DashboardInvitation({
     register,
     reset,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm<EmailRequest>({
     resolver,
     mode: 'onChange',
@@ -199,6 +199,7 @@ export default function DashboardInvitation({
                 <Button
                   type="submit"
                   text="초대"
+                  disabled={!isValid}
                   styles="px-30 py-8 text-14  basis-1/2 md:basis-auto "
                 />
               </div>
