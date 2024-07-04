@@ -50,9 +50,9 @@ export default function DashboardPage({
     setIsCreateColumnModalOpen(true);
   };
 
-  const closeCreateColumnModal = async () => {
+  const closeCreateColumnModal = () => {
     setIsCreateColumnModalOpen(false);
-    await fetchDashboardData(); // 모달을 닫을 때 데이터를 다시 가져옵니다.
+    refreshData(); // 데이터 새로고침 트리거
   };
 
   if (!dashboard) {
