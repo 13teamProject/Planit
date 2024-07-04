@@ -1,7 +1,6 @@
 'use client';
 
 import {
-  deleteInvitation,
   getDashboardInvitation,
   getDashboards,
   postInvitation,
@@ -88,14 +87,6 @@ export default function DashBoardHeader({
     setModalState({ ...modalState, isOpen: true, isContent: true });
   };
 
-  useEffect(() => {
-    console.log('Modal State:', modalState);
-  }, [modalState]);
-
-  useEffect(() => {
-    console.log('Dashboard Details:', dashboardDetails);
-  }, [dashboardDetails]);
-
   // 초대 내역 조회
   const fetchDashboardInvitation = async (page: number) => {
     if (!selectedDashboardId) return;
@@ -104,7 +95,6 @@ export default function DashBoardHeader({
       page,
       size: PAGE_SIZE,
     });
-    console.log(fetchedDashboardInvitation);
     if ('message' in fetchedDashboardInvitation) {
       setModalState({
         isOpen: true,
@@ -262,7 +252,7 @@ export default function DashBoardHeader({
           {isDashboard && (
             <div className="flex font-semibold">
               {visibleProfiles.map((profile) => (
-                <li key={profile.id}>
+                <li key={profile.id} className="-mr-1">
                   <ProfileCircle
                     data={{
                       nickname: profile.nickname[0],
