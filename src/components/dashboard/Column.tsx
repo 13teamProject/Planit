@@ -10,6 +10,7 @@ import {
 import React, { useCallback, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
+import Spinner from '../commons/spinner';
 import Card from './Card';
 import ColumnSettingButton from './ColumnSettingButton';
 import CreateCardModal from './modals/CreateCardModal';
@@ -201,7 +202,7 @@ export default function Column({ dashboardId, onColumnUpdate }: ColumnProps) {
     [columns, handleDragEnd],
   );
 
-  if (loading) return <div>로딩중...</div>;
+  if (loading) return <Spinner size={24} />;
 
   return (
     <div className="w-full lg:flex lg:h-full lg:overflow-hidden">

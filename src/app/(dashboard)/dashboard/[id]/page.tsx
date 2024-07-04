@@ -5,6 +5,7 @@ import { getDashboardId } from '@/app/api/dashboards';
 import BarButton from '@/components/commons/button/BarButton';
 import DashBoardHeader from '@/components/commons/layout/DashboardHeader';
 import Sidemenu from '@/components/commons/layout/Sidemenu';
+import Spinner from '@/components/commons/spinner';
 import Column from '@/components/dashboard/Column';
 import CreateColumnModal from '@/components/dashboard/modals/CreateColumnModal';
 import { GetDashboardIdResponse } from '@planit-types';
@@ -55,7 +56,7 @@ export default function DashboardPage({
   };
 
   if (!dashboard) {
-    return <div>로딩중...</div>;
+    return <Spinner size={24} />;
   }
 
   return (
