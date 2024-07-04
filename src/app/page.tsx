@@ -2,20 +2,10 @@
 
 import Footer from '@/components/home/Footer';
 import Header from '@/components/home/Header';
-import { getCookie } from '@/utils/cookies';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
 
 export default function Home() {
-  const router = useRouter();
-  useEffect(() => {
-    const isLogedIn = getCookie('accessToken');
-    if (isLogedIn) {
-      router.push('/mydashboard');
-    }
-  });
   return (
     <>
       <div className="break-keep">
