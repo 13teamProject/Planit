@@ -14,12 +14,7 @@ import Textarea from '@/components/commons/input/Textarea';
 import Modal from '@/components/commons/modal';
 import Tag from '@/components/commons/tag';
 import { formatDate } from '@/utils/date';
-import {
-  Column,
-  EditCardRequest,
-  Member,
-  TodoDetailsCardResponse,
-} from '@planit-types';
+import { CardResponse, Column, EditCardRequest, Member } from '@planit-types';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -30,7 +25,7 @@ type Props = {
   onClose: () => void;
   dashboardId: number;
   columnId: number;
-  currentCardData: TodoDetailsCardResponse;
+  currentCardData: CardResponse;
 };
 
 export type EditCardInputs = {

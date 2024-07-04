@@ -8,16 +8,18 @@ import {
 import { getMembers } from '@/app/api/members';
 import { getUsers } from '@/app/api/users';
 import Button from '@/components/commons/button';
+import DropDownSelectBox from '@/components/commons/dropdown';
 import Input from '@/components/commons/input';
 import Modal from '@/components/commons/modal';
 import { PAGE_SIZE, SCROLL_SIZE } from '@/constants/globalConstants';
+import { handleLogout } from '@/service/authService';
 import { emailValidationSchema } from '@/utils/validation/schema';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Dashboard, EmailRequest, Invitation, Member } from '@planit-types';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import ProfileCircle from '../circle/ProfileCircle';
@@ -65,6 +67,9 @@ export default function DashBoardHeader({
   } = useForm<EmailRequest>({ resolver, mode: 'onChange' });
   const [isClient, setIsClient] = useState(false);
   const { id } = useParams();
+  const [selectBoxIsOpen, setSelectBoxIsOpen] = useState(false);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const router = useRouter();
 
   useEffect(() => {
     setIsClient(true);
@@ -194,6 +199,21 @@ export default function DashBoardHeader({
   const visibleProfiles = members.slice(0, maxVisible);
   const extraCount = members.length - maxVisible;
 
+  const logoutUser = () => {
+    handleLogout();
+    router.push('/');
+  };
+
+  const dropdownList = [
+    {
+      label: '마이페이지',
+      onClick: () => {
+        router.push('/mypage');
+      },
+    },
+    { label: '로그아웃', onClick: logoutUser },
+  ];
+
   return (
     <>
       <nav className="right-0 top-0 z-[998] flex h-70 w-full items-center justify-end border-1 border-l-0 border-b-gray-200 bg-white py-25 pr-12 md:pr-40 lg:justify-between lg:pe-80 lg:ps-40">
@@ -293,22 +313,39 @@ export default function DashBoardHeader({
           {isDashboard && (
             <div className="mx-12 h-38 border-l border-gray-200 md:mx-24 lg:mx-32" />
           )}
-          <li className="font-semibold">
-            <ProfileCircle
-              data={{
-                nickname: user?.nickname[0] || '',
-                profileImageUrl: user?.profileImageUrl || null,
-              }}
-              styles="size-34 md:size-38 bg-violet-dashboard"
-            />
-          </li>
-          <li className="pl-12">
-            {user && (
-              <p className="text-16 font-medium sm:hidden md:block lg:block">
-                {user.nickname}
-              </p>
+          <button
+            ref={buttonRef}
+            type="button"
+            className="flex cursor-pointer items-center"
+            onClick={() => setSelectBoxIsOpen((prev) => !prev)}
+          >
+            <li className="font-semibold">
+              <ProfileCircle
+                data={{
+                  nickname: user?.nickname[0] || '',
+                  profileImageUrl: user?.profileImageUrl || null,
+                }}
+                styles="size-34 md:size-38 bg-violet-dashboard"
+              />
+            </li>
+            <li className="pl-12">
+              {user && (
+                <p className="text-16 font-medium sm:hidden md:block lg:block">
+                  {user.nickname}
+                </p>
+              )}
+            </li>
+            {selectBoxIsOpen && (
+              <span className="absolute right-20 top-60 md:right-36 md:top-63 lg:right-70">
+                <DropDownSelectBox
+                  items={dropdownList}
+                  setSelectBoxIsOpen={setSelectBoxIsOpen}
+                  exceptions={[buttonRef]}
+                  size="lg"
+                />
+              </span>
             )}
-          </li>
+          </button>
         </ul>
       </nav>
       <Modal isOpen={modalState.isOpen} onClose={handleClose}>
