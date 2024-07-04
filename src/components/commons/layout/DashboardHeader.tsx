@@ -16,6 +16,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Dashboard, EmailRequest, Invitation, Member } from '@planit-types';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
@@ -63,6 +64,7 @@ export default function DashBoardHeader({
     formState: { errors },
   } = useForm<EmailRequest>({ resolver, mode: 'onChange' });
   const [isClient, setIsClient] = useState(false);
+  const { id } = useParams();
 
   useEffect(() => {
     setIsClient(true);
@@ -71,9 +73,12 @@ export default function DashBoardHeader({
   const fetchDashboards = async () => {
     const response = await getDashboards('pagination', 1, SCROLL_SIZE);
     setDashboards(response.dashboards);
-    if (response.dashboards.length > 0) {
-      setSelectedDashboardId(response.dashboards[0].id);
-      setDashboardDetails(response.dashboards[0]);
+    const currentDashboard = response.dashboards.find(
+      (dashboard) => dashboard.id === Number(id),
+    );
+    if (currentDashboard) {
+      setSelectedDashboardId(currentDashboard.id);
+      setDashboardDetails(currentDashboard);
     }
   };
 
@@ -134,8 +139,10 @@ export default function DashBoardHeader({
   };
 
   useEffect(() => {
-    fetchDashboards();
-  }, []);
+    if (id) {
+      fetchDashboards();
+    }
+  }, [id]);
 
   useEffect(() => {
     fetchDashboardInvitation(currentPage);
