@@ -7,6 +7,7 @@ import {
   EditCardRequest,
   GetCardResponse,
 } from '@planit-types';
+import Image from 'next/image';
 import React, { useCallback, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
@@ -233,26 +234,43 @@ export default function Column({ dashboardId, onColumnUpdate }: ColumnProps) {
           </div>
           <BarButton onClick={() => openCreateCardModal(column.id)} />
 
-          <div className="sm:mb-12 md:mb-20 lg:flex-1 lg:overflow-y-auto">
-            {column.cards.map((card, index) => (
-              <div key={card.id}>
-                {dropTarget &&
-                  dropTarget.columnId === column.id &&
-                  dropTarget.index === index && (
-                    <div className="h-2 bg-blue-500 transition-all duration-200" />
-                  )}
-                <Card
-                  card={card}
-                  columnId={column.id}
-                  columnTitle={column.title}
-                  onDragStart={handleDragStart}
-                  onDragOver={(e) => handleDragOver(e, column.id, index)}
-                  onDrop={(e) => handleDrop(e, column.id, index)}
-                  isDragging={draggingCard === card.id}
-                  onClick={() => openTodoDetailCardModal(card, column.title)}
-                />
+          <div className="no-scrollbar sm:mb-12 md:mb-20 lg:flex-1 lg:overflow-y-auto">
+            {column.cards.length === 0 ? (
+              <div className="mt-20 flex h-100 w-full items-center justify-center">
+                <div className="w-35 md:w-60">
+                  <Image
+                    src="/image/empty-comment-logo.png"
+                    width={45}
+                    height={45}
+                    layout="responsive"
+                    alt="댓글 비었을 때 로고"
+                  />
+                </div>
+                <p className="pl-10 text-14 text-toss-blue-light md:text-16">
+                  카드가 없습니다!
+                </p>
               </div>
-            ))}
+            ) : (
+              column.cards.map((card, index) => (
+                <div key={card.id}>
+                  {dropTarget &&
+                    dropTarget.columnId === column.id &&
+                    dropTarget.index === index && (
+                      <div className="h-2 bg-blue-500 transition-all duration-200" />
+                    )}
+                  <Card
+                    card={card}
+                    columnId={column.id}
+                    columnTitle={column.title}
+                    onDragStart={handleDragStart}
+                    onDragOver={(e) => handleDragOver(e, column.id, index)}
+                    onDrop={(e) => handleDrop(e, column.id, index)}
+                    isDragging={draggingCard === card.id}
+                    onClick={() => openTodoDetailCardModal(card, column.title)}
+                  />
+                </div>
+              ))
+            )}
             {dropTarget &&
               dropTarget.columnId === column.id &&
               dropTarget.index === column.cards.length && (
