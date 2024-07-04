@@ -10,6 +10,7 @@ type Props = {
   openEditModal: () => void;
   setSelectBoxIsOpen: Dispatch<SetStateAction<boolean>>;
   todoModalOnClose: () => void;
+  onCardDelete: () => void;
 };
 
 export default function DropDownSelectBox({
@@ -17,6 +18,7 @@ export default function DropDownSelectBox({
   openEditModal,
   setSelectBoxIsOpen,
   todoModalOnClose,
+  onCardDelete,
 }: Props) {
   const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
   const dropdownRef = useOutsideClick<HTMLUListElement>(() => {
@@ -40,6 +42,7 @@ export default function DropDownSelectBox({
     }
     toast.success('성공적으로 삭제되었습니다.');
     todoModalOnClose();
+    onCardDelete();
   };
 
   return (

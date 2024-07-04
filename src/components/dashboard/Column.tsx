@@ -17,16 +17,19 @@ import TodoDetailModal from './modals/TodoDetailModal';
 
 type ColumnProps = {
   dashboardId: number;
+  onColumnUpdate: () => void;
 };
 
 type ColumnWithCards = ColumnType & {
   cards: GetCardResponse[];
 };
 
-export default function Column({ dashboardId }: ColumnProps) {
+export default function Column({ dashboardId, onColumnUpdate }: ColumnProps) {
   const [isCreateCardModalOpen, setIsCreateCardModalOpen] = useState(false);
+  const [isEditColumnModalOpen, setIsEditColumnModalOpen] = useState<{
+    [key: number]: boolean;
+  }>({});
   const [columns, setColumns] = useState<ColumnWithCards[]>([]);
-  const [columnData, setColumnData] = useState<ColumnType[]>();
   const [activeColumnId, setActiveColumnId] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
   const [draggingCard, setDraggingCard] = useState<number | null>(null);
@@ -58,14 +61,16 @@ export default function Column({ dashboardId }: ColumnProps) {
   const fetchColumnsAndCards = useCallback(async () => {
     try {
       const columnsData = await getColumns({ dashboardId });
-      setColumnData(columnsData);
+
       const columnsWithCards = await Promise.all(
         columnsData.map(async (column) => {
           const cards = await getCards({ columnId: column.id });
+
           return { ...column, cards };
         }),
       );
       setColumns(columnsWithCards);
+      onColumnUpdate();
     } catch (err) {
       toast.error('데이터를 받아오는 중 오류 발생!');
     } finally {
@@ -75,7 +80,7 @@ export default function Column({ dashboardId }: ColumnProps) {
 
   useEffect(() => {
     fetchColumnsAndCards();
-  }, [fetchColumnsAndCards]);
+  }, [fetchColumnsAndCards, isCreateCardModalOpen, isEditColumnModalOpen]);
 
   const openCreateCardModal = (columnId: number) => {
     setActiveColumnId(columnId);
@@ -87,6 +92,24 @@ export default function Column({ dashboardId }: ColumnProps) {
     setIsCreateCardModalOpen(false);
     fetchColumnsAndCards();
   };
+
+  const handleEditColumnModal = useCallback(
+    (columnId: number, open: boolean) => {
+      setIsEditColumnModalOpen((prevState) => ({
+        ...prevState,
+        [columnId]: open,
+      }));
+    },
+    [],
+  );
+
+  const handleColumnDelete = useCallback(() => {
+    fetchColumnsAndCards(); // 컬럼 삭제 후 데이터 새로고침
+  }, [fetchColumnsAndCards]);
+
+  const handleCardDelete = useCallback(() => {
+    fetchColumnsAndCards(); // 카드 삭제 후 데이터 새로고침
+  }, [fetchColumnsAndCards]);
 
   // 드래그 시작 시 현재 드래그 중인 카드의 ID 저장
   const handleDragStart = useCallback((cardId: number) => {
@@ -199,8 +222,11 @@ export default function Column({ dashboardId }: ColumnProps) {
             </div>
             <div>
               <ColumnSettingButton
+                isOpen={isEditColumnModalOpen[column.id]}
+                handleOpen={(open) => handleEditColumnModal(column.id, open)}
                 dashboardId={dashboardId}
                 columnData={column}
+                onColumnDelete={handleColumnDelete}
               />
             </div>
           </div>
@@ -240,6 +266,7 @@ export default function Column({ dashboardId }: ColumnProps) {
           todoModalOnClose={closeTodoDetailCardModal}
           cardId={selectedCard.id}
           columnTitle={selectedColumnTitle}
+          onCardDelete={handleCardDelete}
         />
       )}
       <CreateCardModal

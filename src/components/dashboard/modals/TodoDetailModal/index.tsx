@@ -16,12 +16,14 @@ type Props = {
   todoModalIsOpen: boolean;
   cardId: number;
   columnTitle: string;
+  onCardDelete: () => void;
 };
 export default function TodoDetailModal({
   todoModalOnClose,
   todoModalIsOpen,
   cardId,
   columnTitle,
+  onCardDelete,
 }: Props) {
   const [cardDetails, setCardDetails] =
     useState<TodoDetailsCardResponse | null>();
@@ -80,6 +82,7 @@ export default function TodoDetailModal({
                     id={id}
                     setSelectBoxIsOpen={setSelectBoxIsOpen}
                     todoModalOnClose={todoModalOnClose}
+                    onCardDelete={onCardDelete}
                   />
                 </span>
               )}
