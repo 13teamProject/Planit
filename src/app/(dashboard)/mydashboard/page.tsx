@@ -14,7 +14,7 @@ export default function MyDashBoardPage() {
         <Suspense>
           <DashBoardHeader isDashboard={false} />
         </Suspense>
-        <div className="flex-1 overflow-auto">
+        <div className="no-scrollbar flex-1 overflow-auto">
           <NewDashboard />
           <InviteDashboard />
         </div>

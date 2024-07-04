@@ -11,7 +11,7 @@ import {
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import Button from '../button';
@@ -73,7 +73,7 @@ export default function Sidemenu() {
     register,
     handleSubmit,
     watch,
-    formState: { isValid },
+    formState: { isValid, errors },
   } = useForm<DashboardFormValues>({ mode: 'onChange' });
 
   const onSubmit: SubmitHandler<DashboardFormValues> = async (data) => {
@@ -102,7 +102,7 @@ export default function Sidemenu() {
 
   return (
     <>
-      <nav className="left-0 top-0 z-[999] h-screen w-67 overflow-y-auto border-1 border-r-gray-200 bg-white pl-20 pt-20 md:w-160 md:pl-18 lg:w-300 lg:pl-24">
+      <nav className="no-scrollbar left-0 top-0 z-[999] h-screen w-67 overflow-y-auto border-1 border-r-gray-200 bg-white pl-20 pt-20 md:relative md:w-160 lg:w-300">
         <Link href="/" className="cursor-pointer">
           <Image
             className="md:hidden"
@@ -136,7 +136,7 @@ export default function Sidemenu() {
         </div>
 
         <div
-          className="overflow-y-auto"
+          className="no-scrollbar overflow-y-auto"
           style={{ maxHeight: 'calc(100vh - 150px)' }}
         >
           <ul className="mt-20 pr-10 lg:pr-12">
@@ -151,10 +151,19 @@ export default function Sidemenu() {
                 />
                 <Link
                   href={`/dashboard/${dashboard.id}`}
-                  className="text-18 font-medium text-gray-400 hover:text-black sm:hidden md:block md:pl-16 md:text-16 lg:block lg:pl-16"
+                  className="mr-6 text-18 font-medium text-gray-400 hover:text-black sm:hidden md:block md:max-w-[10ch] md:overflow-hidden md:text-ellipsis md:whitespace-nowrap md:pl-16 md:text-16 lg:block lg:max-w-none lg:whitespace-normal lg:pl-16"
                 >
                   {dashboard.title}
                 </Link>
+                {dashboard?.createdByMe && (
+                  <Image
+                    className="mb-3 sm:hidden lg:block"
+                    src="/icon/crown.svg"
+                    width={15}
+                    height={15}
+                    alt="내가 만든 대시보드 표시"
+                  />
+                )}
               </li>
             ))}
             <div ref={endRef} />
@@ -162,18 +171,31 @@ export default function Sidemenu() {
         </div>
       </nav>
       <Modal isOpen={modalState.isOpen} onClose={handleCloseModal}>
-        <div className="h-300 w-327 px-20 py-28 pt-32 md:h-334 md:w-540 md:px-28 md:pb-28">
-          <p className="black-800 mb-24 text-24 font-bold lg:mb-32">
+        <div className="max-h-90vh md:max-h-95vh overflow-y-auto px-20 py-28 pt-32 md:w-540 md:px-28 md:pb-28">
+          <p className="black-800 mb-24 text-24 font-bold lg:mb-28">
             새로운 대시보드
           </p>
           <form onSubmit={handleSubmit(onSubmit)}>
             <label className="mb-10 text-18 font-medium">
               대시보드 이름
               <input
-                {...register('dashboardName', { required: 'true' })}
+                {...register('dashboardName', {
+                  required: '대시보드 이름은 필수 항목입니다.',
+                  maxLength: {
+                    value: 10,
+                    message: '대시보드 이름은 공백 포함 10자 이내여야 합니다.',
+                  },
+                })}
                 type="text"
-                className="block h-42 w-full rounded-md border pl-16 pr-40 text-14 outline-none md:h-48 md:text-16"
+                className={`mt-12 block h-42 w-full rounded-md border pl-16 pr-40 text-14 outline-none md:h-48 md:text-16 ${
+                  errors.dashboardName ? 'border-red-dashboard' : ''
+                }`}
               />
+              {errors.dashboardName && (
+                <span className="pt-8 text-14 text-red-500">
+                  {errors.dashboardName.message}
+                </span>
+              )}
             </label>
             <div className="mt-24 flex space-x-10 md:mt-28">
               {colors.map((color) => (

@@ -1,10 +1,9 @@
 'use client';
 
-import { getDashboards, postDashboards } from '@/app/api/dashboards';
 import { getMyInivations, respondToInvitation } from '@/app/api/inivations';
 import { SCROLL_SIZE } from '@/constants/globalConstants';
 import useDeviceState from '@/hooks/useDeviceState';
-import { DashboardFormData, Invitation } from '@planit-types';
+import { Invitation } from '@planit-types';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
@@ -47,21 +46,6 @@ export default function InviteDashboard() {
     );
   }, [search, invitations]);
 
-  const fetchDashboardColor = async (dashboardId: number) => {
-    try {
-      const response = await getDashboards(
-        'pagination',
-        1,
-        Number.MAX_SAFE_INTEGER,
-      );
-      const dashboard = response.dashboards.find((d) => d.id === dashboardId);
-      return dashboard ? dashboard.color : '#FFFFFF';
-    } catch (error) {
-      console.error('Failed to get dashboard color:', error);
-      return '#FFFFFF';
-    }
-  };
-
   const handleInvitationResponse = async (
     invitationId: number,
     accept: boolean,
@@ -77,25 +61,20 @@ export default function InviteDashboard() {
       console.error(response.message);
     } else if (accept) {
       try {
-        const color = await fetchDashboardColor(invitation.dashboard.id);
-        const formData: DashboardFormData = {
-          title: invitation.dashboard.title,
-          color,
-        };
-        const createResponse = await postDashboards(formData);
-        fetchDashboardInvitations(SCROLL_SIZE);
+        await fetchDashboardInvitations(SCROLL_SIZE);
         window.location.reload(); // 페이지 새로고침
       } catch (error) {
         console.error('Failed to create dashboard:', error);
       }
     } else {
-      fetchDashboardInvitations(SCROLL_SIZE);
+      await fetchDashboardInvitations(SCROLL_SIZE);
+      window.location.reload(); // 페이지 새로고침
     }
   };
   return (
     <>
       {isInvited && (
-        <div className="mb-120 ml-40 mt-24 h-830 w-260 overflow-y-scroll rounded-8 bg-white pl-24 pr-24 md:mt-40 md:h-600 md:w-504 md:pl-28 md:pr-28 lg:w-1022">
+        <div className="no-scrollbar mb-120 ml-40 mt-24 h-830 w-260 overflow-y-auto rounded-8 bg-white pl-24 pr-24 md:mt-40 md:h-600 md:w-504 md:pl-28 md:pr-28 lg:w-1022">
           <p className="pt-24 text-20 font-bold text-black-800 md:pt-32 md:text-24">
             초대받은 대시보드
           </p>

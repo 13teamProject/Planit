@@ -1,31 +1,32 @@
-import { RefObject, useEffect, useRef } from 'react';
+import { RefObject, useEffect } from 'react';
 
-type Handler = () => void;
-
-function useOutsideClick<T extends HTMLElement = HTMLElement>(
-  handler: Handler,
-): RefObject<T> {
-  const ref = useRef<T>(null);
-
+const useOutsideClick = <T extends HTMLElement>(
+  ref: RefObject<T>,
+  handler: (event: MouseEvent) => void,
+  exceptions: RefObject<HTMLElement>[] = [],
+) => {
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        ref.current &&
-        !ref.current.contains(event.target as Node) &&
-        !(event.target as HTMLElement).closest('.modal-content')
-      ) {
-        handler();
+    const listener = (event: MouseEvent) => {
+      if (!ref.current || ref.current.contains(event.target as Node)) {
+        return;
       }
+
+      if (
+        exceptions.some((exception) =>
+          exception.current?.contains(event.target as Node),
+        )
+      ) {
+        return;
+      }
+
+      handler(event);
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-
+    document.addEventListener('mousedown', listener);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('mousedown', listener);
     };
-  }, [handler]);
-
-  return ref;
-}
+  }, [ref, handler, exceptions]);
+};
 
 export default useOutsideClick;

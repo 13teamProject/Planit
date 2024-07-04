@@ -1,6 +1,7 @@
 import { getCookie } from '@/utils/cookies';
 import {
   CardImageResponse,
+  CardResponse,
   CreateCardRequest,
   CreateCardResponse,
   EditCardRequest,
@@ -8,7 +9,6 @@ import {
   ErrorMessage,
   GetCardResponse,
   SuccessMessage,
-  TodoDetailsCardResponse,
 } from '@planit-types';
 
 import { API_URL } from './baseUrl';
@@ -112,40 +112,10 @@ export async function editCard({
   }
 }
 
-type GetCardIdParams = {
-  cardId: number;
-};
-
-// 카드 상세 조회
-export async function getCardId({
-  cardId,
-}: GetCardIdParams): Promise<GetCardResponse> {
-  try {
-    const token = getCookie('accessToken');
-
-    const url = `${API_URL}/cards/${cardId}`;
-
-    const response = await fetch(url, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error: ${response.status}`);
-    }
-
-    const body = await response.json();
-
-    return body;
-  } catch (err) {
-    throw new Error('데이터를 받는 중에 오류가 발생했습니다.');
-  }
-}
-
-// FIXME: 중복
 // 할 일 카드 정보 가져오기
 export async function getTodoCardDetails(
-  boardId: number,
-): Promise<TodoDetailsCardResponse | ErrorMessage> {
+  cardId: number,
+): Promise<CardResponse | ErrorMessage> {
   const token = getCookie('accessToken');
 
   const obj: RequestInit = {
@@ -157,7 +127,7 @@ export async function getTodoCardDetails(
   };
 
   try {
-    const res = await fetch(`${API_URL}/cards/${boardId}`, obj);
+    const res = await fetch(`${API_URL}/cards/${cardId}`, obj);
     const data = await res.json();
 
     if (!res.ok) throw new Error(`${data.message}`);
