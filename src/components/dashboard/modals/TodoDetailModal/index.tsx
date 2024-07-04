@@ -48,6 +48,7 @@ export default function TodoDetailModal({
 
   const handleDelete = async () => {
     const res = await deleteTodoCardDetails(cardId);
+    onCardDelete();
     if ('message' in res) {
       toast.error(res.message);
       return;
@@ -105,7 +106,6 @@ export default function TodoDetailModal({
                     items={dropdownList}
                     setSelectBoxIsOpen={setSelectBoxIsOpen}
                     exceptions={[kebabRef]}
-                    onCardDelete={onCardDelete}
                   />
                 </span>
               )}
