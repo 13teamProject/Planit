@@ -144,7 +144,7 @@ export async function getCardId({
 // FIXME: 중복
 // 할 일 카드 정보 가져오기
 export async function getTodoCardDetails(
-  boardId: string,
+  boardId: number,
 ): Promise<TodoDetailsCardResponse | ErrorMessage> {
   const token = getCookie('accessToken');
 

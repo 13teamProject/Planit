@@ -13,6 +13,7 @@ import { toast } from 'react-toastify';
 import Card from './Card';
 import ColumnSettingButton from './ColumnSettingButton';
 import CreateCardModal from './modals/CreateCardModal';
+import TodoDetailModal from './modals/TodoDetailModal';
 
 type ColumnProps = {
   dashboardId: number;
@@ -25,34 +26,56 @@ type ColumnWithCards = ColumnType & {
 export default function Column({ dashboardId }: ColumnProps) {
   const [isCreateCardModalOpen, setIsCreateCardModalOpen] = useState(false);
   const [columns, setColumns] = useState<ColumnWithCards[]>([]);
+  const [columnData, setColumnData] = useState<ColumnType[]>();
   const [activeColumnId, setActiveColumnId] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
   const [draggingCard, setDraggingCard] = useState<number | null>(null);
   const [dropTarget, setDropTarget] = useState<{
     columnId: number;
     index: number;
   } | null>(null);
+  const [selectedCard, setSelectedCard] = useState<GetCardResponse | null>(
+    null,
+  );
+  const [selectedColumnTitle, setSelectedColumnTitle] = useState<string>('');
+  const [isTodoDetailsCardOpen, setIsTodoDetailsCardOpen] = useState(false);
+
+  const openTodoDetailCardModal = (
+    card: GetCardResponse,
+    columnTitle: string,
+  ) => {
+    setSelectedCard(card);
+    setSelectedColumnTitle(columnTitle);
+    setIsTodoDetailsCardOpen(true);
+  };
+
+  const closeTodoDetailCardModal = useCallback(() => {
+    setIsTodoDetailsCardOpen(false);
+    setSelectedCard(null);
+    setSelectedColumnTitle('');
+  }, []);
+
+  const fetchColumnsAndCards = useCallback(async () => {
+    try {
+      const columnsData = await getColumns({ dashboardId });
+      setColumnData(columnsData);
+      const columnsWithCards = await Promise.all(
+        columnsData.map(async (column) => {
+          const cards = await getCards({ columnId: column.id });
+          return { ...column, cards };
+        }),
+      );
+      setColumns(columnsWithCards);
+    } catch (err) {
+      toast.error('데이터를 받아오는 중 오류 발생!');
+    } finally {
+      setLoading(false);
+    }
+  }, [dashboardId]);
 
   useEffect(() => {
-    async function fetchColumnsAndCards() {
-      try {
-        const columnsData = await getColumns({ dashboardId });
-        const columnsWithCards = await Promise.all(
-          columnsData.map(async (column) => {
-            const cards = await getCards({ columnId: column.id });
-            return { ...column, cards };
-          }),
-        );
-        setColumns(columnsWithCards);
-      } catch (err) {
-        setError('데이터를 불러오는 중 에러가 발생했습니다.');
-      } finally {
-        setLoading(false);
-      }
-    }
     fetchColumnsAndCards();
-  }, [columns]);
+  }, [fetchColumnsAndCards]);
 
   const openCreateCardModal = (columnId: number) => {
     setActiveColumnId(columnId);
@@ -62,6 +85,7 @@ export default function Column({ dashboardId }: ColumnProps) {
   const closeCreateCardModal = () => {
     setActiveColumnId(0);
     setIsCreateCardModalOpen(false);
+    fetchColumnsAndCards();
   };
 
   // 드래그 시작 시 현재 드래그 중인 카드의 ID 저장
@@ -155,7 +179,6 @@ export default function Column({ dashboardId }: ColumnProps) {
   );
 
   if (loading) return <div>로딩중...</div>;
-  if (error) return <div>{error}</div>;
 
   return (
     <div className="w-full lg:flex lg:h-full lg:overflow-hidden">
@@ -185,7 +208,7 @@ export default function Column({ dashboardId }: ColumnProps) {
 
           <div className="sm:mb-12 md:mb-20 lg:flex-1 lg:overflow-y-auto">
             {column.cards.map((card, index) => (
-              <React.Fragment key={card.id}>
+              <div key={card.id}>
                 {dropTarget &&
                   dropTarget.columnId === column.id &&
                   dropTarget.index === index && (
@@ -199,8 +222,9 @@ export default function Column({ dashboardId }: ColumnProps) {
                   onDragOver={(e) => handleDragOver(e, column.id, index)}
                   onDrop={(e) => handleDrop(e, column.id, index)}
                   isDragging={draggingCard === card.id}
+                  onClick={() => openTodoDetailCardModal(card, column.title)}
                 />
-              </React.Fragment>
+              </div>
             ))}
             {dropTarget &&
               dropTarget.columnId === column.id &&
@@ -210,6 +234,14 @@ export default function Column({ dashboardId }: ColumnProps) {
           </div>
         </div>
       ))}
+      {selectedCard && (
+        <TodoDetailModal
+          todoModalIsOpen={isTodoDetailsCardOpen}
+          todoModalOnClose={closeTodoDetailCardModal}
+          cardId={selectedCard.id}
+          columnTitle={selectedColumnTitle}
+        />
+      )}
       <CreateCardModal
         isOpen={isCreateCardModalOpen}
         onClose={closeCreateCardModal}

@@ -11,21 +11,17 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
-const cardId = '8702';
-
-// 추후 설정 예정
-// params: { cardId: string }
-// const { cardId } = params;
-
-const progressTitle = 'To do';
-
 type Props = {
   todoModalOnClose: () => void;
   todoModalIsOpen: boolean;
+  cardId: number;
+  columnTitle: string;
 };
 export default function TodoDetailModal({
   todoModalOnClose,
   todoModalIsOpen,
+  cardId,
+  columnTitle,
 }: Props) {
   const [cardDetails, setCardDetails] =
     useState<TodoDetailsCardResponse | null>();
@@ -97,7 +93,7 @@ export default function TodoDetailModal({
               />
             </div>
           </div>
-          <CardDetails data={cardDetails} progressTitle={progressTitle} />
+          <CardDetails data={cardDetails} columnTitle={columnTitle} />
           <div className="flex-1">
             <CommentSection
               cardId={id}

@@ -4,10 +4,10 @@ import Image from 'next/image';
 
 type Props = {
   data: TodoDetailsCardResponse;
-  progressTitle: string;
+  columnTitle: string;
 };
 
-export default function CardDetails({ data, progressTitle }: Props) {
+export default function CardDetails({ data, columnTitle }: Props) {
   const { description, tags, dueDate, assignee, imageUrl } = data;
   return (
     <div className="flex flex-col gap-16 md:grid md:auto-cols-auto md:grid-cols-[repeat(1,minmax(0,1fr))_180px]">
@@ -35,7 +35,7 @@ export default function CardDetails({ data, progressTitle }: Props) {
         <div className="flex gap-12">
           <div className="flex max-h-22 min-w-60 items-center justify-center rounded-11 bg-toss-blue-light/40 text-10 text-toss-blue first-line:bg-toss-blue-light/40">
             <span className="mr-6 inline-block h-6 w-6 rounded-full bg-toss-blue" />
-            {progressTitle}
+            {columnTitle}
           </div>
           <span className="h-20 w-1 bg-gray-700" />
           <div className="flex flex-wrap gap-5 text-10 md:gap-10">

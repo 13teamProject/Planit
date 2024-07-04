@@ -1,3 +1,5 @@
+'use client';
+
 import ProfileCircle from '@/components/commons/circle/ProfileCircle';
 import Tag from '@/components/commons/tag';
 import { GetCardResponse as CardType } from '@planit-types';
@@ -12,16 +14,17 @@ type CardProps = {
   onDragOver: (e: React.DragEvent) => void;
   onDrop: (e: React.DragEvent) => void;
   isDragging: boolean;
+  onClick: () => void;
 };
 
 const Card: React.FC<CardProps> = React.memo(
   ({
     card,
     columnId,
-    columnTitle,
     onDragStart,
     onDragOver,
     onDrop,
+    onClick,
     isDragging,
   }) => {
     const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
@@ -36,6 +39,8 @@ const Card: React.FC<CardProps> = React.memo(
         onDragStart={handleDragStart}
         onDragOver={onDragOver}
         onDrop={onDrop}
+        onClick={onClick}
+        role="presentation"
         className={`mt-20 min-h-100 cursor-grab rounded-8 border bg-white p-10 transition-all duration-200 ${isDragging ? 'border-blue-300 opacity-50' : 'border-gray-200 hover:border-gray-400'} active:cursor-grabbing sm:block md:flex md:gap-20 md:p-20 lg:block`}
       >
         {card.imageUrl && (
