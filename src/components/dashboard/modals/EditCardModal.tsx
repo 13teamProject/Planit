@@ -13,6 +13,8 @@ import TagInput from '@/components/commons/input/TagInput';
 import Textarea from '@/components/commons/input/Textarea';
 import Modal from '@/components/commons/modal';
 import Tag from '@/components/commons/tag';
+import { useAuthStore } from '@/store/authStore';
+import { useSocketStore } from '@/store/socketStore';
 import { formatDate } from '@/utils/date';
 import { CardResponse, Column, EditCardRequest, Member } from '@planit-types';
 import Image from 'next/image';
@@ -48,6 +50,8 @@ export default function EditCardModal({
   const [currentStatus, setCurrentStatus] = useState<Column | null>(null);
   const [statusList, setStatusList] = useState<Column[]>([]);
   const [members, setMembers] = useState<Member[]>([]);
+  const { socket } = useSocketStore();
+  const { userInfo } = useAuthStore();
 
   const {
     register,
@@ -101,6 +105,11 @@ export default function EditCardModal({
     onClose();
     reset();
     toast.success('카드를 수정하였습니다.');
+    socket?.emit('card', {
+      member: userInfo?.nickname,
+      action: 'edit',
+      room: String(dashboardId),
+    });
   };
 
   useEffect(() => {

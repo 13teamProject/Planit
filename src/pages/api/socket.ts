@@ -28,8 +28,72 @@ export default function handler(
         socket.join(room);
       });
 
-      socket.on('enter', (user: string, room: string) => {
-        socket.to(room).emit('enter', user);
+      socket.on('enter', (data) => {
+        const { member, room } = data;
+
+        socket.broadcast
+          .to(room)
+          .emit('enter', `${member} 님이 접속하였습니다.`);
+      });
+
+      socket.on('card', (data) => {
+        const { member, action, room } = data;
+
+        if (action === 'create') {
+          socket.broadcast
+            .to(room)
+            .emit('card', `${member} 님이 카드를 생성하였습니다.`);
+        }
+
+        if (action === 'edit') {
+          socket.broadcast
+            .to(room)
+            .emit('card', `${member} 님이 카드를 수정하였습니다.`);
+        }
+
+        if (action === 'delete') {
+          socket.broadcast
+            .to(room)
+            .emit('card', `${member} 님이 카드를 삭제하였습니다.`);
+        }
+      });
+
+      socket.on('column', (data) => {
+        const { member, action, room } = data;
+
+        if (action === 'create') {
+          socket.broadcast
+            .to(room)
+            .emit('column', `${member} 님이 컬럼을 생성하였습니다.`);
+        }
+
+        if (action === 'edit') {
+          socket.broadcast
+            .to(room)
+            .emit('column', `${member} 님이 컬럼을 수정하였습니다.`);
+        }
+
+        if (action === 'delete') {
+          socket.broadcast
+            .to(room)
+            .emit('column', `${member} 님이 컬럼을 삭제하였습니다.`);
+        }
+      });
+
+      socket.on('dashboard', (data) => {
+        const { member, action, room } = data;
+
+        if (action === 'edit') {
+          socket.broadcast
+            .to(room)
+            .emit('dashboard', `${member} 님이 대시보드를 수정하였습니다.`);
+        }
+
+        if (action === 'delete') {
+          socket.broadcast
+            .to(room)
+            .emit('dashboard', `${member} 님이 대시보드를 삭제하였습니다.`);
+        }
       });
 
       socket.on('disconnect', () => {

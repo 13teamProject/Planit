@@ -8,6 +8,7 @@ import Sidemenu from '@/components/commons/layout/Sidemenu';
 import Column from '@/components/dashboard/Column';
 import { useSocketStore } from '@/store/socketStore';
 import { GetDashboardIdResponse } from '@planit-types';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
@@ -18,8 +19,7 @@ export default function DashboardPage({
     id: string;
   };
 }) {
-  const { id } = params;
-
+  const router = useRouter();
   const [dashboard, setDashboard] = useState<GetDashboardIdResponse | null>(
     null,
   );
@@ -35,28 +35,54 @@ export default function DashboardPage({
     }
   };
 
-  const socketEventListener = () => {
+  const socketListener = () => {
     if (!socket) return;
 
-    socket.on('enter', (user: string) => {
-      toast.success(`${user} 님이 접속하셨습니다.`);
+    socket.on('enter', (message) => {
+      toast.success(message);
+    });
+
+    socket.on('dashboard', (message) => {
+      if (message.includes('삭제')) {
+        toast.error(message);
+        router.push('/mydashboard');
+      } else {
+        toast.success(message);
+      }
     });
   };
 
   useEffect(() => {
-    initializeSocket(id);
-  }, [id]);
+    let cleanup: () => void | undefined;
+
+    initializeSocket(params.id)
+      .then((cleanUpFn) => {
+        cleanup = cleanUpFn;
+      })
+      .catch((error) => {
+        console.error('Failed to initialize socket:', error);
+      });
+
+    return () => {
+      if (cleanup) {
+        cleanup();
+      }
+    };
+  }, [params.id]);
 
   useEffect(() => {
-    socketEventListener();
-  }, [socket, id]);
+    socketListener();
+  }, [socket, params.id]);
 
   useEffect(() => {
     if (!socket) return;
 
     (async () => {
       const userData = await fetchUser();
-      socket.emit('enter', userData?.nickname, id);
+      socket.emit('enter', {
+        member: userData?.nickname,
+        room: params.id,
+      });
     })();
   }, [socket]);
 

@@ -3,6 +3,8 @@
 import { deleteDashboard } from '@/app/api/dashboards';
 import Button from '@/components/commons/button';
 import Modal from '@/components/commons/modal';
+import { useAuthStore } from '@/store/authStore';
+import { useSocketStore } from '@/store/socketStore';
 import { ContentModalState } from '@planit-types';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -17,6 +19,8 @@ export default function DashboardDeleteButton({
     isOpen: false,
     message: '',
   });
+  const { socket } = useSocketStore();
+  const { userInfo } = useAuthStore();
 
   // 대시보드 삭제 모달 열기
   const handleOpenDashboardDeleteModal = () => {
@@ -36,6 +40,11 @@ export default function DashboardDeleteButton({
     // deleteDashboard API 호출
     await deleteDashboard(params.id.toString());
     setModalState({ isOpen: true, message: '대시보드가 삭제되었습니다.' });
+    socket?.emit('dashboard', {
+      member: userInfo?.nickname,
+      action: 'delete',
+      room: String(params.id),
+    });
   };
   return (
     <>

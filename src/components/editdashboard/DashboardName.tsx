@@ -4,6 +4,8 @@ import { getDashboradDetail, updateDashboard } from '@/app/api/dashboards';
 import Button from '@/components/commons/button';
 import ColorCircle from '@/components/commons/circle/ColorCircle';
 import Input from '@/components/commons/input';
+import { useAuthStore } from '@/store/authStore';
+import { useSocketStore } from '@/store/socketStore';
 import {
   ColorMapping,
   DashboardEditRequest,
@@ -23,6 +25,8 @@ export default function DashboardName({ params }: { params: { id: number } }) {
   } = useForm<DashboardEditRequest>();
   const [selectedColor, setSelectedColor] = useState<string>();
   const [dashboardData, setDashboardData] = useState<DashboardEditResponse>();
+  const { socket } = useSocketStore();
+  const { userInfo } = useAuthStore();
 
   const colorMapping: ColorMapping = {
     '#5534DA': 'bg-violet-dashboard',
@@ -51,6 +55,11 @@ export default function DashboardName({ params }: { params: { id: number } }) {
         toast.success('대시보드 정보를 수정했습니다');
         setDashboardData(result);
         reset();
+        socket?.emit('dashboard', {
+          member: userInfo?.nickname,
+          action: 'edit',
+          room: String(dashboardData?.id),
+        });
       }
     } else {
       // 색상 선택 안했을 때
