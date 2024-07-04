@@ -20,7 +20,7 @@ export default function Password() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
     reset,
   } = useForm<PasswordChangeForm>({
     resolver,
@@ -100,6 +100,7 @@ export default function Password() {
         </span>
         <Button
           type="submit"
+          disabled={!isValid}
           text="변경"
           styles="px-30 py-8 mt-24 float-right text-12 md:text-14"
         />
