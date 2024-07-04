@@ -81,7 +81,7 @@ export default function DashBoardHeader({
 
   useEffect(() => {
     async function fetchDashboard() {
-      const dashboardid = searchParams.get('dashboardid') || '9800'; // 9800 (임시 데이터)
+      const dashboardid = searchParams?.get('dashboardid') || '9800'; // 9800 (임시 데이터)
       setDashboardId(dashboardid);
 
       // 대시보드 id, title 데이터

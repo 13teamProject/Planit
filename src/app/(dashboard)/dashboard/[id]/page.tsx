@@ -1,23 +1,64 @@
 'use client';
 
 import { getDashboardId } from '@/app/api/dashboards';
+import { getUsers } from '@/app/api/users';
 import BarButton from '@/components/commons/button/BarButton';
 import DashBoardHeader from '@/components/commons/layout/DashboardHeader';
 import Sidemenu from '@/components/commons/layout/Sidemenu';
 import Column from '@/components/dashboard/Column';
+import { useSocketStore } from '@/store/socketStore';
 import { GetDashboardIdResponse } from '@planit-types';
 import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 export default function DashboardPage({
   params,
 }: {
   params: {
-    id: number;
+    id: string;
   };
 }) {
+  const { id } = params;
+
   const [dashboard, setDashboard] = useState<GetDashboardIdResponse | null>(
     null,
   );
+  const { socket, initializeSocket } = useSocketStore();
+
+  const fetchUser = async () => {
+    try {
+      const userData = await getUsers();
+      return userData;
+    } catch (error) {
+      console.error('Failed to fetch user:', error);
+      return null;
+    }
+  };
+
+  const socketEventListener = () => {
+    if (!socket) return;
+
+    socket.on('enter', (user: string) => {
+      toast.success(`${user} 님이 접속하셨습니다.`);
+    });
+  };
+
+  useEffect(() => {
+    initializeSocket(id);
+  }, [id]);
+
+  useEffect(() => {
+    socketEventListener();
+  }, [socket, id]);
+
+  useEffect(() => {
+    if (!socket) return;
+
+    (async () => {
+      const userData = await fetchUser();
+      socket.emit('enter', userData?.nickname, id);
+    })();
+  }, [socket]);
 
   useEffect(() => {
     const fetchDashboardId = async () => {
