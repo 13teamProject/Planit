@@ -43,6 +43,7 @@ export const passwordValidationSchema = yup.object().shape({
     .oneOf([yup.ref('newPassword')], ErrorMessages.PASSWORDS_MUST_MATCH)
     .required(ErrorMessages.CONFIRM_PASSWORD_REQUIRED),
 });
+
 export const emailValidationSchema = yup.object().shape({
   email: yup
     .string()

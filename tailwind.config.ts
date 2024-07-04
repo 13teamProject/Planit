@@ -124,6 +124,13 @@ const config: Config = {
         lg: { min: '1200px' },
         landing: { min: '1200px', max: '1670px' },
       },
+      noScrollbar: {
+        '&::-webkit-scrollbar': {
+          display: 'none',
+        },
+        '-ms-overflow-style': 'none', // IE and Edge
+        'scrollbar-width': 'none', // Firefox
+      },
     },
   },
   plugins: [],
