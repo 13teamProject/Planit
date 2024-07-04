@@ -223,7 +223,7 @@ export default function DashBoardHeader({
         {isDashboard && (
           <div className="flex">
             <p className="mr-8 text-20 font-bold sm:hidden lg:block">
-              {isClient && window.location.pathname.startsWith('/edit')
+              {isClient && window.location.pathname.startsWith('/mypage')
                 ? '계정 관리'
                 : dashboardDetails?.title}
             </p>

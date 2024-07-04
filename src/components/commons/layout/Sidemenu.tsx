@@ -1,7 +1,7 @@
 import { getDashboards, postDashboards } from '@/app/api/dashboards';
 import ColorCircle from '@/components/commons/circle/ColorCircle';
 import { SCROLL_SIZE } from '@/constants/globalConstants';
-import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
+import useDeviceState from '@/hooks/useDeviceState';
 import {
   ColorMapping,
   Dashboard,
@@ -11,7 +11,7 @@ import {
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import Button from '../button';
@@ -36,12 +36,24 @@ export const colors = [
 ];
 
 export default function Sidemenu() {
+  const device = useDeviceState();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [modalState, setModalState] = useState<ModalState>({
     isOpen: false,
     message: '',
   });
   const [selectedColor, setSelectedColor] = useState<string>(colors[0]);
+  const [dashboards, setDashboards] = useState<Dashboard[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [cursorId, setCursorId] = useState<number | undefined>(undefined);
+  const observerRef = useRef<HTMLDivElement | null>(null);
   const router = useRouter();
+
+  const toggleMenu = () => {
+    if (device === 'mobile') {
+      setIsMenuOpen(!isMenuOpen);
+    }
+  };
 
   const handleOpenModal = () => {
     setModalState({ isOpen: true, message: '안녕하세요' });
@@ -51,23 +63,66 @@ export default function Sidemenu() {
     setModalState({ ...modalState, isOpen: false });
   };
 
-  const fetchDashboards = async (page: number) => {
-    const response = await getDashboards('infiniteScroll', page, SCROLL_SIZE);
-    return response.dashboards.map((data: Dashboard) => ({
-      id: data.id,
-      title: data.title,
-      color: data.color,
-      createdAt: data.createdAt,
-      updatedAt: data.updatedAt,
-      createdByMe: data.createdByMe,
-      userId: data.userId,
-    }));
+  const loadDashboards = async (isNewPage = false) => {
+    if (loading) return;
+    setLoading(true);
+    try {
+      const response = await getDashboards(
+        'infiniteScroll',
+        10,
+        SCROLL_SIZE,
+        cursorId,
+      );
+      const newDashboards = response.dashboards.map((data: Dashboard) => ({
+        id: data.id,
+        title: data.title,
+        color: data.color,
+        createdAt: data.createdAt,
+        updatedAt: data.updatedAt,
+        createdByMe: data.createdByMe,
+        userId: data.userId,
+      }));
+
+      console.log('Fetched Dashboards:', newDashboards);
+      setDashboards((prevDashboards) =>
+        isNewPage ? [...prevDashboards, ...newDashboards] : newDashboards,
+      );
+
+      if (newDashboards.length > 0) {
+        setCursorId(newDashboards[newDashboards.length - 1].id); // 마지막 아이템의 ID를 cursorId로 설정
+      }
+    } catch (error) {
+      console.error('Failed to fetch dashboards:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const { items: dashboards, endRef } = useInfiniteScroll<Dashboard>({
-    fetchItems: fetchDashboards,
-    pageSize: SCROLL_SIZE,
-  });
+  useEffect(() => {
+    loadDashboards();
+  }, []);
+
+  useEffect(() => {
+    if (device !== 'mobile') {
+      setIsMenuOpen(true); // 모바일이 아닐 때 메뉴를 항상 열어둠
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && !loading) {
+        loadDashboards(true);
+      }
+    });
+
+    if (observerRef.current) {
+      observer.observe(observerRef.current);
+    }
+
+    return () => {
+      if (observerRef.current) {
+        observer.unobserve(observerRef.current);
+      }
+    };
+  }, [cursorId, loading, device]);
 
   const {
     register,
@@ -102,7 +157,39 @@ export default function Sidemenu() {
 
   return (
     <>
-      <nav className="no-scrollbar left-0 top-0 z-[999] h-screen w-67 overflow-y-auto border-1 border-r-gray-200 bg-white pl-20 pt-20 md:relative md:w-160 lg:w-300">
+      {device === 'mobile' && !isMenuOpen && (
+        <button
+          type="button"
+          className="fixed left-20 top-23 z-[1000]"
+          onClick={() => setIsMenuOpen(true)}
+        >
+          <Image
+            src="/icon/sidemenu-toggle.svg"
+            width={20}
+            height={20}
+            alt="메뉴 열기"
+          />
+        </button>
+      )}
+      <nav
+        className={`fixed left-0 top-0 z-[999] h-screen w-70 max-w-[300px] overflow-y-auto border-r border-gray-200 bg-white pl-20 pt-20 transition-transform duration-300 ${
+          isMenuOpen ? 'translate-x-0' : '-translate-x-full'
+        } md:relative md:w-160 md:translate-x-0 lg:w-300`}
+      >
+        {device === 'mobile' && (
+          <button
+            type="button"
+            className="absolute right-28 top-60 z-[1000] transition-transform duration-200 ease-in-out hover:rotate-90"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            <Image
+              src="/icon/close.svg"
+              width={20}
+              height={20}
+              alt="메뉴 닫기"
+            />
+          </button>
+        )}
         <Link href="/" className="cursor-pointer">
           <Image
             className="md:hidden"
@@ -141,33 +228,29 @@ export default function Sidemenu() {
         >
           <ul className="mt-20 pr-10 lg:pr-12">
             {dashboards.map((dashboard) => (
-              <li
-                key={dashboard.id}
-                className="flex h-45 items-center rounded-4 pl-8 hover:bg-violet-light-dashboard md:pl-10 lg:pl-12"
-              >
-                <ColorCircle
-                  color={colorMapping[dashboard.color] || 'bg-gray-400'}
-                  size="sm"
-                />
-                <Link
-                  href={`/dashboard/${dashboard.id}`}
-                  className="mr-6 text-18 font-medium text-gray-400 hover:text-black sm:hidden md:block md:max-w-[10ch] md:overflow-hidden md:text-ellipsis md:whitespace-nowrap md:pl-16 md:text-16 lg:block lg:max-w-none lg:whitespace-normal lg:pl-16"
-                >
-                  {dashboard.title}
-                </Link>
-                {dashboard?.createdByMe && (
-                  <Image
-                    className="mb-3 sm:hidden lg:block"
-                    src="/icon/crown.svg"
-                    width={15}
-                    height={15}
-                    alt="내가 만든 대시보드 표시"
+              <Link href={`/dashboard/${dashboard.id}`} key={dashboard.id}>
+                <li className="flex h-45 items-center rounded-4 pl-8 hover:bg-violet-light-dashboard md:pl-10 lg:pl-12">
+                  <ColorCircle
+                    color={colorMapping[dashboard.color] || 'bg-gray-400'}
+                    size="sm"
                   />
-                )}
-              </li>
+                  <div className="mr-6 text-18 font-medium text-gray-400 hover:text-black sm:hidden md:block md:max-w-[10ch] md:overflow-hidden md:text-ellipsis md:whitespace-nowrap md:pl-16 md:text-16 lg:block lg:max-w-none lg:whitespace-normal lg:pl-16">
+                    {dashboard.title}
+                  </div>
+                  {dashboard?.createdByMe && (
+                    <Image
+                      className="mb-3 sm:hidden lg:block"
+                      src="/icon/crown.svg"
+                      width={15}
+                      height={15}
+                      alt="내가 만든 대시보드 표시"
+                    />
+                  )}
+                </li>
+              </Link>
             ))}
-            <div ref={endRef} />
           </ul>
+          <div ref={observerRef} />
         </div>
       </nav>
       <Modal isOpen={modalState.isOpen} onClose={handleCloseModal}>
