@@ -1,10 +1,10 @@
 import ProfileCircle from '@/components/commons/circle/ProfileCircle';
 import Tag from '@/components/commons/tag';
-import { TodoDetailsCardResponse } from '@planit-types';
+import { CardResponse } from '@planit-types';
 import Image from 'next/image';
 
 type Props = {
-  data: TodoDetailsCardResponse;
+  data: CardResponse;
   progressTitle: string;
 };
 

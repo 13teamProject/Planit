@@ -48,9 +48,6 @@ declare module '@planit-types' {
 
   export type EditCardResponse = CardResponse;
 
-  // 카드 상세 조회
-  export type TodoDetailsCardResponse = CardResponse;
-
   // FIXME: 중복
   export type GetCardResponse = CardResponse;
 
