@@ -120,7 +120,7 @@ function DropdownInput({
       >
         <ToggleButton />
         {isOpen && (
-          <div className="absolute top-48 z-50 h-160 w-full overflow-y-auto rounded-md border border-gray-400 bg-white md:top-56">
+          <div className="custom-scrollbar absolute top-48 z-50 max-h-160 w-full overflow-y-auto rounded-md border border-gray-400 bg-white shadow-lg md:top-56">
             {children}
           </div>
         )}
@@ -161,7 +161,7 @@ function Option({ id, children }: { id: number; children: ReactNode }) {
       onClick={() => {
         handleSelect(id, <>{children}</>);
       }}
-      className="gray-200 flex h-42 w-full items-center border-b border-gray-200 px-16 last:border-none hover:bg-toss-blue-light"
+      className="gray-200 flex h-42 w-full items-center border-b border-gray-200 px-16 last:border-none hover:bg-gray-50"
     >
       {children}
     </button>

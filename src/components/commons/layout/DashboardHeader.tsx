@@ -198,10 +198,7 @@ export default function DashBoardHeader({
           <div className="flex font-semibold">
             {visibleProfiles.map((profile) => (
               <li key={profile.nickname}>
-                <ProfileCircle
-                  data={profile}
-                  styles="size-34 md:size-38 bg-orange-400"
-                />
+                <ProfileCircle data={profile} styles="size-34 md:size-38" />
               </li>
             ))}
             {extraCount > 0 && (
@@ -226,36 +223,16 @@ export default function DashBoardHeader({
         {isDashboard && (
           <div className="mx-12 h-38 border-l border-gray-200 md:mx-24 lg:mx-32" />
         )}
-        <button
-          ref={buttonRef}
-          type="button"
-          className="flex cursor-pointer items-center"
-          onClick={() => setSelectBoxIsOpen((prev) => !prev)}
-        >
-          <li className="font-semibold">
-            <ProfileCircle
-              data={PROFILES[2]}
-              styles="size-34 md:size-38 bg-violet-dashboard"
-            />
-          </li>
-          <li className="pl-12">
-            {user && (
-              <p className="text-16 font-medium sm:hidden md:block lg:block">
-                {user.nickname}
-              </p>
-            )}
-          </li>
-          {selectBoxIsOpen && (
-            <span className="absolute right-20 top-60 md:right-36 md:top-63 lg:right-70">
-              <DropDownSelectBox
-                items={dropdownList}
-                setSelectBoxIsOpen={setSelectBoxIsOpen}
-                exceptions={[buttonRef]}
-                size="lg"
-              />
-            </span>
+        <li className="font-semibold">
+          <ProfileCircle data={PROFILES[2]} styles="size-34 md:size-38" />
+        </li>
+        <li className="pl-12">
+          {user && (
+            <p className="text-16 font-medium sm:hidden md:block lg:block">
+              {user.nickname}
+            </p>
           )}
-        </button>
+        </li>
       </ul>
     </nav>
   );

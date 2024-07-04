@@ -1,10 +1,10 @@
 'use client';
 
-import { getDashboardId } from '@/app/api/getDashboardId';
+import { getDashboardId } from '@/app/api/dashboards';
 import BarButton from '@/components/commons/button/BarButton';
 import DashBoardHeader from '@/components/commons/layout/DashboardHeader';
 import Sidemenu from '@/components/commons/layout/Sidemenu';
-import Column from '@/components/dashboard/columns/Column';
+import Column from '@/components/dashboard/Column';
 import { GetDashboardIdResponse } from '@planit-types';
 import { useEffect, useState } from 'react';
 
