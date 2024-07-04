@@ -8,32 +8,19 @@ import {
 } from '@/app/api/dashboards';
 import { getMembers } from '@/app/api/members';
 import { getUsers } from '@/app/api/users';
-// Import the getMembers API
 import Button from '@/components/commons/button';
 import Input from '@/components/commons/input';
 import Modal from '@/components/commons/modal';
 import { PAGE_SIZE, SCROLL_SIZE } from '@/constants/globalConstants';
 import { emailValidationSchema } from '@/utils/validation/schema';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { EmailRequest, Invitation, Member } from '@planit-types';
-// Import the Member type
+import { Dashboard, EmailRequest, Invitation, Member } from '@planit-types';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import ProfileCircle from '../circle/ProfileCircle';
-
-type Dashboard = {
-  id: number;
-  title: string;
-  color: string;
-  createdAt: string;
-  updatedAt: string;
-  createdByMe: boolean;
-  userId: number;
-};
 
 type User = {
   id: number;
@@ -57,10 +44,12 @@ export default function DashBoardHeader({
   const [dashboardDetails, setDashboardDetails] = useState<Dashboard | null>(
     null,
   );
-  const { id } = useParams(); // URL의 id 파라미터 추출
-  const [dashboardId, setDashboardId] = useState(String(id));
+  const [dashboards, setDashboards] = useState<Dashboard[]>([]);
+  const [selectedDashboardId, setSelectedDashboardId] = useState<number | null>(
+    null,
+  );
   const [user, setUser] = useState<User | null>(null);
-  const [members, setMembers] = useState<Member[]>([]); // Add state for members
+  const [members, setMembers] = useState<Member[]>([]);
   const [modalState, setModalState] = useState<ContentModalState>({
     isOpen: false,
     message: '',
@@ -73,22 +62,21 @@ export default function DashBoardHeader({
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<EmailRequest>({
-    resolver,
-    mode: 'onChange',
-  });
-
+  } = useForm<EmailRequest>({ resolver, mode: 'onChange' });
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
   }, []);
 
-  useEffect(() => {
-    if (id) {
-      setDashboardId(id);
+  const fetchDashboards = async () => {
+    const response = await getDashboards('pagination', 1, SCROLL_SIZE);
+    setDashboards(response.dashboards);
+    if (response.dashboards.length > 0) {
+      setSelectedDashboardId(response.dashboards[0].id);
+      setDashboardDetails(response.dashboards[0]);
     }
-  }, [id]);
+  };
 
   // 모달 닫기
   const handleClose = () => {
@@ -100,13 +88,23 @@ export default function DashBoardHeader({
     setModalState({ ...modalState, isOpen: true, isContent: true });
   };
 
+  useEffect(() => {
+    console.log('Modal State:', modalState);
+  }, [modalState]);
+
+  useEffect(() => {
+    console.log('Dashboard Details:', dashboardDetails);
+  }, [dashboardDetails]);
+
   // 초대 내역 조회
   const fetchDashboardInvitation = async (page: number) => {
+    if (!selectedDashboardId) return;
     const fetchedDashboardInvitation = await getDashboardInvitation({
-      dashboardId: parseInt(dashboardId, 10),
+      dashboardId: selectedDashboardId,
       page,
       size: PAGE_SIZE,
     });
+    console.log(fetchedDashboardInvitation);
     if ('message' in fetchedDashboardInvitation) {
       setModalState({
         isOpen: true,
@@ -122,8 +120,9 @@ export default function DashBoardHeader({
 
   // 멤버 목록 조회
   const fetchMembers = async () => {
+    if (!selectedDashboardId) return;
     const response = await getMembers({
-      dashboardId: parseInt(dashboardId, 10),
+      dashboardId: selectedDashboardId,
     });
     if ('message' in response) {
       console.error(response.message);
@@ -134,23 +133,24 @@ export default function DashBoardHeader({
 
   // 초대하기
   const onSubmit: SubmitHandler<EmailRequest> = async (email) => {
-    const response = await postInvitation(email, parseInt(dashboardId, 10));
-
+    if (!selectedDashboardId) return;
+    const response = await postInvitation(email, selectedDashboardId);
     if ('message' in response) {
       setModalState({ isOpen: true, message: response.message });
     } else {
-      setModalState({
-        isOpen: true,
-        message: '초대가 완료되었습니다.',
-      });
+      setModalState({ isOpen: true, message: '초대가 완료되었습니다.' });
       await fetchDashboardInvitation(currentPage);
     }
   };
 
   useEffect(() => {
+    fetchDashboards();
+  }, []);
+
+  useEffect(() => {
     fetchDashboardInvitation(currentPage);
     fetchMembers();
-  }, [currentPage, dashboardId]);
+  }, [currentPage, selectedDashboardId]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -170,39 +170,6 @@ export default function DashBoardHeader({
       window.removeEventListener('resize', handleResize);
     };
   }, [isExpanded, members.length]);
-
-  useEffect(() => {
-    async function fetchDashboard() {
-      if (dashboardId) {
-        console.log(dashboardId);
-
-        // 대시보드 id, title 데이터
-        const response = await getDashboards('infiniteScroll', 1, SCROLL_SIZE);
-        const fetchedDashboards = response.dashboards.map(
-          (data: Dashboard) => ({
-            id: data.id,
-            title: data.title,
-            color: data.color,
-            createdAt: data.createdAt,
-            updatedAt: data.updatedAt,
-            createdByMe: data.createdByMe,
-            userId: data.userId,
-          }),
-        );
-
-        // URL의 id와 일치하는 대시보드를 찾음
-        const currentDashboard = fetchedDashboards.find(
-          (dashboard: Dashboard) => String(dashboard.id) === dashboardId,
-        );
-
-        if (currentDashboard) {
-          setDashboardDetails(currentDashboard);
-        }
-      }
-    }
-
-    fetchDashboard();
-  }, [dashboardId]);
 
   useEffect(() => {
     async function fetchUser() {
@@ -257,7 +224,7 @@ export default function DashBoardHeader({
         <ul className="flex items-center">
           {isDashboard && dashboardDetails?.createdByMe && (
             <li className="pl-12">
-              <Link href={`/edit/${dashboardId}`}>
+              <Link href={`/edit/${selectedDashboardId}`}>
                 <button
                   type="button"
                   className="flex h-40 w-88 items-center justify-center rounded-8 border-1 border-gray-200 text-16 font-medium text-gray-400 hover:border-black-700"
@@ -358,13 +325,14 @@ export default function DashBoardHeader({
                   placeholder="이메일을 입력해 주세요"
                   size="lg"
                   register={{ ...register('email', { required: true }) }}
+                  defaultValue="" // 기본값 설정
                   error={'email' in errors}
                 />
-                <span
-                  className={`pt-8 text-14 text-red-500 ${errors.email?.message ? 'block' : 'hidden'}`}
-                >
-                  {errors.email?.message}
-                </span>
+                {errors.email && (
+                  <span className="pt-8 text-14 text-red-500">
+                    {errors.email.message}
+                  </span>
+                )}
                 <div className="mt-28 flex justify-end gap-12">
                   <Button
                     text="취소"

@@ -87,6 +87,8 @@ declare module '@planit-types' {
     inviteAccepted: boolean;
     createdAt: string;
     updatedAt: string;
+
+    
   };
 
   type MyInivationErrorMessage = {

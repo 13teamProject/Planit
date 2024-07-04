@@ -68,7 +68,7 @@ export default function Sidemenu() {
     register,
     handleSubmit,
     watch,
-    formState: { isValid },
+    formState: { isValid, errors },
   } = useForm<FormValues>({ mode: 'onChange' });
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
@@ -146,7 +146,7 @@ export default function Sidemenu() {
                 />
                 <Link
                   href={`/dashboard/${dashboard.id}`}
-                  className="mr-6 text-18 font-medium text-gray-400 hover:text-black sm:hidden md:block md:pl-16 md:text-16 lg:block lg:pl-16"
+                  className="mr-6 text-18 font-medium text-gray-400 hover:text-black sm:hidden md:block md:max-w-[10ch] md:overflow-hidden md:text-ellipsis md:whitespace-nowrap md:pl-16 md:text-16 lg:block lg:max-w-[20ch] lg:whitespace-normal lg:pl-16"
                 >
                   {dashboard.title}
                 </Link>
@@ -166,18 +166,31 @@ export default function Sidemenu() {
         </div>
       </nav>
       <Modal isOpen={modalState.isOpen} onClose={handleCloseModal}>
-        <div className="h-300 w-327 px-20 py-28 pt-32 md:h-334 md:w-540 md:px-28 md:pb-28">
-          <p className="black-800 mb-24 text-24 font-bold lg:mb-32">
+        <div className="max-h-90vh md:max-h-95vh overflow-y-auto px-20 py-28 pt-32 md:w-540 md:px-28 md:pb-28">
+          <p className="black-800 mb-24 text-24 font-bold lg:mb-28">
             새로운 대시보드
           </p>
           <form onSubmit={handleSubmit(onSubmit)}>
             <label className="mb-10 text-18 font-medium">
               대시보드 이름
               <input
-                {...register('dashboardName', { required: 'true' })}
+                {...register('dashboardName', {
+                  required: '대시보드 이름은 필수 항목입니다.',
+                  maxLength: {
+                    value: 10,
+                    message: '대시보드 이름은 공백 포함 10자 이내여야 합니다.',
+                  },
+                })}
                 type="text"
-                className="block h-42 w-full rounded-md border pl-16 pr-40 text-14 outline-none md:h-48 md:text-16"
+                className={`mt-12 block h-42 w-full rounded-md border pl-16 pr-40 text-14 outline-none md:h-48 md:text-16 ${
+                  errors.dashboardName ? 'border-red-dashboard' : ''
+                }`}
               />
+              {errors.dashboardName && (
+                <span className="pt-8 text-14 text-red-500">
+                  {errors.dashboardName.message}
+                </span>
+              )}
             </label>
             <div className="mt-24 flex space-x-10 md:mt-28">
               {colors.map((color) => (
