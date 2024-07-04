@@ -15,13 +15,19 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 export default function DashboardName({ params }: { params: { id: number } }) {
-  const { register, handleSubmit, reset } = useForm<DashboardEditRequest>();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { isValid },
+  } = useForm<DashboardEditRequest>();
   const [selectedColor, setSelectedColor] = useState<string>();
   const [dashboardData, setDashboardData] = useState<DashboardEditResponse>();
 
   const colorMapping: ColorMapping = {
-    '#7AC555': 'bg-green-dashboard',
     '#5534DA': 'bg-violet-dashboard',
+    '#D6173A': 'bg-red-dashboard',
+    '#7AC555': 'bg-green-dashboard',
     '#FFA500': 'bg-orange-dashboard',
     '#76A5EA': 'bg-blue-dashboard',
     '#E876EA': 'bg-pink-dashboard',
@@ -70,9 +76,13 @@ export default function DashboardName({ params }: { params: { id: number } }) {
   return (
     <div className="w-full max-w-620 rounded-md bg-white px-28 pb-28 pt-32">
       <form className="overflow-hidden" onSubmit={handleSubmit(onSubmit)}>
-        <div className="mb-34 flex items-center justify-between">
-          <h3 className="text-20 font-bold">{dashboardData?.title}</h3>
-          <div className="flex gap-5 md:gap-10">
+        <div className="mb-34 items-center justify-between md:flex">
+          <div className="w-full md:max-w-320">
+            <h3 className="line-clamp-1 text-20 font-bold">
+              {dashboardData?.title}
+            </h3>
+          </div>
+          <div className="mt-10 flex justify-end gap-5 md:mt-0 md:justify-normal md:gap-10">
             {Object.entries(colorMapping).map(([hexColor, tailwindClass]) => (
               <button
                 type="button"
@@ -112,6 +122,7 @@ export default function DashboardName({ params }: { params: { id: number } }) {
         <Button
           type="submit"
           text="변경"
+          disabled={!isValid}
           styles="px-25 md:px-30 py-8 mt-24 text-12 md:text-14 float-right"
         />
       </form>

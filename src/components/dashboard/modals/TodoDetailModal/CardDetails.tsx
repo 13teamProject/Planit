@@ -1,9 +1,10 @@
 import ProfileCircle from '@/components/commons/circle/ProfileCircle';
-import { TodoDetailsCardResponse } from '@planit-types';
+import Tag from '@/components/commons/tag';
+import { CardResponse } from '@planit-types';
 import Image from 'next/image';
 
 type Props = {
-  data: TodoDetailsCardResponse;
+  data: CardResponse;
   progressTitle: string;
 };
 
@@ -40,14 +41,12 @@ export default function CardDetails({ data, progressTitle }: Props) {
           <span className="h-20 w-1 bg-gray-700" />
           <div className="flex flex-wrap gap-5 text-10 md:gap-10">
             {tags.map((tag) => (
-              <span className="rounded-4 bg-gray-200 px-6 pb-4 pt-6" key={tag}>
-                {tag}
-              </span>
+              <Tag text={tag} key={tag} />
             ))}
           </div>
         </div>
 
-        <div className="custom-scrollbar min-h-240 overflow-scroll p-0 md:max-h-283">
+        <div className="custom-scrollbar max-h-240 min-h-240 overflow-scroll p-0 md:max-h-283">
           <section className="text-12 leading-22">{description}</section>
           {imageUrl && (
             <div className="relative mt-10 h-167 md:h-245 lg:h-262">

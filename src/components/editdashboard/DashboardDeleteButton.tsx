@@ -34,7 +34,7 @@ export default function DashboardDeleteButton({
   // 대시보드 삭제
   const handleDashboardDelete = async () => {
     // deleteDashboard API 호출
-    const res = await deleteDashboard(params.id.toString());
+    await deleteDashboard(params.id.toString());
     setModalState({ isOpen: true, message: '대시보드가 삭제되었습니다.' });
   };
   return (
