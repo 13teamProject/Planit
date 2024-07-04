@@ -102,7 +102,7 @@ export default function Sidemenu() {
 
   return (
     <>
-      <nav className="no-scrollbar fixed left-0 top-0 z-[999] h-screen w-67 overflow-y-auto border-1 border-r-gray-200 bg-white pl-20 pt-20 md:relative md:w-160 lg:w-300">
+      <nav className="no-scrollbar left-0 top-0 z-[999] h-screen w-67 overflow-y-auto border-1 border-r-gray-200 bg-white pl-20 pt-20 md:relative md:w-160 lg:w-300">
         <Link href="/" className="cursor-pointer">
           <Image
             className="md:hidden"

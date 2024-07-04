@@ -87,30 +87,32 @@ export default function DashBoardHeader({
     setModalState({ ...modalState, isOpen: false });
   };
 
-  // 초대하기 모달 열기
-  const handleOpenInvitation = () => {
-    setModalState({ ...modalState, isOpen: true, isContent: true });
-  };
-
   // 초대 내역 조회
   const fetchDashboardInvitation = async (page: number) => {
     if (!selectedDashboardId) return;
-    const fetchedDashboardInvitation = await getDashboardInvitation({
-      dashboardId: selectedDashboardId,
-      page,
-      size: PAGE_SIZE,
-    });
-    if ('message' in fetchedDashboardInvitation) {
-      setModalState({
-        isOpen: true,
-        message: fetchedDashboardInvitation.message,
+    try {
+      const fetchedDashboardInvitation = await getDashboardInvitation({
+        dashboardId: selectedDashboardId,
+        page,
+        size: PAGE_SIZE,
       });
-    } else {
-      setInvitaionData(fetchedDashboardInvitation.invitations);
-      setTotalPages(
-        Math.ceil(fetchedDashboardInvitation.totalCount / PAGE_SIZE),
-      );
+      if ('message' in fetchedDashboardInvitation) {
+        console.error(fetchedDashboardInvitation.message);
+      } else {
+        setInvitaionData(fetchedDashboardInvitation.invitations);
+        setTotalPages(
+          Math.ceil(fetchedDashboardInvitation.totalCount / PAGE_SIZE),
+        );
+      }
+    } catch (error) {
+      console.error('Failed to fetch dashboard invitations:', error);
     }
+  };
+
+  // 초대하기 모달 열기
+  const handleOpenInvitation = async () => {
+    setModalState({ ...modalState, isOpen: true, isContent: true });
+    await fetchDashboardInvitation(currentPage);
   };
 
   // 멤버 목록 조회
