@@ -4,11 +4,34 @@ import DashboardDeleteButton from '@/components/editdashboard/DashboardDeleteBut
 import DashboardInvitation from '@/components/editdashboard/DashboardInvitation';
 import DashboardMember from '@/components/editdashboard/DashboardMember';
 import DashboardName from '@/components/editdashboard/DashboardName';
+import { useSocketStore } from '@/store/socketStore';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 export default function Edit({ params }: { params: { id: number } }) {
+  const { id } = params;
   const router = useRouter();
+  const { initializeSocket } = useSocketStore();
+
+  useEffect(() => {
+    let cleanup: () => void | undefined;
+
+    initializeSocket(String(id))
+      .then((cleanUpFn) => {
+        cleanup = cleanUpFn;
+      })
+      .catch((error) => {
+        console.error('Failed to initialize socket:', error);
+      });
+
+    return () => {
+      if (cleanup) {
+        cleanup();
+      }
+    };
+  }, [id]);
+
   return (
     <div>
       <div>

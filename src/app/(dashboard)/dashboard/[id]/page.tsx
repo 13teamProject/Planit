@@ -39,15 +39,15 @@ export default function DashboardPage({
     if (!socket) return;
 
     socket.on('enter', (message) => {
-      toast.success(message);
+      toast.success(message, { containerId: 'socket' });
     });
 
     socket.on('dashboard', (message) => {
       if (message.includes('삭제')) {
-        toast.error(message);
+        toast.error(message, { containerId: 'socket' });
         router.push('/mydashboard');
       } else {
-        toast.success(message);
+        toast.success(message, { containerId: 'socket' });
       }
     });
   };
