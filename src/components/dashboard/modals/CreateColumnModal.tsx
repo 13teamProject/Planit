@@ -61,6 +61,7 @@ export default function CreateColumnModal({
     socket?.emit('column', {
       member: userInfo?.nickname,
       action: 'create',
+      column: columnTitle,
       room: String(dashboardId),
     });
   };

@@ -63,6 +63,7 @@ export default function TodoDetailModal({
     socket?.emit('card', {
       member: userInfo?.nickname,
       action: 'delete',
+      card: cardDetails?.title,
       room: String(dashboardId),
     });
   };

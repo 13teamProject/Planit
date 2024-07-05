@@ -130,7 +130,7 @@ export default function DashboardPage({
       <Sidemenu />
       <div className="flex flex-1 flex-col">
         <Suspense>
-          <DashBoardHeader isDashboard params={{ id: Number(params) }} />
+          <DashBoardHeader isDashboard params={params} />
         </Suspense>
         <div className="w-full bg-gray-50 lg:flex lg:h-full lg:overflow-hidden">
           <Column

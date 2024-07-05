@@ -85,6 +85,7 @@ export default function CreateCardModal({
     socket?.emit('card', {
       member: userInfo?.nickname,
       action: 'create',
+      card: title,
       room: String(dashboardId),
     });
   };

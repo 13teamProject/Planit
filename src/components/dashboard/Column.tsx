@@ -51,12 +51,22 @@ export default function Column({ dashboardId, onColumnUpdate }: ColumnProps) {
     if (!socket) return;
 
     socket.on('card', (message: string) => {
-      toast.success(message, { containerId: 'socket' });
+      if (message.includes('삭제')) {
+        toast.error(message, { containerId: 'socket' });
+      } else {
+        toast.success(message, { containerId: 'socket' });
+      }
+
       fetchColumnsAndCards();
     });
 
     socket.on('column', (message: string) => {
-      toast.success(message, { containerId: 'socket' });
+      if (message.includes('삭제')) {
+        toast.error(message, { containerId: 'socket' });
+      } else {
+        toast.success(message, { containerId: 'socket' });
+      }
+
       fetchColumnsAndCards();
     });
   };

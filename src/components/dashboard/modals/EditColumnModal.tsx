@@ -69,6 +69,8 @@ export default function EditColumnModal({
     socket?.emit('column', {
       member: userInfo?.nickname,
       action: 'edit',
+      prevColumn: columnData.title,
+      column: columnTitle,
       room: String(dashboardId),
     });
   };
@@ -191,6 +193,7 @@ function DeleteColumnModal({
     socket?.emit('column', {
       member: userInfo?.nickname,
       action: 'delete',
+      column: columnData.title,
       room: String(dashboardId),
     });
   };

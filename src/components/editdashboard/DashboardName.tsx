@@ -59,6 +59,7 @@ export default function DashboardName({ params }: { params: { id: number } }) {
         reset();
         socket?.emit('dashboard', {
           member: userInfo?.nickname,
+          dashboard: data.title,
           action: 'edit',
           room: String(dashboardData?.id),
         });

@@ -4,6 +4,7 @@ import { deleteDashboard } from '@/app/api/dashboards';
 import Button from '@/components/commons/button';
 import Modal from '@/components/commons/modal';
 import { useAuthStore } from '@/store/authStore';
+import { useDashboardNameChange } from '@/store/dashBoardName';
 import { useSocketStore } from '@/store/socketStore';
 import { ContentModalState } from '@planit-types';
 import { useRouter } from 'next/navigation';
