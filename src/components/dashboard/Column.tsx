@@ -205,15 +205,15 @@ export default function Column({ dashboardId, onColumnUpdate }: ColumnProps) {
   if (loading) return <Spinner size={24} />;
 
   return (
-    <div className="w-full lg:flex lg:h-full lg:max-w-1200 lg:overflow-hidden lg:overflow-x-scroll lg:whitespace-nowrap">
+    <>
       {columns.map((column) => (
         <div
           key={column.id}
-          className="w-full px-20 sm:border-b sm:p-12 md:border-r md:p-20 lg:flex lg:h-full lg:flex-col"
+          className="w-full px-20 sm:border-b sm:p-12 md:border-r md:p-20 lg:inline-block lg:flex lg:h-full lg:min-w-300 lg:max-w-400 lg:flex-col"
           onDragOver={(e) => handleDragOver(e, column.id, column.cards.length)}
           onDrop={(e) => handleDrop(e, column.id, column.cards.length)}
         >
-          <div className="my-20 flex w-full items-center justify-between lg:min-w-300">
+          <div className="mb-20 flex w-full items-center justify-between">
             <div className="flex items-center gap-4">
               <ColorCircle size="sm" color="bg-toss-blue" />
               <h1 className="max-w-120 overflow-hidden text-ellipsis whitespace-nowrap text-16 font-bold md:text-18">
@@ -296,6 +296,6 @@ export default function Column({ dashboardId, onColumnUpdate }: ColumnProps) {
         dashboardId={dashboardId}
         columnId={activeColumnId}
       />
-    </div>
+    </>
   );
 }

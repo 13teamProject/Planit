@@ -58,7 +58,7 @@ const Card: React.FC<CardProps> = React.memo(
                 <Tag key={tag} text={tag} />
               ))}
             </div>
-            <div className="flex flex-grow items-baseline justify-between pt-8">
+            <div className="flex flex-grow items-center justify-between pt-8">
               <div className="flex items-baseline gap-4">
                 {card.dueDate && (
                   <>
@@ -67,7 +67,7 @@ const Card: React.FC<CardProps> = React.memo(
                         src="/icon/calendar_gray.svg"
                         alt="calendar"
                         layout="fill"
-                        className="absolute"
+                        className="absolute sm:mt-3 md:mt-2 lg:mt-2"
                       />
                     </div>
                     <p className="flex-grow text-gray-300 sm:text-10 md:text-12">
