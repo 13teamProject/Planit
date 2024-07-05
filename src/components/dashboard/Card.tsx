@@ -49,7 +49,9 @@ const Card: React.FC<CardProps> = React.memo(
           </div>
         )}
         <div className="flex flex-grow flex-col justify-between">
-          <h1 className="py-4 sm:text-14 md:text-16">{card.title}</h1>
+          <h1 className="overflow-hidden text-ellipsis whitespace-nowrap py-4 sm:max-w-150 sm:text-14 md:max-w-500 md:text-16 lg:max-w-300">
+            {card.title}
+          </h1>
           <div className="md:flex md:w-full md:gap-16 lg:block">
             <div className="flex flex-wrap gap-6">
               {card.tags.map((tag) => (
