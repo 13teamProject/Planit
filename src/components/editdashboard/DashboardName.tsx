@@ -5,6 +5,7 @@ import Button from '@/components/commons/button';
 import ColorCircle from '@/components/commons/circle/ColorCircle';
 import Input from '@/components/commons/input';
 import { useAuthStore } from '@/store/authStore';
+import { useDashboardNameChange } from '@/store/dashBoardName';
 import { useSocketStore } from '@/store/socketStore';
 import {
   ColorMapping,
@@ -27,6 +28,7 @@ export default function DashboardName({ params }: { params: { id: number } }) {
   const [dashboardData, setDashboardData] = useState<DashboardEditResponse>();
   const { socket } = useSocketStore();
   const { userInfo } = useAuthStore();
+  const { setData } = useDashboardNameChange();
 
   const colorMapping: ColorMapping = {
     '#5534DA': 'bg-violet-dashboard',
@@ -48,11 +50,11 @@ export default function DashboardName({ params }: { params: { id: number } }) {
       const editRequest = { ...data, color: selectedColor };
 
       const result = await updateDashboard(params.id, editRequest);
-
       if ('message' in result) {
         toast.error(result.message);
       } else {
         toast.success('대시보드 정보를 수정했습니다');
+        setData(result.title);
         setDashboardData(result);
         reset();
         socket?.emit('dashboard', {

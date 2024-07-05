@@ -14,7 +14,7 @@ export default function Layout({
       <Sidemenu />
       <div className="flex flex-1 flex-col">
         <Suspense>
-          <DashBoardHeader isDashboard />
+          <DashBoardHeader isDashboard={false} />
         </Suspense>
         <div className="flex-1 bg-gray-50 p-20">{children}</div>
       </div>

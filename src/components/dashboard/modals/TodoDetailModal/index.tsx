@@ -14,18 +14,20 @@ import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 
-const cardId = 8684;
-
-const progressTitle = 'To do';
-
 type Props = {
   todoModalOnClose: () => void;
   todoModalIsOpen: boolean;
+  cardId: number;
+  columnTitle: string;
+  onCardDelete: () => void;
 };
 
 export default function TodoDetailModal({
   todoModalOnClose,
   todoModalIsOpen,
+  cardId,
+  columnTitle,
+  onCardDelete,
 }: Props) {
   const [cardDetails, setCardDetails] = useState<CardResponse | null>(null);
   const [selectBoxIsOpen, setSelectBoxIsOpen] = useState(false);
@@ -50,6 +52,7 @@ export default function TodoDetailModal({
 
   const handleDelete = async () => {
     const res = await deleteTodoCardDetails(cardId);
+    onCardDelete();
     if ('message' in res) {
       toast.error(res.message);
       return;
@@ -71,7 +74,6 @@ export default function TodoDetailModal({
   const openEditModal = () => {
     setEditModalIsOpen(true);
     setSelectBoxIsOpen(false);
-    todoModalOnClose();
   };
 
   const handleKebabClick = () => {
@@ -125,7 +127,7 @@ export default function TodoDetailModal({
               />
             </div>
           </div>
-          <CardDetails data={cardDetails} progressTitle={progressTitle} />
+          <CardDetails data={cardDetails} columnTitle={columnTitle} />
           <div className="flex-1">
             <CommentSection
               cardId={id}
