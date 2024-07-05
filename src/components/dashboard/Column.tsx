@@ -1,14 +1,10 @@
-import { editCard, getCards } from '@/app/api/cards';
+import { getCards } from '@/app/api/cards';
 import { getColumns } from '@/app/api/columns';
 import BarButton from '@/components/commons/button/BarButton';
 import ColorCircle from '@/components/commons/circle/ColorCircle';
-import { useAuthStore } from '@/store/authStore';
+import { useDragAndDrop } from '@/hooks/useDragAndDrop';
 import { useSocketStore } from '@/store/socketStore';
-import {
-  Column as ColumnType,
-  EditCardRequest,
-  GetCardResponse,
-} from '@planit-types';
+import { Column as ColumnType, GetCardResponse } from '@planit-types';
 import Image from 'next/image';
 import React, { useCallback, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
@@ -36,18 +32,20 @@ export default function Column({ dashboardId, onColumnUpdate }: ColumnProps) {
   const [columns, setColumns] = useState<ColumnWithCards[]>([]);
   const [activeColumnId, setActiveColumnId] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
-  const [draggingCard, setDraggingCard] = useState<number | null>(null);
-  const [dropTarget, setDropTarget] = useState<{
-    columnId: number;
-    index: number;
-  } | null>(null);
   const [selectedCard, setSelectedCard] = useState<GetCardResponse | null>(
     null,
   );
   const [selectedColumnTitle, setSelectedColumnTitle] = useState<string>('');
   const [isTodoDetailsCardOpen, setIsTodoDetailsCardOpen] = useState(false);
   const { socket } = useSocketStore();
-  const { userInfo } = useAuthStore();
+
+  const {
+    draggingCard,
+    dropTarget,
+    handleDragStart,
+    handleDragOver,
+    handleDrop,
+  } = useDragAndDrop({ columns, setColumns, dashboardId });
 
   const socketListener = () => {
     if (!socket) return;
@@ -143,103 +141,6 @@ export default function Column({ dashboardId, onColumnUpdate }: ColumnProps) {
   const handleCardDelete = useCallback(() => {
     fetchColumnsAndCards(); // 카드 삭제 후 데이터 새로고침
   }, [fetchColumnsAndCards]);
-
-  // 드래그 시작 시 현재 드래그 중인 카드의 ID 저장
-  const handleDragStart = useCallback((cardId: number) => {
-    setDraggingCard(cardId);
-  }, []);
-
-  // 현재 마우스가 위치한 드롭 가능 영역(컬럼과 인덱스)을 상태에 저장
-  const handleDragOver = useCallback(
-    (e: React.DragEvent, columnId: number, index: number) => {
-      e.preventDefault();
-      setDropTarget({ columnId, index });
-    },
-    [],
-  );
-
-  // 드래그 종료시 드래그 관련 상태를 초기화
-  const handleDragEnd = useCallback(() => {
-    setDraggingCard(null);
-    setDropTarget(null);
-  }, []);
-
-  // 드롭시 카드의 위치를 업데이트하고 서버에 변경사항을 전송
-  const handleDrop = useCallback(
-    async (e: React.DragEvent, targetColumnId: number, targetIndex: number) => {
-      e.preventDefault();
-      const cardId = Number(e.dataTransfer.getData('cardId'));
-      const sourceColumnId = Number(e.dataTransfer.getData('sourceColumnId'));
-
-      // 로컬 상태 업데이트: 카드 위치 변경
-      setColumns((prevColumns) => {
-        const newColumns = prevColumns.map((column) => ({
-          ...column,
-          cards: [...column.cards],
-        }));
-        const sourceColumn = newColumns.find(
-          (col) => col.id === sourceColumnId,
-        );
-        const targetColumn = newColumns.find(
-          (col) => col.id === targetColumnId,
-        );
-
-        if (!sourceColumn || !targetColumn) return prevColumns;
-
-        const cardIndex = sourceColumn.cards.findIndex(
-          (card) => card.id === cardId,
-        );
-        if (cardIndex === -1) return prevColumns;
-
-        const [movedCard] = sourceColumn.cards.splice(cardIndex, 1);
-
-        const updatedCard = { ...movedCard, columnId: targetColumnId };
-        targetColumn.cards.splice(targetIndex, 0, updatedCard);
-
-        return newColumns;
-      });
-
-      // 서버에 카드 이동 정보를 업데이트
-      try {
-        const currentCard = columns
-          .flatMap((col) => col.cards)
-          .find((card) => card.id === cardId);
-
-        if (!currentCard) {
-          toast.error('카드를 찾을 수 없습니다.');
-          return;
-        }
-
-        const formValue: EditCardRequest = {
-          columnId: targetColumnId,
-          assigneeUserId: currentCard.assignee?.id,
-          title: currentCard.title,
-          description: currentCard.description,
-          dueDate: currentCard.dueDate ? currentCard.dueDate : undefined,
-          tags: currentCard.tags,
-        };
-
-        const result = await editCard({ cardId, formValue });
-
-        socket?.emit('card', {
-          member: userInfo?.nickname,
-          action: 'edit',
-          card: currentCard.title,
-          room: String(dashboardId),
-        });
-
-        // 에러 처리 및 성공
-        if ('message' in result) {
-          toast.error('카드 이동 중 오류 발생');
-        }
-      } catch (err) {
-        toast.error('카드 이동 중 예상치 못한 오류 발생');
-      }
-
-      handleDragEnd();
-    },
-    [columns, handleDragEnd],
-  );
 
   if (loading) return <Spinner size={24} />;
 
