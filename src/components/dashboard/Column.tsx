@@ -237,17 +237,17 @@ export default function Column({ dashboardId, onColumnUpdate }: ColumnProps) {
 
           <div className="no-scrollbar sm:mb-12 md:mb-20 lg:flex-1 lg:overflow-y-auto">
             {column.cards.length === 0 ? (
-              <div className="mt-20 flex h-200 w-full items-center justify-center sm:h-150">
+              <div className="mt-20 flex h-200 w-full select-none items-center justify-center sm:h-150">
                 <div className="w-35 md:w-60">
                   <Image
                     src="/image/empty-comment-logo.png"
                     width={45}
                     height={45}
-                    layout="responsive"
+                    layout="responsive "
                     alt="댓글 비었을 때 로고"
                   />
                 </div>
-                <p className="pl-10 text-14 text-toss-blue-light md:text-16">
+                <p className="pointer-events-none pl-10 text-14 text-toss-blue-light md:text-16">
                   카드가 없습니다!
                 </p>
               </div>
