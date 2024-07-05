@@ -2,6 +2,8 @@ import { editCard, getCards } from '@/app/api/cards';
 import { getColumns } from '@/app/api/columns';
 import BarButton from '@/components/commons/button/BarButton';
 import ColorCircle from '@/components/commons/circle/ColorCircle';
+import { useAuthStore } from '@/store/authStore';
+import { useSocketStore } from '@/store/socketStore';
 import {
   Column as ColumnType,
   EditCardRequest,
@@ -44,6 +46,36 @@ export default function Column({ dashboardId, onColumnUpdate }: ColumnProps) {
   );
   const [selectedColumnTitle, setSelectedColumnTitle] = useState<string>('');
   const [isTodoDetailsCardOpen, setIsTodoDetailsCardOpen] = useState(false);
+  const { socket } = useSocketStore();
+  const { userInfo } = useAuthStore();
+
+  const socketListener = () => {
+    if (!socket) return;
+
+    socket.on('card', (message: string) => {
+      if (message.includes('삭제')) {
+        toast.error(message, { containerId: 'socket' });
+      } else {
+        toast.success(message, { containerId: 'socket' });
+      }
+
+      fetchColumnsAndCards();
+    });
+
+    socket.on('column', (message: string) => {
+      if (message.includes('삭제')) {
+        toast.error(message, { containerId: 'socket' });
+      } else {
+        toast.success(message, { containerId: 'socket' });
+      }
+
+      fetchColumnsAndCards();
+    });
+  };
+
+  useEffect(() => {
+    socketListener();
+  }, [socket]);
 
   const openTodoDetailCardModal = (
     card: GetCardResponse,
@@ -188,6 +220,13 @@ export default function Column({ dashboardId, onColumnUpdate }: ColumnProps) {
         };
 
         const result = await editCard({ cardId, formValue });
+
+        socket?.emit('card', {
+          member: userInfo?.nickname,
+          action: 'edit',
+          card: currentCard.title,
+          room: String(dashboardId),
+        });
 
         // 에러 처리 및 성공
         if ('message' in result) {

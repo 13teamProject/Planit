@@ -4,7 +4,9 @@ import { getDashboradDetail, updateDashboard } from '@/app/api/dashboards';
 import Button from '@/components/commons/button';
 import ColorCircle from '@/components/commons/circle/ColorCircle';
 import Input from '@/components/commons/input';
+import { useAuthStore } from '@/store/authStore';
 import { useDashboardNameChange } from '@/store/dashBoardName';
+import { useSocketStore } from '@/store/socketStore';
 import {
   ColorMapping,
   DashboardEditRequest,
@@ -24,6 +26,8 @@ export default function DashboardName({ params }: { params: { id: number } }) {
   } = useForm<DashboardEditRequest>();
   const [selectedColor, setSelectedColor] = useState<string>();
   const [dashboardData, setDashboardData] = useState<DashboardEditResponse>();
+  const { socket } = useSocketStore();
+  const { userInfo } = useAuthStore();
   const { setData } = useDashboardNameChange();
 
   const colorMapping: ColorMapping = {
@@ -53,6 +57,12 @@ export default function DashboardName({ params }: { params: { id: number } }) {
         setData(result.title);
         setDashboardData(result);
         reset();
+        socket?.emit('dashboard', {
+          member: userInfo?.nickname,
+          dashboard: data.title,
+          action: 'edit',
+          room: String(dashboardData?.id),
+        });
       }
     } else {
       // 색상 선택 안했을 때

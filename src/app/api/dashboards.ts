@@ -99,7 +99,7 @@ export async function getDashboradDetail(
 }
 
 type GetDashboardIdParams = {
-  dashboardId: number;
+  dashboardId: string;
 };
 
 // FIXME: 중복

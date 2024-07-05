@@ -2,12 +2,14 @@ import { deleteColumn, editColumn, getColumnList } from '@/app/api/columns';
 import Button from '@/components/commons/button';
 import Input from '@/components/commons/input';
 import Modal from '@/components/commons/modal';
+import { useAuthStore } from '@/store/authStore';
+import { useSocketStore } from '@/store/socketStore';
 import { Column, EditColumnRequest } from '@planit-types';
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
-type EditColumnModalProps = {
+type Props = {
   isOpen: boolean;
   onClose: () => void;
   columnData: Column;
@@ -25,7 +27,7 @@ export default function EditColumnModal({
   isOpen,
   onClose,
   onColumnDelete, // 새로 추가된 prop
-}: EditColumnModalProps) {
+}: Props) {
   const [columnList, setColumnList] = useState<Column[]>([]);
   const [error, setError] = useState('');
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -41,6 +43,8 @@ export default function EditColumnModal({
     },
   });
   const inputValue = watch('columnTitle');
+  const { socket } = useSocketStore();
+  const { userInfo } = useAuthStore();
 
   const onSubmit: SubmitHandler<EditColumnInputs> = async ({ columnTitle }) => {
     if (error) return;
@@ -62,6 +66,13 @@ export default function EditColumnModal({
     onClose();
     reset();
     onColumnDelete(); // 컬럼 수정 후 데이터 새로고침
+    socket?.emit('column', {
+      member: userInfo?.nickname,
+      action: 'edit',
+      prevColumn: columnData.title,
+      column: columnTitle,
+      room: String(dashboardId),
+    });
   };
 
   const openDeleteColumnModal = () => {
@@ -153,6 +164,7 @@ export default function EditColumnModal({
         isOpen={isDeleteModalOpen}
         onClose={closeDeleteColumnModal}
         columnData={columnData}
+        dashboardId={dashboardId}
         onColumnDelete={onColumnDelete} // 새로 추가된 prop
       />
     </>
@@ -163,8 +175,11 @@ function DeleteColumnModal({
   isOpen,
   onClose,
   columnData,
+  dashboardId,
   onColumnDelete, // 새로 추가된 prop
-}: Omit<EditColumnModalProps, 'dashboardId'>) {
+}: Props) {
+  const { socket } = useSocketStore();
+  const { userInfo } = useAuthStore();
   const handleDeleteColumn = async () => {
     const res = await deleteColumn(columnData.id);
 
@@ -172,8 +187,15 @@ function DeleteColumnModal({
       toast.error(res.message);
       return;
     }
+
     onClose();
     onColumnDelete(); // 컬럼 삭제 후 데이터 새로고침
+    socket?.emit('column', {
+      member: userInfo?.nickname,
+      action: 'delete',
+      column: columnData.title,
+      room: String(dashboardId),
+    });
   };
 
   return (

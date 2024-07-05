@@ -9,3 +9,60 @@
   > svg {
   fill: #0064ff !important;
 }
+
+#socket.Toastify .Toastify__toast {
+  width: 100% !important;
+  max-width: 500px;
+  background-color: #0064ff !important;
+  color: white;
+  text-align: center;
+}
+
+#socket.Toastify .Toastify__toast-icon {
+  display: none;
+}
+
+#socket.Toastify .Toastify__close-button {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+}
+
+#socket.Toastify .Toastify__close-button svg {
+  fill: white;
+}
+
+@media only screen and (min-width: 481px) {
+  #socket.Toastify .Toastify__toast-container {
+    width: 400px;
+  }
+
+  #socket.Toastify .Toastify__toast-body {
+    padding: 8px;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  #socket.Toastify .Toastify__toast-container {
+    width: max-content !important;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  #socket.Toastify .Toastify__toast {
+    padding: 8px 30px !important;
+    border-radius: 8px;
+    margin-bottom: 8px;
+  }
+
+  #socket.Toastify .Toastify__toast-body {
+    margin: 0;
+    padding: 0;
+  }
+}
+
+#socket.Toastify .Toastify__toast--error {
+  background-color: red !important;
+  color: white;
+  text-align: center;
+}
