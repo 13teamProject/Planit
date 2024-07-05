@@ -23,6 +23,10 @@ export default function DashboardPage({
   };
 }) {
   const router = useRouter();
+  const [columnLength, setColumnLength] = useState<number>();
+  const [isCreateColumnModalOpen, setIsCreateColumnModalOpen] = useState(false);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const dashboardId = params.id;
   const [dashboard, setDashboard] = useState<GetDashboardIdResponse | null>(
     null,
   );
@@ -88,10 +92,6 @@ export default function DashboardPage({
       });
     })();
   }, [socket]);
-  const [columnLength, setColumnLength] = useState<number>();
-  const [isCreateColumnModalOpen, setIsCreateColumnModalOpen] = useState(false);
-  const [refreshTrigger, setRefreshTrigger] = useState(0);
-  const dashboardId = params.id;
 
   const fetchDashboardData = useCallback(async () => {
     try {

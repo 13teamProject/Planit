@@ -108,7 +108,6 @@ export default function EditCardModal({
     socket?.emit('card', {
       member: userInfo?.nickname,
       action: 'edit',
-      prevCard: currentCardData.title,
       card: title,
       room: String(dashboardId),
     });

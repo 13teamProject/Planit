@@ -48,10 +48,7 @@ export default function handler(
         if (action === 'edit') {
           socket.broadcast
             .to(room)
-            .emit(
-              'card',
-              `${member} 님이 ${data.prevCard} 카드를 ${card} 로 수정하였습니다.`,
-            );
+            .emit('card', `${member} 님이 ${card} 카드를 수정하였습니다.`);
         }
 
         if (action === 'delete') {
