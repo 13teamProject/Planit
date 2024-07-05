@@ -233,7 +233,6 @@ export default function Column({ dashboardId, onColumnUpdate }: ColumnProps) {
                   <Card
                     card={card}
                     columnId={column.id}
-                    columnTitle={column.title}
                     onDragStart={() => handleDragStart(card.id, column.id)}
                     isDragging={draggingCard === card.id}
                     onClick={() => openTodoDetailCardModal(card, column.title)}
