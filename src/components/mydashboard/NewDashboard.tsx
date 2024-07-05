@@ -84,12 +84,14 @@ export default function NewDashboard() {
 
   const handleCloseModal = () => {
     setModalState({ ...modalState, isOpen: false });
+    reset(); // 추가: 폼을 초기화하는 reset 함수 호출
   };
 
   const {
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { isValid, errors },
   } = useForm<DashboardFormValues>({ mode: 'onChange' });
 

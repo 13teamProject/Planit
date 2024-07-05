@@ -60,6 +60,7 @@ export default function Sidemenu() {
 
   const handleCloseModal = () => {
     setModalState({ ...modalState, isOpen: false });
+    reset(); // 추가: 폼을 초기화하는 reset 함수 호출
   };
 
   const fetchDashboard = async (currentPage: number) => {
@@ -93,6 +94,7 @@ export default function Sidemenu() {
     handleSubmit,
     watch,
     formState: { isValid, errors },
+    reset,
   } = useForm<DashboardFormValues>({ mode: 'onChange' });
 
   const onSubmit: SubmitHandler<DashboardFormValues> = async (data) => {
