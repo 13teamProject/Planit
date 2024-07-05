@@ -11,22 +11,12 @@ type CardProps = {
   columnId: number;
   columnTitle: string;
   onDragStart: (cardId: number, columnId: number) => void;
-  onDragOver: (e: React.DragEvent) => void;
-  onDrop: (e: React.DragEvent) => void;
   isDragging: boolean;
   onClick: () => void;
 };
 
 const Card: React.FC<CardProps> = React.memo(
-  ({
-    card,
-    columnId,
-    onDragStart,
-    onDragOver,
-    onDrop,
-    onClick,
-    isDragging,
-  }) => {
+  ({ card, columnId, onDragStart, onClick, isDragging }) => {
     const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
       onDragStart(card.id, columnId);
       e.dataTransfer.setData('cardId', card.id.toString());
@@ -37,11 +27,13 @@ const Card: React.FC<CardProps> = React.memo(
       <div
         draggable
         onDragStart={handleDragStart}
-        onDragOver={onDragOver}
-        onDrop={onDrop}
         onClick={onClick}
         role="presentation"
-        className={`mt-20 min-h-100 cursor-grab rounded-8 border bg-white p-10 transition-all duration-200 ${isDragging ? 'border-blue-300 opacity-50' : 'border-gray-200 hover:border-gray-400'} active:cursor-grabbing sm:block md:flex md:gap-20 md:p-20 lg:block`}
+        className={`min-h-100 cursor-grab rounded-8 border bg-white p-10 transition-all duration-200 ${
+          isDragging
+            ? 'border-blue-300 opacity-50'
+            : 'border-gray-200 hover:border-gray-400'
+        } active:cursor-grabbing sm:block md:flex md:gap-20 md:p-20 lg:block`}
       >
         {card.imageUrl && (
           <div className="relative aspect-video sm:w-full md:w-200 lg:w-full">
@@ -49,14 +41,16 @@ const Card: React.FC<CardProps> = React.memo(
           </div>
         )}
         <div className="flex flex-grow flex-col justify-between">
-          <h1 className="py-4 sm:text-14 md:text-16">{card.title}</h1>
+          <h1 className="overflow-hidden text-ellipsis whitespace-nowrap py-4 sm:max-w-150 sm:text-14 md:max-w-500 md:text-16 lg:max-w-300">
+            {card.title}
+          </h1>
           <div className="md:flex md:w-full md:gap-16 lg:block">
             <div className="flex flex-wrap gap-6">
               {card.tags.map((tag) => (
                 <Tag key={tag} text={tag} />
               ))}
             </div>
-            <div className="flex flex-grow items-baseline justify-between pt-8">
+            <div className="flex flex-grow items-center justify-between pt-8">
               <div className="flex items-baseline gap-4">
                 {card.dueDate && (
                   <>
@@ -65,7 +59,7 @@ const Card: React.FC<CardProps> = React.memo(
                         src="/icon/calendar_gray.svg"
                         alt="calendar"
                         layout="fill"
-                        className="absolute"
+                        className="absolute sm:mt-3 md:mt-2 lg:mt-2"
                       />
                     </div>
                     <p className="flex-grow text-gray-300 sm:text-10 md:text-12">
