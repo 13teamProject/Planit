@@ -230,12 +230,12 @@ export default function Sidemenu() {
             ))}
           </ul>
         </div>
-        <div className="mt-10 flex justify-end p-4">
+        <div className="absolute bottom-30 right-20 mt-10 flex">
           <button
             type="button"
             onClick={handlePreviousPage}
             disabled={page <= 1}
-            className={`mr-15 transition-transform duration-200 hover:scale-110 ${page > 1 ? 'text-black' : 'text-gray-400'}`}
+            className="mr-15 transition-transform duration-200 hover:scale-110"
           >
             <Image
               src={
@@ -252,7 +252,7 @@ export default function Sidemenu() {
             type="button"
             onClick={handleNextPage}
             disabled={page >= totalPages}
-            className={`mr-15 transition-transform duration-200 hover:scale-110 ${page < totalPages ? 'text-black' : 'text-gray-400'}`}
+            className="mr-15 transition-transform duration-200 hover:scale-110"
           >
             <Image
               src={
