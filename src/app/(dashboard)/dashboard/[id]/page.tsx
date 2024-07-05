@@ -6,7 +6,7 @@ import DashBoardHeader from '@/components/commons/layout/DashboardHeader';
 import Sidemenu from '@/components/commons/layout/Sidemenu';
 import Column from '@/components/dashboard/Column';
 import { GetDashboardIdResponse } from '@planit-types';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 
 export default function DashboardPage({
   params,
@@ -41,7 +41,9 @@ export default function DashboardPage({
     <div className="flex h-screen lg:overflow-hidden">
       <Sidemenu />
       <div className="flex flex-1 flex-col">
-        <DashBoardHeader isDashboard />
+        <Suspense>
+          <DashBoardHeader isDashboard params={params} />
+        </Suspense>
         <div className="w-full bg-gray-50 lg:flex lg:h-full lg:overflow-hidden">
           <Column key={dashboard.id} dashboardId={dashboard.id} />
           <div className="sm:w-full sm:p-12 md:w-full md:p-20 lg:w-500">
