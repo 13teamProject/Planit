@@ -4,6 +4,7 @@ import { getDashboradDetail, updateDashboard } from '@/app/api/dashboards';
 import Button from '@/components/commons/button';
 import ColorCircle from '@/components/commons/circle/ColorCircle';
 import Input from '@/components/commons/input';
+import { useDashboardNameChange } from '@/store/dashBoardName';
 import {
   ColorMapping,
   DashboardEditRequest,
@@ -23,6 +24,7 @@ export default function DashboardName({ params }: { params: { id: number } }) {
   } = useForm<DashboardEditRequest>();
   const [selectedColor, setSelectedColor] = useState<string>();
   const [dashboardData, setDashboardData] = useState<DashboardEditResponse>();
+  const { setData } = useDashboardNameChange();
 
   const colorMapping: ColorMapping = {
     '#5534DA': 'bg-violet-dashboard',
@@ -44,11 +46,11 @@ export default function DashboardName({ params }: { params: { id: number } }) {
       const editRequest = { ...data, color: selectedColor };
 
       const result = await updateDashboard(params.id, editRequest);
-
       if ('message' in result) {
         toast.error(result.message);
       } else {
         toast.success('대시보드 정보를 수정했습니다');
+        setData(result.title);
         setDashboardData(result);
         reset();
       }

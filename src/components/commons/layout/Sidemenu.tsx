@@ -1,6 +1,5 @@
 import { getDashboards, postDashboards } from '@/app/api/dashboards';
 import ColorCircle from '@/components/commons/circle/ColorCircle';
-import { SCROLL_SIZE } from '@/constants/globalConstants';
 import useDeviceState from '@/hooks/useDeviceState';
 import {
   ColorMapping,
@@ -11,13 +10,13 @@ import {
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import Button from '../button';
 import Modal from '../modal';
 
-export const colorMapping: ColorMapping = {
+const colorMapping: ColorMapping = {
   '#5534DA': 'bg-violet-dashboard',
   '#D6173A': 'bg-red-dashboard',
   '#7AC555': 'bg-green-dashboard',
@@ -26,7 +25,7 @@ export const colorMapping: ColorMapping = {
   '#E876EA': 'bg-pink-dashboard',
 };
 
-export const colors = [
+const colors = [
   '#D6173A',
   '#E876EA',
   '#FFA500',
@@ -44,15 +43,15 @@ export default function Sidemenu() {
   });
   const [selectedColor, setSelectedColor] = useState<string>(colors[0]);
   const [dashboards, setDashboards] = useState<Dashboard[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [cursorId, setCursorId] = useState<number | undefined>(undefined);
-  const observerRef = useRef<HTMLDivElement | null>(null);
+  const [page, setPage] = useState(1);
+  const [totalItems, setTotalItems] = useState<number>(0);
+  const [totalPages, setTotalPages] = useState<number>(1);
   const router = useRouter();
 
+  const pageSize = 18;
+
   const toggleMenu = () => {
-    if (device === 'mobile') {
-      setIsMenuOpen(!isMenuOpen);
-    }
+    setIsMenuOpen(!isMenuOpen);
   };
 
   const handleOpenModal = () => {
@@ -63,66 +62,31 @@ export default function Sidemenu() {
     setModalState({ ...modalState, isOpen: false });
   };
 
-  const loadDashboards = async (isNewPage = false) => {
-    if (loading) return;
-    setLoading(true);
-    try {
-      const response = await getDashboards(
-        'infiniteScroll',
-        10,
-        SCROLL_SIZE,
-        cursorId,
-      );
-      const newDashboards = response.dashboards.map((data: Dashboard) => ({
-        id: data.id,
-        title: data.title,
-        color: data.color,
-        createdAt: data.createdAt,
-        updatedAt: data.updatedAt,
-        createdByMe: data.createdByMe,
-        userId: data.userId,
-      }));
+  const fetchDashboard = async (currentPage: number) => {
+    const response = await getDashboards(
+      'pagination',
+      1,
+      Number.MAX_SAFE_INTEGER,
+    );
 
-      console.log('Fetched Dashboards:', newDashboards);
-      setDashboards((prevDashboards) =>
-        isNewPage ? [...prevDashboards, ...newDashboards] : newDashboards,
-      );
+    const totalItemsCount = response.dashboards.length;
+    setTotalItems(totalItemsCount);
 
-      if (newDashboards.length > 0) {
-        setCursorId(newDashboards[newDashboards.length - 1].id); // 마지막 아이템의 ID를 cursorId로 설정
-      }
-    } catch (error) {
-      console.error('Failed to fetch dashboards:', error);
-    } finally {
-      setLoading(false);
-    }
+    const calculatedTotalPages = Math.ceil(totalItemsCount / pageSize);
+    setTotalPages(calculatedTotalPages);
+
+    const sortedDashboards: Dashboard[] = response.dashboards.sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    );
+
+    const paginatedDashboards = sortedDashboards.slice(
+      (currentPage - 1) * pageSize,
+      currentPage * pageSize,
+    );
+
+    setDashboards(paginatedDashboards);
   };
-
-  useEffect(() => {
-    loadDashboards();
-  }, []);
-
-  useEffect(() => {
-    if (device !== 'mobile') {
-      setIsMenuOpen(true); // 모바일이 아닐 때 메뉴를 항상 열어둠
-    }
-
-    const observer = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting && !loading) {
-        loadDashboards(true);
-      }
-    });
-
-    if (observerRef.current) {
-      observer.observe(observerRef.current);
-    }
-
-    return () => {
-      if (observerRef.current) {
-        observer.unobserve(observerRef.current);
-      }
-    };
-  }, [cursorId, loading, device]);
 
   const {
     register,
@@ -148,6 +112,7 @@ export default function Sidemenu() {
         createdByMe: response.createdByMe,
         userId: response.userId,
       };
+      fetchDashboard(1);
       setModalState({ ...modalState, isOpen: false });
       router.push(`/dashboard/${response.id}`);
     } catch (error) {
@@ -155,13 +120,29 @@ export default function Sidemenu() {
     }
   };
 
+  useEffect(() => {
+    fetchDashboard(page);
+  }, [page, device]);
+
+  const handlePreviousPage = () => {
+    if (page > 1) {
+      setPage(page - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (page < totalPages) {
+      setPage(page + 1);
+    }
+  };
+
   return (
     <>
-      {device === 'mobile' && !isMenuOpen && (
+      {!isMenuOpen && (
         <button
           type="button"
-          className="fixed left-20 top-23 z-[1000]"
-          onClick={() => setIsMenuOpen(true)}
+          className="fixed left-20 top-23 z-[1000] md:left-20 lg:left-20"
+          onClick={toggleMenu}
         >
           <Image
             src="/icon/sidemenu-toggle.svg"
@@ -172,24 +153,20 @@ export default function Sidemenu() {
         </button>
       )}
       <nav
-        className={`fixed left-0 top-0 z-[999] h-screen w-70 max-w-[300px] overflow-y-auto border-r border-gray-200 bg-white pl-20 pt-20 transition-transform duration-300 ${
-          isMenuOpen ? 'translate-x-0' : '-translate-x-full'
-        } md:relative md:w-160 md:translate-x-0 lg:w-300`}
+        className={`fixed left-0 top-0 z-[1001] h-screen w-70 max-w-[300px] overflow-y-auto border-r border-gray-200 bg-white pl-20 pt-20 transition-transform duration-300 ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'} md:w-[160px] lg:w-[300px]`}
       >
-        {device === 'mobile' && (
-          <button
-            type="button"
-            className="absolute right-28 top-60 z-[1000] transition-transform duration-200 ease-in-out hover:rotate-90"
-            onClick={() => setIsMenuOpen(false)}
-          >
-            <Image
-              src="/icon/close.svg"
-              width={20}
-              height={20}
-              alt="메뉴 닫기"
-            />
-          </button>
-        )}
+        <button
+          type="button"
+          className="absolute right-26 top-60 z-[1002] transform transition-transform duration-300 hover:scale-150 md:right-8 md:top-20 lg:right-20"
+          onClick={toggleMenu}
+        >
+          <Image
+            src="/icon/menu-toggle-close.svg"
+            width={25}
+            height={25}
+            alt="메뉴 닫기"
+          />
+        </button>
         <Link href="/" className="cursor-pointer">
           <Image
             className="md:hidden"
@@ -212,7 +189,7 @@ export default function Sidemenu() {
           <p className="text-12 font-bold text-gray-400 sm:hidden md:block lg:block">
             Dash Boards
           </p>
-          <button type="button" onClick={handleOpenModal} className="md:pr-10">
+          <button type="button" onClick={handleOpenModal}>
             <Image
               src="/icon/add_box.svg"
               width={20}
@@ -250,7 +227,42 @@ export default function Sidemenu() {
               </Link>
             ))}
           </ul>
-          <div ref={observerRef} />
+        </div>
+        <div className="mt-10 flex justify-end p-4">
+          <button
+            type="button"
+            onClick={handlePreviousPage}
+            disabled={page <= 1}
+            className={`mr-15 transition-transform duration-200 hover:scale-110 ${page > 1 ? 'text-black' : 'text-gray-400'}`}
+          >
+            <Image
+              src={
+                page > 1
+                  ? '/icon/sidemenu-left-black.svg'
+                  : '/icon/sidemenu-left.svg'
+              }
+              width={10}
+              height={10}
+              alt="대시보드 왼쪽 화살표 버튼"
+            />
+          </button>
+          <button
+            type="button"
+            onClick={handleNextPage}
+            disabled={page >= totalPages}
+            className={`mr-15 transition-transform duration-200 hover:scale-110 ${page < totalPages ? 'text-black' : 'text-gray-400'}`}
+          >
+            <Image
+              src={
+                page < totalPages
+                  ? '/icon/sidemenu-right-black.svg'
+                  : '/icon/sidemenu-right.svg'
+              }
+              width={10}
+              height={10}
+              alt="대시보드 오른쪽 화살표 버튼"
+            />
+          </button>
         </div>
       </nav>
       <Modal isOpen={modalState.isOpen} onClose={handleCloseModal}>

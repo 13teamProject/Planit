@@ -12,6 +12,7 @@ type EditColumnModalProps = {
   onClose: () => void;
   columnData: Column;
   dashboardId: number;
+  onColumnDelete: () => void; // 새로 추가된 prop
 };
 
 export type EditColumnInputs = {
@@ -23,6 +24,7 @@ export default function EditColumnModal({
   dashboardId,
   isOpen,
   onClose,
+  onColumnDelete, // 새로 추가된 prop
 }: EditColumnModalProps) {
   const [columnList, setColumnList] = useState<Column[]>([]);
   const [error, setError] = useState('');
@@ -59,10 +61,12 @@ export default function EditColumnModal({
 
     onClose();
     reset();
+    onColumnDelete(); // 컬럼 수정 후 데이터 새로고침
   };
 
   const openDeleteColumnModal = () => {
     setIsDeleteModalOpen(true);
+    onClose(); // EditColumnModal을 닫습니다.
   };
 
   const closeDeleteColumnModal = () => {
@@ -82,18 +86,23 @@ export default function EditColumnModal({
 
       setColumnList(columnRes.data);
     })();
-  }, [isOpen]);
+  }, [isOpen, dashboardId]);
 
   useEffect(() => {
     const columnTitleList = columnList.map((column) => column.title);
-    if (columnTitleList.includes(inputValue)) {
+    if (
+      columnTitleList.includes(inputValue) &&
+      inputValue !== columnData.title
+    ) {
       setError('중복된 컬럼 이름입니다.');
-    } else setError('');
-  }, [inputValue, columnList]);
+    } else {
+      setError('');
+    }
+  }, [inputValue, columnList, columnData.title]);
 
   return (
     <>
-      <Modal isOpen={isOpen} onClose={() => {}}>
+      <Modal isOpen={isOpen} onClose={onClose}>
         <form className="w-327 px-20 py-28 md:w-540 md:px-28 md:py-32">
           <h1 className="text-20 font-bold md:text-24">컬럼 관리</h1>
 
@@ -115,10 +124,7 @@ export default function EditColumnModal({
             <button
               type="button"
               className="mb-16 cursor-pointer text-left text-14 text-gray-300 underline md:mb-0"
-              onClick={() => {
-                openDeleteColumnModal();
-                onClose();
-              }}
+              onClick={openDeleteColumnModal}
             >
               삭제하기
             </button>
@@ -147,6 +153,7 @@ export default function EditColumnModal({
         isOpen={isDeleteModalOpen}
         onClose={closeDeleteColumnModal}
         columnData={columnData}
+        onColumnDelete={onColumnDelete} // 새로 추가된 prop
       />
     </>
   );
@@ -156,6 +163,7 @@ function DeleteColumnModal({
   isOpen,
   onClose,
   columnData,
+  onColumnDelete, // 새로 추가된 prop
 }: Omit<EditColumnModalProps, 'dashboardId'>) {
   const handleDeleteColumn = async () => {
     const res = await deleteColumn(columnData.id);
@@ -165,10 +173,11 @@ function DeleteColumnModal({
       return;
     }
     onClose();
+    onColumnDelete(); // 컬럼 삭제 후 데이터 새로고침
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={() => {}}>
+    <Modal isOpen={isOpen} onClose={onClose}>
       <div className="w-327 px-20 py-28 md:w-540 md:px-28">
         <h1 className="my-50 text-center md:text-18">
           컬럼의 모든 카드가 삭제됩니다.

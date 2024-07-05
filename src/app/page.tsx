@@ -2,8 +2,22 @@
 
 import Footer from '@/components/home/Footer';
 import Header from '@/components/home/Header';
+import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
+
+const MotionLink = motion(Link);
+
+const buttonVariants = {
+  rest: {
+    backgroundPosition: '0% 0%',
+    color: '#0070f3',
+  },
+  hover: {
+    backgroundPosition: '100% 100%',
+    color: '#ffffff',
+  },
+};
 
 export default function Home() {
   return (
@@ -26,12 +40,24 @@ export default function Home() {
               시간 절약과 생산성 향상을 위해 설계된 스마트한 task 관리 솔루션을
               지금 바로 경험해보세요.
             </p>
-            <Link
+            <MotionLink
               href="/login"
-              className="inline-block rounded-full border border-toss-blue px-30 py-10 text-12 md:px-70 md:py-25 md:text-18 lg:px-70 lg:py-25 lg:text-18"
+              className="animatedButton inline-block rounded-full border border-toss-blue px-30 py-10 text-12 md:px-70 md:py-25 md:text-18 lg:px-70 lg:py-25 lg:text-18"
+              whileHover="hover"
+              initial="rest"
+              animate="rest"
+              variants={buttonVariants}
+              transition={{ duration: 0.5 }}
+              style={{
+                background:
+                  'linear-gradient(120deg, transparent, transparent 50%, #0070f3 50%)',
+                backgroundSize: '200% 200%',
+                color: '#0070f3',
+                transition: 'color 0.3s ease',
+              }}
             >
               로그인하기
-            </Link>
+            </MotionLink>
           </div>
           <Image
             src="/image/main_banner.png"
