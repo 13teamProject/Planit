@@ -65,7 +65,6 @@ export default function TodoDetailModal({
   const openEditModal = () => {
     setEditModalIsOpen(true);
     setSelectBoxIsOpen(false);
-    todoModalOnClose();
   };
 
   const handleKebabClick = () => {
