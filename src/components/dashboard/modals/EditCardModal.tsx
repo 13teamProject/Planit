@@ -26,6 +26,7 @@ type Props = {
   dashboardId: number;
   columnId: number;
   currentCardData: CardResponse;
+  onColumnUpdate: () => void;
 };
 
 export type EditCardInputs = {
@@ -43,6 +44,7 @@ export default function EditCardModal({
   onClose,
   dashboardId,
   currentCardData,
+  onColumnUpdate,
 }: Props) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [currentStatus, setCurrentStatus] = useState<Column | null>(null);
@@ -99,6 +101,7 @@ export default function EditCardModal({
     }
 
     onClose();
+    onColumnUpdate();
     reset();
     toast.success('카드를 수정하였습니다.');
   };

@@ -18,6 +18,7 @@ type Props = {
   cardId: number;
   columnTitle: string;
   onCardDelete: () => void;
+  onColumnUpdate: () => void;
 };
 
 export default function TodoDetailModal({
@@ -26,6 +27,7 @@ export default function TodoDetailModal({
   cardId,
   columnTitle,
   onCardDelete,
+  onColumnUpdate,
 }: Props) {
   const [cardDetails, setCardDetails] = useState<CardResponse | null>(null);
   const [selectBoxIsOpen, setSelectBoxIsOpen] = useState(false);
@@ -83,58 +85,62 @@ export default function TodoDetailModal({
 
   return (
     <>
-      <Modal isOpen={todoModalIsOpen} onClose={() => {}}>
-        <div className="mb-28 flex max-h-730 w-327 flex-col overflow-hidden px-28 pt-30 md:w-680 md:gap-16 lg:w-730">
-          <div className="grid md:flex md:justify-between md:pb-8 selection:md:flex-col">
-            <h1 className="order-2 py-10 text-20 font-bold md:order-1 md:text-24">
-              {title}
-            </h1>
-            <div className="order-1 flex justify-end gap-24 md:order-2">
-              <Image
-                ref={kebabRef}
-                className="cursor-pointer"
-                src="/icon/kebab.svg"
-                width={28}
-                height={28}
-                alt="드롭다운 케밥"
-                onClick={handleKebabClick}
-              />
-              {selectBoxIsOpen && (
-                <span className="absolute top-70">
-                  <DropDownSelectBox
-                    items={dropdownList}
-                    setSelectBoxIsOpen={setSelectBoxIsOpen}
-                    exceptions={[kebabRef]}
-                  />
-                </span>
-              )}
-              <Image
-                className="cursor-pointer"
-                src="/icon/close.svg"
-                width={32}
-                height={32}
-                alt="창끄기"
-                onClick={todoModalOnClose}
+      {!editModalIsOpen ? (
+        <Modal isOpen={todoModalIsOpen} onClose={() => {}}>
+          <div className="mb-28 flex max-h-730 w-327 flex-col overflow-hidden px-28 pt-30 md:w-680 md:gap-16 lg:w-730">
+            <div className="grid md:flex md:justify-between md:pb-8 selection:md:flex-col">
+              <h1 className="order-2 py-10 text-20 font-bold md:order-1 md:text-24">
+                {title}
+              </h1>
+              <div className="order-1 flex justify-end gap-24 md:order-2">
+                <Image
+                  ref={kebabRef}
+                  className="cursor-pointer"
+                  src="/icon/kebab.svg"
+                  width={28}
+                  height={28}
+                  alt="드롭다운 케밥"
+                  onClick={handleKebabClick}
+                />
+                {selectBoxIsOpen && (
+                  <span className="absolute top-70">
+                    <DropDownSelectBox
+                      items={dropdownList}
+                      setSelectBoxIsOpen={setSelectBoxIsOpen}
+                      exceptions={[kebabRef]}
+                    />
+                  </span>
+                )}
+                <Image
+                  className="cursor-pointer"
+                  src="/icon/close.svg"
+                  width={32}
+                  height={32}
+                  alt="창끄기"
+                  onClick={todoModalOnClose}
+                />
+              </div>
+            </div>
+            <CardDetails data={cardDetails} columnTitle={columnTitle} />
+            <div className="flex-1">
+              <CommentSection
+                cardId={id}
+                columnId={columnId}
+                dashboardId={dashboardId}
               />
             </div>
           </div>
-          <CardDetails data={cardDetails} columnTitle={columnTitle} />
-          <div className="flex-1">
-            <CommentSection
-              cardId={id}
-              columnId={columnId}
-              dashboardId={dashboardId}
-            />
-          </div>
-        </div>
-      </Modal>
-      <EditCardModal
-        isOpen={editModalIsOpen}
-        onClose={handleModalClose(setEditModalIsOpen)}
-        dashboardId={dashboardId}
-        columnId={columnId}
-        currentCardData={cardDetails}
-      />
+        </Modal>
+      ) : (
+        <EditCardModal
+          isOpen={editModalIsOpen}
+          onClose={handleModalClose(setEditModalIsOpen)}
+          dashboardId={dashboardId}
+          columnId={columnId}
+          currentCardData={cardDetails}
+          onColumnUpdate={onColumnUpdate}
+        />
+      )}
       <Modal
         isOpen={deleteModalIsOpen}
         onClose={handleModalClose(setDeleteModalIsOpen)}

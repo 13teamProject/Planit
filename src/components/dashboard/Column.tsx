@@ -287,6 +287,7 @@ export default function Column({ dashboardId, onColumnUpdate }: ColumnProps) {
           cardId={selectedCard.id}
           columnTitle={selectedColumnTitle}
           onCardDelete={handleCardDelete}
+          onColumnUpdate={onColumnUpdate}
         />
       )}
       <CreateCardModal
