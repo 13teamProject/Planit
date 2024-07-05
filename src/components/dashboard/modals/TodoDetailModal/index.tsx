@@ -7,6 +7,8 @@ import Modal from '@/components/commons/modal';
 import EditCardModal from '@/components/dashboard/modals/EditCardModal';
 import CardDetails from '@/components/dashboard/modals/TodoDetailModal/CardDetails';
 import CommentSection from '@/components/dashboard/modals/TodoDetailModal/CommentSection';
+import { useAuthStore } from '@/store/authStore';
+import { useSocketStore } from '@/store/socketStore';
 import { CardResponse, ErrorMessage } from '@planit-types';
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
@@ -32,6 +34,8 @@ export default function TodoDetailModal({
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
   const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
   const kebabRef = useRef<HTMLImageElement>(null);
+  const { socket } = useSocketStore();
+  const { userInfo } = useAuthStore();
 
   const fetchTodoCard = async () => {
     const data: CardResponse | ErrorMessage = await getTodoCardDetails(cardId);
@@ -56,6 +60,12 @@ export default function TodoDetailModal({
     toast.success('성공적으로 삭제되었습니다.');
     setDeleteModalIsOpen(false);
     todoModalOnClose();
+    socket?.emit('card', {
+      member: userInfo?.nickname,
+      action: 'delete',
+      card: cardDetails?.title,
+      room: String(dashboardId),
+    });
   };
 
   useEffect(() => {

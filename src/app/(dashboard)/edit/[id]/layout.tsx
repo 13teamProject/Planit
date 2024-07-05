@@ -9,7 +9,7 @@ export default function Layout({
   params,
 }: Readonly<{
   children: React.ReactNode;
-  params: { id: number };
+  params: { id: string };
 }>) {
   return (
     <div className="flex h-screen">

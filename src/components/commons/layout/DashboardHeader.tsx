@@ -32,7 +32,7 @@ export default function DashBoardHeader({
   params,
 }: {
   isDashboard: boolean;
-  params?: { id: number };
+  params?: { id: string };
 }) {
   const router = useRouter();
   const { userInfo } = useAuthStore();
@@ -43,7 +43,7 @@ export default function DashBoardHeader({
   const [maxVisible, setMaxVisible] = useState(4);
   const [isExpanded, setIsExpanded] = useState(false);
   const [dashboards, setDashboards] = useState<Dashboard>();
-  const [selectedDashboardId] = useState<number>(params ? params.id : 0);
+  const [selectedDashboardId] = useState<number>(params ? +params.id : 0);
   const [members, setMembers] = useState<Member[]>([]);
   const [isClient, setIsClient] = useState(false);
   const { dashboardName, setData } = useDashboardNameChange();
