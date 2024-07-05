@@ -9,8 +9,7 @@ import Spinner from '@/components/commons/spinner';
 import Column from '@/components/dashboard/Column';
 import CreateColumnModal from '@/components/dashboard/modals/CreateColumnModal';
 import { GetDashboardIdResponse } from '@planit-types';
-import { useCallback, useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
+import { Suspense, useEffect, useState } from 'react';
 
 export default function DashboardPage({
   params,
@@ -63,7 +62,9 @@ export default function DashboardPage({
     <div className="flex h-screen lg:overflow-hidden">
       <Sidemenu />
       <div className="flex flex-1 flex-col">
-        <DashBoardHeader isDashboard />
+        <Suspense>
+          <DashBoardHeader isDashboard params={params} />
+        </Suspense>
         <div className="w-full bg-gray-50 lg:flex lg:h-full lg:overflow-hidden">
           <Column
             key={columnLength} // columns 길이를 key로 사용하여 변화를 감지합니다.
