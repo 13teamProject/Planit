@@ -1,13 +1,16 @@
 'use client';
 
 import { getDashboardId } from '@/app/api/dashboards';
+import { getUsers } from '@/app/api/users';
 import BarButton from '@/components/commons/button/BarButton';
 import DashBoardHeader from '@/components/commons/layout/DashboardHeader';
 import Sidemenu from '@/components/commons/layout/Sidemenu';
 import Spinner from '@/components/commons/spinner';
 import Column from '@/components/dashboard/Column';
 import CreateColumnModal from '@/components/dashboard/modals/CreateColumnModal';
+import { useSocketStore } from '@/store/socketStore';
 import { GetDashboardIdResponse } from '@planit-types';
+import { useRouter } from 'next/navigation';
 import { Suspense, useCallback, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
@@ -15,15 +18,78 @@ export default function DashboardPage({
   params,
 }: {
   params: {
-    id: number;
+    id: string;
   };
 }) {
-  const [dashboard, setDashboard] = useState<GetDashboardIdResponse | null>(
-    null,
-  );
+  const router = useRouter();
   const [isCreateColumnModalOpen, setIsCreateColumnModalOpen] = useState(false);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const dashboardId = params.id;
+  const [dashboard, setDashboard] = useState<GetDashboardIdResponse | null>(
+    null,
+  );
+  const { socket, initializeSocket } = useSocketStore();
+
+  const fetchUser = async () => {
+    try {
+      const userData = await getUsers();
+      return userData;
+    } catch (error) {
+      console.error('Failed to fetch user:', error);
+      return null;
+    }
+  };
+
+  const socketListener = () => {
+    if (!socket) return;
+
+    socket.on('enter', (message) => {
+      toast.success(message, { containerId: 'socket' });
+    });
+
+    socket.on('dashboard', (message) => {
+      if (message.includes('삭제')) {
+        toast.error(message, { containerId: 'socket' });
+        router.push('/mydashboard');
+      } else {
+        toast.success(message, { containerId: 'socket' });
+      }
+    });
+  };
+
+  useEffect(() => {
+    let cleanup: () => void | undefined;
+
+    initializeSocket(params.id)
+      .then((cleanUpFn) => {
+        cleanup = cleanUpFn;
+      })
+      .catch((error) => {
+        console.error('Failed to initialize socket:', error);
+      });
+
+    return () => {
+      if (cleanup) {
+        cleanup();
+      }
+    };
+  }, [params.id]);
+
+  useEffect(() => {
+    socketListener();
+  }, [socket, params.id]);
+
+  useEffect(() => {
+    if (!socket) return;
+
+    (async () => {
+      const userData = await fetchUser();
+      socket.emit('enter', {
+        member: userData?.nickname,
+        room: params.id,
+      });
+    })();
+  }, [socket]);
 
   const fetchDashboardData = useCallback(async () => {
     try {

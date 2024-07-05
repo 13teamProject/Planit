@@ -11,6 +11,8 @@ import ImageInput from '@/components/commons/input/ImageInput';
 import TagInput from '@/components/commons/input/TagInput';
 import Textarea from '@/components/commons/input/Textarea';
 import Modal from '@/components/commons/modal';
+import { useAuthStore } from '@/store/authStore';
+import { useSocketStore } from '@/store/socketStore';
 import { formatDate } from '@/utils/date';
 import { CreateCardRequest, Member } from '@planit-types';
 import Image from 'next/image';
@@ -41,6 +43,8 @@ export default function CreateCardModal({
   columnId,
 }: Props) {
   const [members, setMembers] = useState<Member[]>([]);
+  const { socket } = useSocketStore();
+  const { userInfo } = useAuthStore();
   const {
     register,
     handleSubmit,
@@ -78,6 +82,12 @@ export default function CreateCardModal({
     onClose();
     reset();
     toast.success('카드를 생성하였습니다.');
+    socket?.emit('card', {
+      member: userInfo?.nickname,
+      action: 'create',
+      card: title,
+      room: String(dashboardId),
+    });
   };
 
   useEffect(() => {
