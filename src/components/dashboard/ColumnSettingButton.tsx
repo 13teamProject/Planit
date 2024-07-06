@@ -23,7 +23,7 @@ export default function ColumnSettingButton({
     <>
       <button
         type="button"
-        className="relative size-22 md:size-24"
+        className="relative size-22 transition duration-500 ease-in-out hover:rotate-45 md:size-24"
         onClick={() => handleOpen(true)}
       >
         <Image
