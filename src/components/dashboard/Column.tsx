@@ -244,15 +244,15 @@ export default function Column({ dashboardId, onColumnUpdate }: ColumnProps) {
   if (loading) return <Spinner size={24} />;
 
   return (
-    <div className="w-full lg:flex lg:h-full lg:max-w-1200 lg:overflow-hidden lg:overflow-x-scroll lg:whitespace-nowrap">
+    <>
       {columns.map((column) => (
         <div
           key={column.id}
-          className="w-full px-20 sm:border-b sm:p-12 md:border-r md:p-20 lg:flex lg:h-full lg:flex-col"
+          className="w-full px-20 sm:border-b sm:p-12 md:border-r md:p-20 lg:inline-block lg:flex lg:h-full lg:min-w-300 lg:max-w-400 lg:flex-col"
           onDragOver={(e) => handleDragOver(e, column.id, column.cards.length)}
           onDrop={(e) => handleDrop(e, column.id, column.cards.length)}
         >
-          <div className="my-20 flex w-full items-center justify-between lg:min-w-300">
+          <div className="mb-20 flex w-full items-center justify-between">
             <div className="flex items-center gap-4">
               <ColorCircle size="sm" color="bg-toss-blue" />
               <h1 className="max-w-120 overflow-hidden text-ellipsis whitespace-nowrap text-16 font-bold md:text-18">
@@ -276,17 +276,17 @@ export default function Column({ dashboardId, onColumnUpdate }: ColumnProps) {
 
           <div className="no-scrollbar sm:mb-12 md:mb-20 lg:flex-1 lg:overflow-y-auto">
             {column.cards.length === 0 ? (
-              <div className="mt-20 flex h-200 w-full items-center justify-center sm:h-150">
+              <div className="mt-20 flex h-200 w-full select-none items-center justify-center sm:h-150">
                 <div className="w-35 md:w-60">
                   <Image
                     src="/image/empty-comment-logo.png"
                     width={45}
                     height={45}
-                    layout="responsive"
+                    layout="responsive "
                     alt="댓글 비었을 때 로고"
                   />
                 </div>
-                <p className="pl-10 text-14 text-toss-blue-light md:text-16">
+                <p className="pointer-events-none pl-10 text-14 text-toss-blue-light md:text-16">
                   카드가 없습니다!
                 </p>
               </div>
@@ -326,6 +326,7 @@ export default function Column({ dashboardId, onColumnUpdate }: ColumnProps) {
           cardId={selectedCard.id}
           columnTitle={selectedColumnTitle}
           onCardDelete={handleCardDelete}
+          onColumnUpdate={onColumnUpdate}
         />
       )}
       <CreateCardModal
@@ -334,6 +335,6 @@ export default function Column({ dashboardId, onColumnUpdate }: ColumnProps) {
         dashboardId={dashboardId}
         columnId={activeColumnId}
       />
-    </div>
+    </>
   );
 }
