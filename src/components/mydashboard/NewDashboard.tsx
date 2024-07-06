@@ -135,11 +135,10 @@ export default function NewDashboard() {
       setPage(page + 1);
     }
   };
-
   return (
     <>
       <section className="mb-8 ml-40 mt-40 grid w-260 grid-cols-1 grid-rows-6 gap-y-8 md:mb-10 md:w-504 md:grid-cols-2 md:grid-rows-3 md:gap-x-10 md:gap-y-10 lg:mb-12 lg:w-1022 lg:grid-cols-3 lg:grid-rows-2 lg:gap-x-13 lg:gap-y-12">
-        <div className="col-span-1 col-start-1 row-span-1 row-start-1 bg-white">
+        <div className="col-span-1 col-start-1 row-span-1 row-start-1">
           <BarButton
             onClick={handleOpenModal}
             text="새로운 대시보드"
@@ -150,12 +149,12 @@ export default function NewDashboard() {
           dashboards.map((dashboard) => (
             <div
               key={dashboard.id}
-              className="col-span-1 col-start-auto row-span-1 row-start-auto bg-white"
+              className="col-span-1 col-start-auto row-span-1 row-start-auto"
             >
               <Link href={`/dashboard/${dashboard.id}`}>
                 <button
                   type="button"
-                  className="flex w-full items-center justify-between gap-8 rounded-8 border border-gray-200 px-20 py-20 font-bold text-black-800 hover:border-gray-400 md:py-24 md:text-18"
+                  className="flex w-full items-center justify-between gap-8 rounded-8 border border-gray-200 bg-white px-20 py-20 font-bold text-black-800 hover:border-gray-400 md:py-24 md:text-18"
                 >
                   <div className="flex items-center">
                     <ColorCircle
@@ -181,7 +180,11 @@ export default function NewDashboard() {
         </p>
         <button type="button" onClick={handlePreviousPage}>
           <Image
-            src="/icon/dashboard-pagenation-left.svg"
+            src={
+              page > 1
+                ? '/icon/dashboard-pagenation-left-black.svg'
+                : '/icon/dashboard-pagenation-left.svg'
+            }
             width={40}
             height={40}
             alt="대시보드 왼쪽 화살표 버튼"
@@ -189,7 +192,11 @@ export default function NewDashboard() {
         </button>
         <button type="button" onClick={handleNextPage}>
           <Image
-            src="/icon/dashboard-pagenation-right.svg"
+            src={
+              page < totalPages
+                ? '/icon/dashboard-pagenation-right-black.svg'
+                : '/icon/dashboard-pagenation-right.svg'
+            }
             width={40}
             height={40}
             alt="대시보드 오른쪽 화살표 버튼"
