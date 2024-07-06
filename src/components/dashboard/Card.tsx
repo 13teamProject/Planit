@@ -71,10 +71,10 @@ function Card({ card, columnId, onDragStart, onClick, isDragging }: CardProps) {
                 </>
               )}
             </div>
-            {card.assignee && (
-              <ProfileCircle styles="size-24" data={card.assignee} />
-            )}
           </div>
+          {card.assignee && (
+            <ProfileCircle styles="size-24" data={card.assignee} />
+          )}
         </div>
       </div>
     </div>
