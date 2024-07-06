@@ -102,7 +102,12 @@ export default function Sidemenu() {
       const formData: Dashboard = {
         title: data.dashboardName,
         color: selectedColor,
-      } as Dashboard;
+        id: 0,
+        createdAt: '',
+        updatedAt: '',
+        createdByMe: false,
+        userId: 0,
+      };
       const response = await postDashboards(formData);
 
       const newDashboard: Dashboard = {
@@ -159,7 +164,7 @@ export default function Sidemenu() {
       >
         <button
           type="button"
-          className="absolute right-26 top-60 z-[1002] transform transition-transform duration-300 hover:scale-150 md:right-8 md:top-20 lg:right-20"
+          className="absolute right-26 top-65 z-[1002] transform transition-transform duration-300 hover:scale-125 md:right-8 md:top-20 lg:right-20"
           onClick={toggleMenu}
         >
           <Image
@@ -187,7 +192,7 @@ export default function Sidemenu() {
             alt="사이드메뉴 로고"
           />
         </Link>
-        <div className="mt-50 flex items-center justify-between lg:pr-24">
+        <div className="ml-2 mt-60 flex items-center justify-between md:mt-50 md:pr-22 lg:pr-24">
           <p className="text-12 font-bold text-gray-400 sm:hidden md:block lg:block">
             Dash Boards
           </p>
@@ -200,12 +205,11 @@ export default function Sidemenu() {
             />
           </button>
         </div>
-
         <div
           className="no-scrollbar overflow-y-auto"
           style={{ maxHeight: 'calc(100vh - 150px)' }}
         >
-          <ul className="mt-20 pr-10 lg:pr-12">
+          <ul className="mt-15 pr-10 md:mt-20 lg:pr-12">
             {dashboards.map((dashboard) => (
               <Link href={`/dashboard/${dashboard.id}`} key={dashboard.id}>
                 <li className="flex h-45 items-center rounded-4 pl-8 hover:bg-violet-light-dashboard md:pl-10 lg:pl-12">
@@ -230,21 +234,20 @@ export default function Sidemenu() {
             ))}
           </ul>
         </div>
-        <div className="absolute bottom-30 right-20 mt-10 flex">
+        <div className="absolute bottom-12 left-1 flex md:bottom-10 md:left-12">
           <button
             type="button"
             onClick={handlePreviousPage}
             disabled={page <= 1}
-            className="mr-15 transition-transform duration-200 hover:scale-110"
           >
             <Image
               src={
                 page > 1
-                  ? '/icon/sidemenu-left-black.svg'
-                  : '/icon/sidemenu-left.svg'
+                  ? '/icon/dashboard-pagenation-left-black.svg'
+                  : '/icon/dashboard-pagenation-left.svg'
               }
-              width={10}
-              height={10}
+              width={40}
+              height={40}
               alt="대시보드 왼쪽 화살표 버튼"
             />
           </button>
@@ -252,16 +255,15 @@ export default function Sidemenu() {
             type="button"
             onClick={handleNextPage}
             disabled={page >= totalPages}
-            className="mr-15 transition-transform duration-200 hover:scale-110"
           >
             <Image
               src={
                 page < totalPages
-                  ? '/icon/sidemenu-right-black.svg'
-                  : '/icon/sidemenu-right.svg'
+                  ? '/icon/dashboard-pagenation-right-black.svg'
+                  : '/icon/dashboard-pagenation-right.svg'
               }
-              width={10}
-              height={10}
+              width={40}
+              height={40}
               alt="대시보드 오른쪽 화살표 버튼"
             />
           </button>

@@ -130,7 +130,7 @@ export default function DashboardPage({
             <DashBoardHeader isDashboard params={params} />
           </Suspense>
 
-          <div className="custom-scrollbar relative flex-1 overflow-y-auto bg-gray-50 lg:overflow-y-hidden">
+          <div className="custom-scrollbar relative flex-1 overflow-y-auto bg-gray-50 pt-70 lg:overflow-y-hidden">
             <div className="min-h-full w-full lg:flex lg:h-full lg:overflow-x-auto lg:whitespace-nowrap">
               <Column dashboardId={dashboard.id} onColumnUpdate={refreshData} />
               <div className="hidden lg:mt-50 lg:block lg:w-400 lg:shrink-0 lg:px-50">
