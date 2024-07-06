@@ -80,3 +80,12 @@ button {
 .no-scrollbar::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
 }
+
+.no-drag {
+  /*카드 드래그 시 이미지만 드래그되는 이슈 방지*/
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+}
