@@ -102,6 +102,11 @@ export default function Sidemenu() {
       const formData: Dashboard = {
         title: data.dashboardName,
         color: selectedColor,
+        id: 0,
+        createdAt: '',
+        updatedAt: '',
+        createdByMe: false,
+        userId: 0,
       };
       const response = await postDashboards(formData);
 
