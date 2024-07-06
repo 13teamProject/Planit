@@ -22,7 +22,7 @@ export default function ProfileCircle({ styles, data }: Props) {
     'relative flex transform cursor-pointer shadow-xl items-center justify-center rounded-full text-white ring-[1.5px] ring-white transition-transform duration-200 ease-in-out hover:scale-110',
     styles,
     {
-      [getProfileColor(nickname)]: profileImageUrl === null,
+      [getProfileColor(nickname[0])]: profileImageUrl === null,
     },
   );
 

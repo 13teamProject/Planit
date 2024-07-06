@@ -90,7 +90,12 @@ export default function CreateColumnModal({
 
   return (
     <Modal isOpen={isOpen} onClose={() => {}}>
-      <form className="w-327 px-20 py-28 md:w-540 md:px-28 md:py-32">
+      <form
+        className="w-327 px-20 py-28 md:w-540 md:px-28 md:py-32"
+        onSubmit={(e) => {
+          e.preventDefault();
+        }}
+      >
         <h1 className="text-20 font-bold md:text-24">새 컬럼 생성</h1>
 
         <label
@@ -101,6 +106,7 @@ export default function CreateColumnModal({
         </label>
         <Input
           id="columnTitle"
+          type="text"
           placeholder="컬럼을 입력해 주세요"
           error={!!error}
           register={{ ...register('columnTitle', { required: true }) }}
