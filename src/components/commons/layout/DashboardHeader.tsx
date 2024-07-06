@@ -149,6 +149,7 @@ export default function DashBoardHeader({
         newSize = 2; // 태블릿 (md)
       } else {
         newSize = isExpanded ? members.length : 4; // PC (lg 이상)
+        newSize = isExpanded ? members.length : 4; // PC (lg 이상)
       }
       setMaxVisible(newSize);
     };

@@ -60,7 +60,7 @@ export default function Sidemenu() {
 
   const handleCloseModal = () => {
     setModalState({ ...modalState, isOpen: false });
-    reset(); // 추가: 폼을 초기화하는 reset 함수 호출
+    reset();
   };
 
   const fetchDashboard = async (currentPage: number) => {
@@ -102,7 +102,7 @@ export default function Sidemenu() {
       const formData: Dashboard = {
         title: data.dashboardName,
         color: selectedColor,
-      } as Dashboard;
+      };
       const response = await postDashboards(formData);
 
       const newDashboard: Dashboard = {
@@ -127,15 +127,11 @@ export default function Sidemenu() {
   }, [page, device]);
 
   const handlePreviousPage = () => {
-    if (page > 1) {
-      setPage(page - 1);
-    }
+    if (page > 1) setPage(page - 1);
   };
 
   const handleNextPage = () => {
-    if (page < totalPages) {
-      setPage(page + 1);
-    }
+    if (page < totalPages) setPage(page + 1);
   };
 
   return (
@@ -154,21 +150,7 @@ export default function Sidemenu() {
           />
         </button>
       )}
-      <nav
-        className={`fixed left-0 top-0 z-[1001] h-screen w-70 max-w-[300px] overflow-y-auto border-r border-gray-200 bg-white pl-20 pt-20 transition-transform duration-300 ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'} md:w-[160px] lg:w-[300px]`}
-      >
-        <button
-          type="button"
-          className="absolute right-26 top-60 z-[1002] transform transition-transform duration-300 hover:scale-150 md:right-8 md:top-20 lg:right-20"
-          onClick={toggleMenu}
-        >
-          <Image
-            src="/icon/menu-toggle-close.svg"
-            width={25}
-            height={25}
-            alt="메뉴 닫기"
-          />
-        </button>
+      <nav className="no-scrollbar left-0 top-0 z-[999] h-screen w-67 overflow-y-auto border-1 border-r-gray-200 bg-white pl-20 pt-20 md:relative md:w-160 lg:w-300">
         <Link href="/" className="cursor-pointer">
           <Image
             className="md:hidden"
@@ -200,7 +182,6 @@ export default function Sidemenu() {
             />
           </button>
         </div>
-
         <div
           className="no-scrollbar overflow-y-auto"
           style={{ maxHeight: 'calc(100vh - 150px)' }}
