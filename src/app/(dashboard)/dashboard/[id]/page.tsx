@@ -64,23 +64,6 @@ export default function DashboardPage({
     enterRoom({ member: userInfo.nickname, roomId: params.id, socketId });
   }, [params.id, userInfo, socketId]);
 
-  // const socketListener = () => {
-  //   if (!socket) return;
-
-  //   socket.on('enter', (message) => {
-  //     toast.success(message, { containerId: 'socket' });
-  //   });
-
-  //   socket.on('dashboard', (message) => {
-  //     if (message.includes('삭제')) {
-  //       toast.error(message, { containerId: 'socket' });
-  //       router.push('/mydashboard');
-  //     } else {
-  //       toast.success(message, { containerId: 'socket' });
-  //     }
-  //   });
-  // };
-
   const fetchDashboardData = useCallback(async () => {
     try {
       const dashboardRes = await getDashboardId({ dashboardId });
