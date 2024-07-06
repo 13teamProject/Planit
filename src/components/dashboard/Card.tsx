@@ -49,14 +49,16 @@ const Card: React.FC<CardProps> = React.memo(
           </div>
         )}
         <div className="flex flex-grow flex-col justify-between">
-          <h1 className="py-4 sm:text-14 md:text-16">{card.title}</h1>
+          <h1 className="overflow-hidden text-ellipsis whitespace-nowrap py-4 sm:max-w-150 sm:text-14 md:max-w-500 md:text-16 lg:max-w-300">
+            {card.title}
+          </h1>
           <div className="md:flex md:w-full md:gap-16 lg:block">
             <div className="flex flex-wrap gap-6">
               {card.tags.map((tag) => (
                 <Tag key={tag} text={tag} />
               ))}
             </div>
-            <div className="flex flex-grow items-baseline justify-between pt-8">
+            <div className="flex flex-grow items-center justify-between pt-8">
               <div className="flex items-baseline gap-4">
                 {card.dueDate && (
                   <>
@@ -65,7 +67,7 @@ const Card: React.FC<CardProps> = React.memo(
                         src="/icon/calendar_gray.svg"
                         alt="calendar"
                         layout="fill"
-                        className="absolute"
+                        className="absolute sm:mt-3 md:mt-2 lg:mt-2"
                       />
                     </div>
                     <p className="flex-grow text-gray-300 sm:text-10 md:text-12">

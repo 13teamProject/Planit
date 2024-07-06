@@ -14,7 +14,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Dashboard, EmailRequest, Member } from '@planit-types';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
@@ -101,7 +101,10 @@ export default function DashBoardHeader({
     if ('message' in response) {
       toast.error(response.message);
     } else {
-      setMembers(response.members);
+      const memberprofile = response.members.filter(
+        (data) => data.userId !== userInfo?.id,
+      );
+      setMembers(memberprofile);
     }
   };
 
@@ -228,7 +231,7 @@ export default function DashBoardHeader({
                 </button>
               </li>
             )}
-          {isDashboard && !dashboards?.createdByMe && (
+          {isDashboard && (
             <>
               <div className="flex font-semibold">
                 {visibleProfiles.map((profile) => (
