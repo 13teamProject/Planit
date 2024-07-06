@@ -1,12 +1,13 @@
 'use client';
 
 import { getDashboradDetail, updateDashboard } from '@/app/api/dashboards';
+import emitDashboards from '@/app/api/pusher/dashboards/emit';
 import Button from '@/components/commons/button';
 import ColorCircle from '@/components/commons/circle/ColorCircle';
 import Input from '@/components/commons/input';
 import { useAuthStore } from '@/store/authStore';
 import { useDashboardNameChange } from '@/store/dashBoardName';
-import { useSocketStore } from '@/store/socketStore';
+import { usePusherStore } from '@/store/pusherStore';
 import {
   ColorMapping,
   DashboardEditRequest,
@@ -26,7 +27,7 @@ export default function DashboardName({ params }: { params: { id: number } }) {
   } = useForm<DashboardEditRequest>();
   const [selectedColor, setSelectedColor] = useState<string>();
   const [dashboardData, setDashboardData] = useState<DashboardEditResponse>();
-  const { socket } = useSocketStore();
+  const { socketId } = usePusherStore();
   const { userInfo } = useAuthStore();
   const { setData } = useDashboardNameChange();
 
@@ -57,11 +58,12 @@ export default function DashboardName({ params }: { params: { id: number } }) {
         setData(result.title);
         setDashboardData(result);
         reset();
-        socket?.emit('dashboard', {
+        await emitDashboards({
           member: userInfo?.nickname,
-          dashboard: data.title,
           action: 'edit',
-          room: String(dashboardData?.id),
+          dashboard: data.title,
+          roomId: String(dashboardData?.id),
+          socketId: socketId as string,
         });
       }
     } else {

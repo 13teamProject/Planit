@@ -2,6 +2,7 @@
 
 import { postCardImage, postCreateCard } from '@/app/api/cards';
 import { getMembers } from '@/app/api/members';
+import emitCards from '@/app/api/pusher/cards/emit';
 import Button from '@/components/commons/button';
 import ProfileCircle from '@/components/commons/circle/ProfileCircle';
 import Input from '@/components/commons/input';
@@ -12,7 +13,7 @@ import TagInput from '@/components/commons/input/TagInput';
 import Textarea from '@/components/commons/input/Textarea';
 import Modal from '@/components/commons/modal';
 import { useAuthStore } from '@/store/authStore';
-import { useSocketStore } from '@/store/socketStore';
+import { usePusherStore } from '@/store/pusherStore';
 import { formatDate } from '@/utils/date';
 import { CreateCardRequest, Member } from '@planit-types';
 import Image from 'next/image';
@@ -43,7 +44,7 @@ export default function CreateCardModal({
   columnId,
 }: Props) {
   const [members, setMembers] = useState<Member[]>([]);
-  const { socket } = useSocketStore();
+  const { socketId } = usePusherStore();
   const { userInfo } = useAuthStore();
   const {
     register,
@@ -82,11 +83,12 @@ export default function CreateCardModal({
     onClose();
     reset();
     toast.success('카드를 생성하였습니다.');
-    socket?.emit('card', {
+    await emitCards({
       member: userInfo?.nickname,
       action: 'create',
       card: title,
-      room: String(dashboardId),
+      roomId: String(dashboardId),
+      socketId: socketId as string,
     });
   };
 

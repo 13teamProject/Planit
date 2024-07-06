@@ -3,6 +3,7 @@
 import { editCard, postCardImage } from '@/app/api/cards';
 import { getColumnList } from '@/app/api/columns';
 import { getMembers } from '@/app/api/members';
+import emitCards from '@/app/api/pusher/cards/emit';
 import Button from '@/components/commons/button';
 import ProfileCircle from '@/components/commons/circle/ProfileCircle';
 import Input from '@/components/commons/input';
@@ -14,7 +15,7 @@ import Textarea from '@/components/commons/input/Textarea';
 import Modal from '@/components/commons/modal';
 import Tag from '@/components/commons/tag';
 import { useAuthStore } from '@/store/authStore';
-import { useSocketStore } from '@/store/socketStore';
+import { usePusherStore } from '@/store/pusherStore';
 import { formatDate } from '@/utils/date';
 import { CardResponse, Column, EditCardRequest, Member } from '@planit-types';
 import Image from 'next/image';
@@ -52,7 +53,7 @@ export default function EditCardModal({
   const [currentStatus, setCurrentStatus] = useState<Column | null>(null);
   const [statusList, setStatusList] = useState<Column[]>([]);
   const [members, setMembers] = useState<Member[]>([]);
-  const { socket } = useSocketStore();
+  const { socketId } = usePusherStore();
   const { userInfo } = useAuthStore();
 
   const {
@@ -108,11 +109,12 @@ export default function EditCardModal({
     onColumnUpdate();
     reset();
     toast.success('카드를 수정하였습니다.');
-    socket?.emit('card', {
+    await emitCards({
       member: userInfo?.nickname,
       action: 'edit',
       card: title,
-      room: String(dashboardId),
+      roomId: String(dashboardId),
+      socketId: socketId as string,
     });
   };
 

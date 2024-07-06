@@ -1,8 +1,10 @@
 import { deleteColumn, editColumn, getColumnList } from '@/app/api/columns';
+import emitColumns from '@/app/api/pusher/columns/emit';
 import Button from '@/components/commons/button';
 import Input from '@/components/commons/input';
 import Modal from '@/components/commons/modal';
 import { useAuthStore } from '@/store/authStore';
+import { usePusherStore } from '@/store/pusherStore';
 import { useSocketStore } from '@/store/socketStore';
 import { Column, EditColumnRequest } from '@planit-types';
 import { useEffect, useState } from 'react';
@@ -39,7 +41,7 @@ export default function EditColumnModal({
     formState: { isValid },
   } = useForm<EditColumnInputs>();
   const inputValue = watch('columnTitle');
-  const { socket } = useSocketStore();
+  const { socketId } = usePusherStore();
   const { userInfo } = useAuthStore();
 
   const onSubmit: SubmitHandler<EditColumnInputs> = async ({ columnTitle }) => {
@@ -62,12 +64,12 @@ export default function EditColumnModal({
     onClose();
     reset();
     onColumnDelete(); // 컬럼 수정 후 데이터 새로고침
-    socket?.emit('column', {
+    await emitColumns({
       member: userInfo?.nickname,
       action: 'edit',
-      prevColumn: columnData.title,
       column: columnTitle,
-      room: String(dashboardId),
+      roomId: String(dashboardId),
+      socketId: socketId as string,
     });
   };
 
@@ -177,7 +179,7 @@ function DeleteColumnModal({
   dashboardId,
   onColumnDelete, // 새로 추가된 prop
 }: Props) {
-  const { socket } = useSocketStore();
+  const { socketId } = usePusherStore();
   const { userInfo } = useAuthStore();
   const handleDeleteColumn = async () => {
     const res = await deleteColumn(columnData.id);
@@ -189,11 +191,13 @@ function DeleteColumnModal({
 
     onClose();
     onColumnDelete(); // 컬럼 삭제 후 데이터 새로고침
-    socket?.emit('column', {
+
+    await emitColumns({
       member: userInfo?.nickname,
       action: 'delete',
       column: columnData.title,
-      room: String(dashboardId),
+      roomId: String(dashboardId),
+      socketId: socketId as string,
     });
   };
 

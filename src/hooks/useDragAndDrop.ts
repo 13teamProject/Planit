@@ -1,6 +1,7 @@
 import { editCard } from '@/app/api/cards';
+import emitCards from '@/app/api/pusher/cards/emit';
 import { useAuthStore } from '@/store/authStore';
-import { useSocketStore } from '@/store/socketStore';
+import { usePusherStore } from '@/store/pusherStore';
 import {
   Column as ColumnType,
   EditCardRequest,
@@ -29,7 +30,7 @@ export const useDragAndDrop = ({
     columnId: number;
     index: number;
   } | null>(null); // 드롭할 위치
-  const { socket } = useSocketStore();
+  const { socketId } = usePusherStore();
   const { userInfo } = useAuthStore();
   const indicatorsRef: MutableRefObject<{ [key: string]: HTMLElement | null }> =
     useRef({}); // 드롭 인디케이터 참조 객체
@@ -180,11 +181,12 @@ export const useDragAndDrop = ({
 
         const result = await editCard({ cardId, formValue });
 
-        socket?.emit('card', {
+        await emitCards({
           member: userInfo?.nickname,
           action: 'edit',
           card: cardToMove.title,
-          room: String(dashboardId),
+          roomId: String(dashboardId),
+          socketId: socketId as string,
         });
 
         if ('message' in result) {
@@ -196,7 +198,7 @@ export const useDragAndDrop = ({
 
       handleDragEnd();
     },
-    [columns, handleDragEnd, socket, userInfo, dashboardId, dropTarget],
+    [columns, handleDragEnd, userInfo, dashboardId, dropTarget],
   );
 
   return {

@@ -1,11 +1,12 @@
 'use client';
 
 import { getColumnList, postCreateColumn } from '@/app/api/columns';
+import emitColumns from '@/app/api/pusher/columns/emit';
 import Button from '@/components/commons/button';
 import Input from '@/components/commons/input';
 import Modal from '@/components/commons/modal';
 import { useAuthStore } from '@/store/authStore';
-import { useSocketStore } from '@/store/socketStore';
+import { usePusherStore } from '@/store/pusherStore';
 import { Column, CreateColumnRequest } from '@planit-types';
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -36,8 +37,8 @@ export default function CreateColumnModal({
     formState: { isValid },
   } = useForm<CreatColumnInputs>();
   const inputValue = watch('columnTitle');
-  const { socket } = useSocketStore();
   const { userInfo } = useAuthStore();
+  const { socketId } = usePusherStore();
 
   const onSubmit: SubmitHandler<CreatColumnInputs> = async ({
     columnTitle,
@@ -58,11 +59,12 @@ export default function CreateColumnModal({
 
     onClose();
     reset();
-    socket?.emit('column', {
+    await emitColumns({
       member: userInfo?.nickname,
       action: 'create',
       column: columnTitle,
-      room: String(dashboardId),
+      roomId: String(dashboardId),
+      socketId: socketId as string,
     });
   };
 
