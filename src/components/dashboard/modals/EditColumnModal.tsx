@@ -37,11 +37,7 @@ export default function EditColumnModal({
     reset,
     watch,
     formState: { isValid },
-  } = useForm<EditColumnInputs>({
-    defaultValues: {
-      columnTitle: columnData.title,
-    },
-  });
+  } = useForm<EditColumnInputs>();
   const inputValue = watch('columnTitle');
   const { socket } = useSocketStore();
   const { userInfo } = useAuthStore();
@@ -101,20 +97,23 @@ export default function EditColumnModal({
 
   useEffect(() => {
     const columnTitleList = columnList.map((column) => column.title);
-    if (
-      columnTitleList.includes(inputValue) &&
-      inputValue !== columnData.title
-    ) {
+
+    if (columnTitleList.includes(inputValue)) {
       setError('중복된 컬럼 이름입니다.');
     } else {
       setError('');
     }
-  }, [inputValue, columnList, columnData.title]);
+  }, [inputValue, columnList]);
 
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose}>
-        <form className="w-327 px-20 py-28 md:w-540 md:px-28 md:py-32">
+        <form
+          className="w-327 px-20 py-28 md:w-540 md:px-28 md:py-32"
+          onSubmit={(e) => {
+            e.preventDefault();
+          }}
+        >
           <h1 className="text-20 font-bold md:text-24">컬럼 관리</h1>
 
           <label
