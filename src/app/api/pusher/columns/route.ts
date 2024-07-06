@@ -4,7 +4,7 @@ export async function POST(req: Request) {
   const { member, column, action, roomId, socketId } = await req.json();
 
   if (action === 'create') {
-    pusherServer.trigger(
+    await pusherServer.trigger(
       String(roomId),
       'columns',
       `${member} 님이 ${column} 컬럼을 생성하였습니다.`,
@@ -15,7 +15,7 @@ export async function POST(req: Request) {
   }
 
   if (action === 'edit') {
-    pusherServer.trigger(
+    await pusherServer.trigger(
       String(roomId),
       'columns',
       `${member} 님이 ${column} 컬럼을 수정하였습니다.`,
@@ -26,7 +26,7 @@ export async function POST(req: Request) {
   }
 
   if (action === 'delete') {
-    pusherServer.trigger(
+    await pusherServer.trigger(
       String(roomId),
       'columns',
       `${member} 님이 ${column} 컬럼을 삭제하였습니다.`,
