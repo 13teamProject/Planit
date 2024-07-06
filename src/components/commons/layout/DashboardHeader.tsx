@@ -163,7 +163,7 @@ export default function DashBoardHeader({
     <>
       <nav className="right-0 top-0 z-[998] flex h-70 w-full items-center justify-end border-1 border-l-0 border-b-gray-200 bg-white py-25 pr-12 md:pr-40 lg:justify-between lg:pe-80 lg:ps-40">
         {!isDashboard && isClient && (
-          <p className="text-20 font-bold sm:hidden lg:block">
+          <p className="ml-30 text-20 font-bold sm:hidden lg:block">
             {window.location.pathname.startsWith('/mypage')
               ? '계정 관리'
               : '내 대시보드'}
@@ -172,7 +172,7 @@ export default function DashBoardHeader({
         {isDashboard && (
           <div className="flex">
             {isClient && (
-              <p className="mr-8 text-20 font-bold sm:hidden lg:block">
+              <p className="ml-30 mr-8 text-20 font-bold sm:hidden lg:block">
                 {dashboardName}
               </p>
             )}

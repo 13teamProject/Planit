@@ -50,29 +50,26 @@ export default function NewDashboard() {
   const [totalPages, setTotalPages] = useState<number>(1); // 전체 페이지 수
   const router = useRouter();
 
+  const pageSize = 5; // 한 페이지당 아이템 수
+
   const fetchDashboard = async (currentPage: number) => {
-    // 전체 데이터 가져오기
-    const totalItemsResponse = await getDashboards(
+    const response = await getDashboards(
       'pagination',
       1,
       Number.MAX_SAFE_INTEGER,
     );
 
-    const totalItemsCount = totalItemsResponse.dashboards.length;
+    const totalItemsCount = response.dashboards.length;
     setTotalItems(totalItemsCount);
 
-    // 페이지네이션 - 한 페이지 당 아이템 수 계산
-    const pageSize = 5;
     const calculatedTotalPages = Math.ceil(totalItemsCount / pageSize);
     setTotalPages(calculatedTotalPages);
 
-    // 전체 데이터 최신순 정렬
-    const sortedDashboards: Dashboard[] = totalItemsResponse.dashboards.sort(
+    const sortedDashboards: Dashboard[] = response.dashboards.sort(
       (a, b) =>
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
     );
 
-    // 현재 페이지에 해당하는 데이터 설정
     const paginatedDashboards = sortedDashboards.slice(
       (currentPage - 1) * pageSize,
       currentPage * pageSize,
@@ -87,12 +84,14 @@ export default function NewDashboard() {
 
   const handleCloseModal = () => {
     setModalState({ ...modalState, isOpen: false });
+    reset(); // 추가: 폼을 초기화하는 reset 함수 호출
   };
 
   const {
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { isValid, errors },
   } = useForm<DashboardFormValues>({ mode: 'onChange' });
 
@@ -113,7 +112,7 @@ export default function NewDashboard() {
         createdByMe: response.createdByMe,
         userId: response.userId,
       };
-      fetchDashboard(page);
+      fetchDashboard(1);
       setModalState({ ...modalState, isOpen: false });
       router.push(`/dashboard/${response.id}`);
     } catch (error) {
@@ -136,7 +135,6 @@ export default function NewDashboard() {
       setPage(page + 1);
     }
   };
-
   return (
     <>
       <section className="mb-8 ml-40 mt-40 grid w-260 grid-cols-1 grid-rows-6 gap-y-8 md:mb-10 md:w-504 md:grid-cols-2 md:grid-rows-3 md:gap-x-10 md:gap-y-10 lg:mb-12 lg:w-1022 lg:grid-cols-3 lg:grid-rows-2 lg:gap-x-13 lg:gap-y-12">
