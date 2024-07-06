@@ -20,6 +20,7 @@ export async function getDashboards(
   navigationMethod: string,
   page: number,
   size: number,
+  cursorId?: number,
 ): Promise<DashboardListResponse> {
   try {
     const token = getCookie('accessToken');
@@ -28,6 +29,9 @@ export async function getDashboards(
       size: size.toString(),
       page: page.toString(),
     });
+    if (cursorId !== undefined) {
+      params.append('cursorId', cursorId.toString());
+    }
     const response = await fetch(`${API_URL}/dashboards?${params}`, {
       headers: { Authorization: `Bearer ${token}` },
     });

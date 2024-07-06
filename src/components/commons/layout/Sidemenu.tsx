@@ -1,7 +1,6 @@
 import { getDashboards, postDashboards } from '@/app/api/dashboards';
 import ColorCircle from '@/components/commons/circle/ColorCircle';
-import { SCROLL_SIZE } from '@/constants/globalConstants';
-import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
+import useDeviceState from '@/hooks/useDeviceState';
 import {
   ColorMapping,
   Dashboard,
@@ -11,13 +10,13 @@ import {
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import Button from '../button';
 import Modal from '../modal';
 
-export const colorMapping: ColorMapping = {
+const colorMapping: ColorMapping = {
   '#5534DA': 'bg-violet-dashboard',
   '#D6173A': 'bg-red-dashboard',
   '#7AC555': 'bg-green-dashboard',
@@ -26,7 +25,7 @@ export const colorMapping: ColorMapping = {
   '#E876EA': 'bg-pink-dashboard',
 };
 
-export const colors = [
+const colors = [
   '#D6173A',
   '#E876EA',
   '#FFA500',
@@ -36,12 +35,24 @@ export const colors = [
 ];
 
 export default function Sidemenu() {
+  const device = useDeviceState();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [modalState, setModalState] = useState<ModalState>({
     isOpen: false,
     message: '',
   });
   const [selectedColor, setSelectedColor] = useState<string>(colors[0]);
+  const [dashboards, setDashboards] = useState<Dashboard[]>([]);
+  const [page, setPage] = useState(1);
+  const [totalItems, setTotalItems] = useState<number>(0);
+  const [totalPages, setTotalPages] = useState<number>(1);
   const router = useRouter();
+
+  const pageSize = 18;
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
 
   const handleOpenModal = () => {
     setModalState({ isOpen: true, message: '안녕하세요' });
@@ -49,31 +60,41 @@ export default function Sidemenu() {
 
   const handleCloseModal = () => {
     setModalState({ ...modalState, isOpen: false });
+    reset(); // 추가: 폼을 초기화하는 reset 함수 호출
   };
 
-  const fetchDashboards = async (page: number) => {
-    const response = await getDashboards('infiniteScroll', page, SCROLL_SIZE);
-    return response.dashboards.map((data: Dashboard) => ({
-      id: data.id,
-      title: data.title,
-      color: data.color,
-      createdAt: data.createdAt,
-      updatedAt: data.updatedAt,
-      createdByMe: data.createdByMe,
-      userId: data.userId,
-    }));
-  };
+  const fetchDashboard = async (currentPage: number) => {
+    const response = await getDashboards(
+      'pagination',
+      1,
+      Number.MAX_SAFE_INTEGER,
+    );
 
-  const { items: dashboards, endRef } = useInfiniteScroll<Dashboard>({
-    fetchItems: fetchDashboards,
-    pageSize: SCROLL_SIZE,
-  });
+    const totalItemsCount = response.dashboards.length;
+    setTotalItems(totalItemsCount);
+
+    const calculatedTotalPages = Math.ceil(totalItemsCount / pageSize);
+    setTotalPages(calculatedTotalPages);
+
+    const sortedDashboards: Dashboard[] = response.dashboards.sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    );
+
+    const paginatedDashboards = sortedDashboards.slice(
+      (currentPage - 1) * pageSize,
+      currentPage * pageSize,
+    );
+
+    setDashboards(paginatedDashboards);
+  };
 
   const {
     register,
     handleSubmit,
     watch,
     formState: { isValid, errors },
+    reset,
   } = useForm<DashboardFormValues>({ mode: 'onChange' });
 
   const onSubmit: SubmitHandler<DashboardFormValues> = async (data) => {
@@ -93,6 +114,7 @@ export default function Sidemenu() {
         createdByMe: response.createdByMe,
         userId: response.userId,
       };
+      fetchDashboard(1);
       setModalState({ ...modalState, isOpen: false });
       router.push(`/dashboard/${response.id}`);
     } catch (error) {
@@ -100,9 +122,53 @@ export default function Sidemenu() {
     }
   };
 
+  useEffect(() => {
+    fetchDashboard(page);
+  }, [page, device]);
+
+  const handlePreviousPage = () => {
+    if (page > 1) {
+      setPage(page - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (page < totalPages) {
+      setPage(page + 1);
+    }
+  };
+
   return (
     <>
-      <nav className="no-scrollbar left-0 top-0 z-[999] h-screen w-67 overflow-y-auto border-1 border-r-gray-200 bg-white pl-20 pt-20 md:relative md:w-160 lg:w-300">
+      {!isMenuOpen && (
+        <button
+          type="button"
+          className="fixed left-20 top-23 z-[1000] md:left-20 lg:left-20"
+          onClick={toggleMenu}
+        >
+          <Image
+            src="/icon/sidemenu-toggle.svg"
+            width={20}
+            height={20}
+            alt="메뉴 열기"
+          />
+        </button>
+      )}
+      <nav
+        className={`fixed left-0 top-0 z-[1001] h-screen w-70 max-w-[300px] overflow-y-auto border-r border-gray-200 bg-white pl-20 pt-20 transition-transform duration-300 ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'} md:w-[160px] lg:w-[300px]`}
+      >
+        <button
+          type="button"
+          className="absolute right-26 top-60 z-[1002] transform transition-transform duration-300 hover:scale-150 md:right-8 md:top-20 lg:right-20"
+          onClick={toggleMenu}
+        >
+          <Image
+            src="/icon/menu-toggle-close.svg"
+            width={25}
+            height={25}
+            alt="메뉴 닫기"
+          />
+        </button>
         <Link href="/" className="cursor-pointer">
           <Image
             className="md:hidden"
@@ -125,7 +191,7 @@ export default function Sidemenu() {
           <p className="text-12 font-bold text-gray-400 sm:hidden md:block lg:block">
             Dash Boards
           </p>
-          <button type="button" onClick={handleOpenModal} className="md:pr-10">
+          <button type="button" onClick={handleOpenModal}>
             <Image
               src="/icon/add_box.svg"
               width={20}
@@ -141,33 +207,64 @@ export default function Sidemenu() {
         >
           <ul className="mt-20 pr-10 lg:pr-12">
             {dashboards.map((dashboard) => (
-              <li
-                key={dashboard.id}
-                className="flex h-45 items-center rounded-4 pl-8 hover:bg-violet-light-dashboard md:pl-10 lg:pl-12"
-              >
-                <ColorCircle
-                  color={colorMapping[dashboard.color] || 'bg-gray-400'}
-                  size="sm"
-                />
-                <Link
-                  href={`/dashboard/${dashboard.id}`}
-                  className="mr-6 text-18 font-medium text-gray-400 hover:text-black sm:hidden md:block md:max-w-[10ch] md:overflow-hidden md:text-ellipsis md:whitespace-nowrap md:pl-16 md:text-16 lg:block lg:max-w-none lg:whitespace-normal lg:pl-16"
-                >
-                  {dashboard.title}
-                </Link>
-                {dashboard?.createdByMe && (
-                  <Image
-                    className="mb-3 sm:hidden lg:block"
-                    src="/icon/crown.svg"
-                    width={15}
-                    height={15}
-                    alt="내가 만든 대시보드 표시"
+              <Link href={`/dashboard/${dashboard.id}`} key={dashboard.id}>
+                <li className="flex h-45 items-center rounded-4 pl-8 hover:bg-violet-light-dashboard md:pl-10 lg:pl-12">
+                  <ColorCircle
+                    color={colorMapping[dashboard.color] || 'bg-gray-400'}
+                    size="sm"
                   />
-                )}
-              </li>
+                  <div className="mr-6 text-18 font-medium text-gray-400 hover:text-black sm:hidden md:block md:max-w-[10ch] md:overflow-hidden md:text-ellipsis md:whitespace-nowrap md:pl-16 md:text-16 lg:block lg:max-w-none lg:whitespace-normal lg:pl-16">
+                    {dashboard.title}
+                  </div>
+                  {dashboard?.createdByMe && (
+                    <Image
+                      className="mb-3 sm:hidden lg:block"
+                      src="/icon/crown.svg"
+                      width={15}
+                      height={15}
+                      alt="내가 만든 대시보드 표시"
+                    />
+                  )}
+                </li>
+              </Link>
             ))}
-            <div ref={endRef} />
           </ul>
+        </div>
+        <div className="absolute bottom-30 right-20 mt-10 flex">
+          <button
+            type="button"
+            onClick={handlePreviousPage}
+            disabled={page <= 1}
+            className="mr-15 transition-transform duration-200 hover:scale-110"
+          >
+            <Image
+              src={
+                page > 1
+                  ? '/icon/sidemenu-left-black.svg'
+                  : '/icon/sidemenu-left.svg'
+              }
+              width={10}
+              height={10}
+              alt="대시보드 왼쪽 화살표 버튼"
+            />
+          </button>
+          <button
+            type="button"
+            onClick={handleNextPage}
+            disabled={page >= totalPages}
+            className="mr-15 transition-transform duration-200 hover:scale-110"
+          >
+            <Image
+              src={
+                page < totalPages
+                  ? '/icon/sidemenu-right-black.svg'
+                  : '/icon/sidemenu-right.svg'
+              }
+              width={10}
+              height={10}
+              alt="대시보드 오른쪽 화살표 버튼"
+            />
+          </button>
         </div>
       </nav>
       <Modal isOpen={modalState.isOpen} onClose={handleCloseModal}>
