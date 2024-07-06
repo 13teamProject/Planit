@@ -200,7 +200,7 @@ export default function EditCardModal({
                     <div className="flex items-center gap-6">
                       <ProfileCircle
                         data={currentCardData.assignee}
-                        styles="size-26 text-14"
+                        styles="size-26 text-12"
                       />
                       {currentCardData.assignee.nickname}
                     </div>

@@ -242,7 +242,7 @@ export default function DashBoardHeader({
                         nickname: profile.nickname[0],
                         profileImageUrl: profile.profileImageUrl,
                       }}
-                      styles="size-34 md:size-38 bg-orange-400"
+                      styles="size-34 md:size-38"
                     />
                   </li>
                 ))}
@@ -279,7 +279,7 @@ export default function DashBoardHeader({
                   nickname: userInfo?.nickname[0] || '',
                   profileImageUrl: userInfo?.profileImageUrl || null,
                 }}
-                styles="size-34 md:size-38 bg-violet-dashboard"
+                styles="size-34 md:size-38"
               />
             </li>
             <li className="pl-12">
