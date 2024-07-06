@@ -130,7 +130,7 @@ export default function DashboardPage({
             <DashBoardHeader isDashboard params={params} />
           </Suspense>
 
-          <div className="custom-scrollbar relative flex-1 overflow-y-auto bg-gray-50 pt-70 lg:overflow-y-hidden">
+          <div className="custom-scrollbar relative flex-1 overflow-y-auto bg-gray-50 pt-70 dark:bg-gray-800 lg:overflow-y-hidden">
             <div className="min-h-full w-full lg:flex lg:h-full lg:overflow-x-auto lg:whitespace-nowrap">
               <Column dashboardId={dashboard.id} onColumnUpdate={refreshData} />
               <div className="hidden lg:mt-50 lg:block lg:w-400 lg:shrink-0 lg:px-50">
@@ -142,7 +142,7 @@ export default function DashboardPage({
             </div>
 
             {/* 스티키 버튼 */}
-            <div className="sticky bottom-0 left-0 right-0 border-t border-gray-200 bg-gray-50 p-10 lg:hidden">
+            <div className="sticky bottom-0 left-0 right-0 border-t border-gray-200 bg-gray-50 p-10 dark:bg-gray-900 lg:hidden">
               <BarButton
                 onClick={openCreateColumnModal}
                 text="새로운 컬럼 추가하기"

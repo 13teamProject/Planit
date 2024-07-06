@@ -59,20 +59,23 @@ export default function CommentSection({
         className="w-full md:max-w-420 lg:max-w-450"
         onSubmit={handleSubmit}
       >
-        <label className="pb-8 font-medium md:pb-10" htmlFor="content">
+        <label
+          className="pb-8 font-medium dark:text-white md:pb-10"
+          htmlFor="content"
+        >
           댓글
         </label>
-        <div className="flex h-70 rounded-md border border-gray-200 p-12 selection:rounded-md focus:border-toss-blue md:h-110">
+        <div className="flex h-70 rounded-md border border-gray-200 p-12 selection:rounded-md focus:border-toss-blue dark:bg-gray-600 md:h-110">
           <textarea
             onChange={handleChange}
             id="content"
             value={content}
             placeholder="댓글을 입력해주세요"
-            className="w-full resize-none rounded-md pr-3 text-12 outline-none placeholder:text-gray-300"
+            className="w-full resize-none rounded-md pr-3 text-12 outline-none placeholder:text-gray-300 dark:bg-gray-600 dark:text-white dark:placeholder:text-gray-200"
           />
           <button
             disabled={content.length < 1}
-            className="relative left-4 top-23 h-28 w-84 rounded-4 border text-12 font-medium text-toss-blue disabled:text-gray-400 md:top-58 md:h-32 md:w-77"
+            className="relative left-4 top-23 h-28 w-84 rounded-4 border text-12 font-medium text-toss-blue disabled:text-gray-400 dark:disabled:text-gray-200 md:top-58 md:h-32 md:w-77"
             type="submit"
           >
             입력

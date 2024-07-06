@@ -1,5 +1,6 @@
 import { getDashboards, postDashboards } from '@/app/api/dashboards';
 import ColorCircle from '@/components/commons/circle/ColorCircle';
+import { useDarkMode } from '@/context/DarkModeContext';
 import useDeviceState from '@/hooks/useDeviceState';
 import {
   ColorMapping,
@@ -35,6 +36,8 @@ const colors = [
 ];
 
 export default function Sidemenu() {
+  const { darkMode } = useDarkMode();
+
   const device = useDeviceState();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [modalState, setModalState] = useState<ModalState>({
@@ -109,16 +112,6 @@ export default function Sidemenu() {
         userId: 0,
       };
       const response = await postDashboards(formData);
-
-      const newDashboard: Dashboard = {
-        id: response.id,
-        title: response.title,
-        color: response.color,
-        createdAt: response.createdAt,
-        updatedAt: response.updatedAt,
-        createdByMe: response.createdByMe,
-        userId: response.userId,
-      };
       fetchDashboard(1);
       setModalState({ ...modalState, isOpen: false });
       router.push(`/dashboard/${response.id}`);
@@ -152,7 +145,11 @@ export default function Sidemenu() {
           onClick={toggleMenu}
         >
           <Image
-            src="/icon/sidemenu-toggle.svg"
+            src={
+              darkMode
+                ? `/icon/sidemenu-toggle_gray.svg`
+                : `/icon/sidemenu-toggle.svg`
+            }
             width={20}
             height={20}
             alt="메뉴 열기"
@@ -160,7 +157,7 @@ export default function Sidemenu() {
         </button>
       )}
       <nav
-        className={`fixed left-0 top-0 z-[1001] h-screen w-70 max-w-[300px] overflow-y-auto border-r border-gray-200 bg-white pl-20 pt-20 transition-transform duration-300 ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'} md:w-[160px] lg:w-[300px]`}
+        className={`fixed left-0 top-0 z-[1001] h-screen w-70 max-w-[300px] overflow-y-auto border-r border-gray-200 bg-white px-10 pt-20 transition-transform duration-300 dark:border-r-0 dark:bg-gray-900 dark:text-white ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'} md:w-[160px] lg:w-[300px]`}
       >
         <button
           type="button"
@@ -168,7 +165,11 @@ export default function Sidemenu() {
           onClick={toggleMenu}
         >
           <Image
-            src="/icon/menu-toggle-close.svg"
+            src={
+              darkMode
+                ? `/icon/menu-toggle-close_gray.svg`
+                : `/icon/menu-toggle-close.svg`
+            }
             width={25}
             height={25}
             alt="메뉴 닫기"
@@ -176,7 +177,7 @@ export default function Sidemenu() {
         </button>
         <Link href="/" className="cursor-pointer">
           <Image
-            className="md:hidden"
+            className="m-auto md:hidden"
             src="/image/logo_icon_blue.png"
             width={25}
             height={25}
@@ -186,17 +187,17 @@ export default function Sidemenu() {
         <Link href="/" className="cursor-pointer sm:hidden md:block lg:block">
           <Image
             src="/image/logo_text_blue.png"
-            className="mt-3"
+            className="ml-15 mt-3"
             width={85}
             height={30}
             alt="사이드메뉴 로고"
           />
         </Link>
-        <div className="ml-2 mt-60 flex items-center justify-between md:mt-50 md:pr-22 lg:pr-24">
-          <p className="text-12 font-bold text-gray-400 sm:hidden md:block lg:block">
+        <div className="mt-60 flex items-center justify-around md:mt-50 md:justify-between">
+          <p className="text-12 font-bold text-gray-400 sm:hidden md:block md:pl-15 lg:block">
             Dash Boards
           </p>
-          <button type="button" onClick={handleOpenModal}>
+          <button className="md:pr-10" type="button" onClick={handleOpenModal}>
             <Image
               src="/icon/add_box.svg"
               width={20}
@@ -209,10 +210,10 @@ export default function Sidemenu() {
           className="no-scrollbar overflow-y-auto"
           style={{ maxHeight: 'calc(100vh - 150px)' }}
         >
-          <ul className="mt-15 pr-10 md:mt-20 lg:pr-12">
+          <ul className="mt-15 md:mt-20">
             {dashboards.map((dashboard) => (
               <Link href={`/dashboard/${dashboard.id}`} key={dashboard.id}>
-                <li className="flex h-45 items-center rounded-4 pl-8 hover:bg-violet-light-dashboard md:pl-10 lg:pl-12">
+                <li className="flex h-45 items-center justify-center rounded-4 hover:bg-violet-light-dashboard dark:hover:bg-gray-700 md:justify-start md:pl-15">
                   <ColorCircle
                     color={colorMapping[dashboard.color] || 'bg-gray-400'}
                     size="sm"
@@ -234,9 +235,10 @@ export default function Sidemenu() {
             ))}
           </ul>
         </div>
-        <div className="absolute bottom-12 left-1 flex md:bottom-10 md:left-12">
+        <div className="absolute bottom-12 left-1 px-9 md:bottom-10 md:left-12">
           <button
             type="button"
+            className="rounded-s-md border border-gray-200 px-8 py-6 md:px-14 md:py-11"
             onClick={handlePreviousPage}
             disabled={page <= 1}
           >
@@ -244,15 +246,16 @@ export default function Sidemenu() {
               src={
                 page > 1
                   ? '/icon/dashboard-pagenation-left-black.svg'
-                  : '/icon/dashboard-pagenation-left.svg'
+                  : '/icon/arrow_prev.svg'
               }
-              width={40}
-              height={40}
+              width={8}
+              height={13}
               alt="대시보드 왼쪽 화살표 버튼"
             />
           </button>
           <button
             type="button"
+            className="rounded-e-md border border-gray-200 px-8 py-6 md:px-14 md:py-11"
             onClick={handleNextPage}
             disabled={page >= totalPages}
           >
@@ -260,10 +263,10 @@ export default function Sidemenu() {
               src={
                 page < totalPages
                   ? '/icon/dashboard-pagenation-right-black.svg'
-                  : '/icon/dashboard-pagenation-right.svg'
+                  : '/icon/arrow_next.svg'
               }
-              width={40}
-              height={40}
+              width={8}
+              height={13}
               alt="대시보드 오른쪽 화살표 버튼"
             />
           </button>
@@ -271,11 +274,11 @@ export default function Sidemenu() {
       </nav>
       <Modal isOpen={modalState.isOpen} onClose={handleCloseModal}>
         <div className="max-h-90vh md:max-h-95vh overflow-y-auto px-20 py-28 pt-32 md:w-540 md:px-28 md:pb-28">
-          <p className="black-800 mb-24 text-24 font-bold lg:mb-28">
+          <p className="black-800 mb-24 text-24 font-bold dark:text-white lg:mb-28">
             새로운 대시보드
           </p>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <label className="mb-10 text-18 font-medium">
+            <label className="mb-10 text-18 font-medium dark:text-gray-200">
               대시보드 이름
               <input
                 {...register('dashboardName', {
@@ -286,7 +289,7 @@ export default function Sidemenu() {
                   },
                 })}
                 type="text"
-                className={`mt-12 block h-42 w-full rounded-md border pl-16 pr-40 text-14 outline-none md:h-48 md:text-16 ${
+                className={`mt-12 block h-42 w-full rounded-md border pl-16 pr-40 text-14 outline-none dark:bg-gray-600 dark:text-white md:h-48 md:text-16 ${
                   errors.dashboardName ? 'border-red-dashboard' : ''
                 }`}
               />
@@ -329,7 +332,7 @@ export default function Sidemenu() {
                 type="button"
                 cancel
                 onClick={handleCloseModal}
-                styles="h-42 md:h-48 py-10 px-54 text-16 md:py-14 md:text-18 md:px-46 md:py-10 mr-12"
+                styles="h-42 md:h-48 py-10 px-54 text-16 md:py-14 md:text-18 md:px-46 md:py-10"
               >
                 취소
               </Button>

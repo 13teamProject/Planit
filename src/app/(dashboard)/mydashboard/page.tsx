@@ -8,7 +8,7 @@ import { Suspense } from 'react';
 
 export default function MyDashBoardPage() {
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen bg-gray-50 dark:border-white dark:bg-gray-800 dark:text-white">
       <Sidemenu />
       <div className="flex flex-1 flex-col">
         <Suspense>

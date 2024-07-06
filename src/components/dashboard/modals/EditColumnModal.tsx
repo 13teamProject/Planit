@@ -114,11 +114,13 @@ export default function EditColumnModal({
             e.preventDefault();
           }}
         >
-          <h1 className="text-20 font-bold md:text-24">컬럼 관리</h1>
+          <h1 className="text-20 font-bold dark:text-white md:text-24">
+            컬럼 관리
+          </h1>
 
           <label
             htmlFor="columnTitle"
-            className="mb-10 mt-24 block text-16 text-black-800 md:mt-32 md:text-18"
+            className="mb-10 mt-24 block text-16 text-black-800 dark:text-white md:mt-32 md:text-18"
           >
             이름
           </label>
