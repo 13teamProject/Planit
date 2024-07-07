@@ -15,7 +15,7 @@ import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 type DropdownInputWrapperProps<T extends FieldValues> = {
   children: ReactNode;
   control: Control<T>;
-  placeholder: string;
+  defaultValue: ReactNode;
   name: Path<T>;
 };
 
@@ -27,14 +27,14 @@ export default function DropdownInputWrapper<T extends FieldValues>({
   children,
   name,
   control,
-  placeholder,
+  defaultValue,
 }: DropdownInputWrapperProps<T>) {
   return (
     <Controller
       name={name}
       control={control}
       render={({ field: { onChange } }) => (
-        <DropdownInput placeholder={placeholder} onChange={onChange}>
+        <DropdownInput onChange={onChange} defaultValue={defaultValue}>
           {children}
         </DropdownInput>
       )}
@@ -45,7 +45,7 @@ export default function DropdownInputWrapper<T extends FieldValues>({
 type DropdownInputContextType = {
   isOpen: boolean;
   toggle: () => void;
-  selected: JSX.Element;
+  selected: ReactNode;
   handleSelect: (id: number, element: JSX.Element) => void;
 };
 
@@ -58,8 +58,8 @@ const DropdownInputContext = createContext<DropdownInputContextType>({
 
 type DropdownInputProps = {
   children: ReactNode;
-  placeholder: string;
   onChange: (value: number) => void;
+  defaultValue: ReactNode;
 };
 
 /**
@@ -68,14 +68,12 @@ type DropdownInputProps = {
  */
 function DropdownInput({
   children,
-  placeholder,
   onChange,
+  defaultValue,
 }: DropdownInputProps) {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState(
-    <span className="text-gray-300">{placeholder}</span>,
-  );
+  const [selected, setSelected] = useState(defaultValue);
 
   const toggle = () => {
     setIsOpen((prev) => !prev);
@@ -118,11 +116,11 @@ function DropdownInput({
     <DropdownInputContext.Provider value={contextValue}>
       <div
         ref={dropdownRef}
-        className="relative h-42 w-287 text-14 md:h-48 md:w-217 md:text-16"
+        className="relative h-42 w-287 text-14 dark:text-white md:h-48 md:w-217 md:text-16"
       >
         <ToggleButton />
         {isOpen && (
-          <div className="absolute top-48 z-50 w-full rounded-md border border-gray-200 bg-white md:top-56">
+          <div className="custom-scrollbar absolute top-48 z-50 max-h-160 w-full overflow-y-auto rounded-md border border-gray-400 bg-white shadow-lg dark:border-white dark:bg-gray-700 dark:text-white md:top-56">
             {children}
           </div>
         )}
@@ -163,7 +161,7 @@ function Option({ id, children }: { id: number; children: ReactNode }) {
       onClick={() => {
         handleSelect(id, <>{children}</>);
       }}
-      className="gray-200 flex h-42 w-full items-center border-b border-gray-200 px-16 last:border-none hover:bg-toss-blue-light"
+      className="gray-200 flex h-42 w-full items-center border-b border-gray-200 px-16 last:border-none hover:bg-gray-50 dark:hover:bg-gray-600"
     >
       {children}
     </button>

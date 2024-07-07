@@ -1,10 +1,11 @@
 import {
   LoginProps,
-  LoginResponse,
+  LoginResult,
   SignUpProps,
   SignUpResult,
-} from '../../../types';
-import { API_URL, createFetchRequestOptions } from './baseUrl';
+} from '@planit-types';
+
+import { API_URL } from './baseUrl';
 
 // 회원가입 데이터 전송
 export async function signUpUser({
@@ -12,7 +13,14 @@ export async function signUpUser({
   password,
   nickname,
 }: SignUpProps): Promise<SignUpResult> {
-  const obj = createFetchRequestOptions('POST', {
+  const obj: RequestInit = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+
+  obj.body = JSON.stringify({
     email,
     password,
     nickname,
@@ -22,13 +30,15 @@ export async function signUpUser({
     const res = await fetch(`${API_URL}/users`, obj);
     const data = await res.json();
 
-    if (!res.ok) {
-      return { message: data.message || '회원가입에 실패하였습니다.' };
-    }
+    if (!res.ok) throw new Error(`${data.message}`);
 
     return data;
   } catch (error) {
-    throw new Error('네트워크 오류가 발생했습니다. 연결을 확인하십시오.');
+    if (error instanceof Error) {
+      return { message: error.message };
+    }
+
+    return { message: '회원가입 중 알 수 없는 오류가 발생했습니다.' };
   }
 }
 
@@ -36,18 +46,31 @@ export async function signUpUser({
 export async function loginUser({
   email,
   password,
-}: LoginProps): Promise<LoginResponse> {
-  const obj = createFetchRequestOptions('POST', {
+}: LoginProps): Promise<LoginResult> {
+  const obj: RequestInit = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+
+  obj.body = JSON.stringify({
     email,
     password,
   });
 
-  const res = await fetch(`${API_URL}/auth/login`, obj);
-  const data = await res.json();
+  try {
+    const res = await fetch(`${API_URL}/auth/login`, obj);
+    const data = await res.json();
 
-  if (!res.ok) {
-    throw new Error(data.message || '로그인에 실패하였습니다.');
+    if (!res.ok) throw new Error(`${data.message}`);
+
+    return data;
+  } catch (error) {
+    if (error instanceof Error) {
+      return { message: error.message };
+    }
+
+    return { message: '로그인 중 알 수 없는 오류가 발생했습니다.' };
   }
-
-  return data;
 }

@@ -11,6 +11,7 @@ type DateInputWrapperProps<T extends FieldValues> = {
   control: Control<T>;
   placeholder: string;
   name: Path<T>;
+  defaultValue?: T[Path<T>];
 };
 
 /**
@@ -21,13 +22,18 @@ export default function DateInputWrapper<T extends FieldValues>({
   name,
   placeholder,
   control,
+  defaultValue,
 }: DateInputWrapperProps<T>) {
   return (
     <Controller
       name={name}
       control={control}
       render={({ field: { onChange } }) => (
-        <DateInput placeholder={placeholder} onChange={onChange} />
+        <DateInput
+          defaultValue={defaultValue}
+          placeholder={placeholder}
+          onChange={onChange}
+        />
       )}
     />
   );
@@ -36,52 +42,57 @@ export default function DateInputWrapper<T extends FieldValues>({
 type DateInputProps = {
   placeholder: string;
   onChange: (value: Date) => void;
+  defaultValue?: Date;
 };
 
-const DateInput = memo(({ placeholder, onChange }: DateInputProps) => {
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const now = new Date();
-  const isToday =
-    selectedDate && selectedDate.toDateString() === now.toDateString();
+const DateInput = memo(
+  ({ placeholder, onChange, defaultValue }: DateInputProps) => {
+    const [selectedDate, setSelectedDate] = useState<Date | null>(
+      defaultValue || null,
+    );
+    const now = new Date();
+    const isToday =
+      selectedDate && selectedDate.toDateString() === now.toDateString();
 
-  const handleChange = (date: Date | null) => {
-    if (!date) return;
-    setSelectedDate(date);
-    onChange(date);
-  };
+    const handleChange = (date: Date | null) => {
+      if (!date) return;
+      setSelectedDate(date);
+      onChange(date);
+    };
 
-  return (
-    <div className="block h-42 w-full text-14 md:h-48 md:text-16">
-      <DatePicker
-        selected={selectedDate}
-        onChange={handleChange}
-        minDate={now}
-        minTime={
-          isToday
-            ? now
-            : new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0)
-        }
-        maxTime={
-          new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59)
-        }
-        dateFormat="yyyy.MM.dd HH:mm"
-        showTimeSelect
-        customInput={
-          <CustomInput
-            placeholderText={placeholder}
-            onClick={() => {}}
-            value={String(selectedDate)}
-          />
-        }
-      />
-    </div>
-  );
-});
+    return (
+      <div className="block h-42 w-full text-14 dark:text-white md:h-48 md:text-16">
+        <DatePicker
+          selected={selectedDate}
+          onChange={handleChange}
+          minDate={now}
+          minTime={
+            isToday
+              ? now
+              : new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0)
+          }
+          maxTime={
+            new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59)
+          }
+          dateFormat="yyyy.MM.dd HH:mm"
+          showTimeSelect
+          customInput={
+            <CustomInput
+              placeholderText={placeholder}
+              onClick={() => {}}
+              value={selectedDate && String(selectedDate)}
+            />
+          }
+        />
+      </div>
+    );
+  },
+);
 
 DateInput.displayName = 'DateInputWrapper';
 
 type CustomInputProps = {
-  value: string;
+  value: string | null;
   placeholderText: string;
   onClick: () => void;
 };
@@ -92,9 +103,9 @@ const CustomInput = forwardRef<HTMLButtonElement, CustomInputProps>(
       type="button"
       onClick={onClick}
       ref={ref}
-      className="block size-full rounded-md border border-gray-200 bg-white focus:border-[1.5px] focus:border-toss-blue"
+      className="block size-full rounded-md border border-gray-200 bg-white focus:border-[1.5px] focus:border-toss-blue dark:bg-gray-700 dark:text-white"
     >
-      <div className="flex items-center justify-start gap-10 px-16">
+      <div className="flex items-center justify-start gap-10 px-16 dark:text-white">
         <Image
           src={value ? '/icon/calendar.svg' : '/icon/calendar_gray.svg'}
           alt="calendar"
@@ -102,9 +113,11 @@ const CustomInput = forwardRef<HTMLButtonElement, CustomInputProps>(
           height={22}
         />
         {value ? (
-          <span className="text-black-800">{value}</span>
+          <span className="text-black-800 dark:text-white">{value}</span>
         ) : (
-          <span className="text-gray-300">{placeholderText}</span>
+          <span className="text-gray-300 dark:text-white">
+            {placeholderText}
+          </span>
         )}
       </div>
     </button>

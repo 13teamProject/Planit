@@ -1,0 +1,68 @@
+@media only screen and (max-width: 480px) {
+  .Toastify__toast-container {
+    width: 200vw !important;
+  }
+}
+
+.Toastify__toast--success
+  .Toastify__toast-icon.Toastify--animate-icon.Toastify__zoom-enter
+  > svg {
+  fill: #0064ff !important;
+}
+
+#pusher.Toastify .Toastify__toast {
+  width: 100% !important;
+  max-width: 500px;
+  background-color: #0064ff !important;
+  color: white;
+  text-align: center;
+}
+
+#pusher.Toastify .Toastify__toast-icon {
+  display: none;
+}
+
+#pusher.Toastify .Toastify__close-button {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+}
+
+#pusher.Toastify .Toastify__close-button svg {
+  fill: white;
+}
+
+@media only screen and (min-width: 481px) {
+  #pusher.Toastify .Toastify__toast-container {
+    width: 400px;
+  }
+
+  #pusher.Toastify .Toastify__toast-body {
+    padding: 8px;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  #pusher.Toastify .Toastify__toast-container {
+    width: max-content !important;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  #pusher.Toastify .Toastify__toast {
+    padding: 8px 30px !important;
+    border-radius: 8px;
+    margin-bottom: 8px;
+  }
+
+  #pusher.Toastify .Toastify__toast-body {
+    margin: 0;
+    padding: 0;
+  }
+}
+
+#pusher.Toastify .Toastify__toast--error {
+  background-color: red !important;
+  color: white;
+  text-align: center;
+}

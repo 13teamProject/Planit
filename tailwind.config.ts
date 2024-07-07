@@ -12,13 +12,62 @@ const createPxMap = (size: number): Record<string, string> =>
 const PX_10 = createPxMap(10);
 const PX_100 = createPxMap(100);
 const PX_2000 = createPxMap(2000);
+
+const TAG_COLORS = [
+  'bg-zinc-900',
+  'text-gray-50',
+  'bg-gray-200',
+  'text-zinc-900',
+  'bg-pink-light-chip',
+  'text-pink-chip',
+  'bg-red-light-chip',
+  'text-red-chip',
+  'bg-orange-light-chip',
+  'text-orange-chip',
+  'bg-yellow-300',
+  'text-yellow-600',
+  'bg-green-light-chip',
+  'text-green-chip',
+  'bg-emerald-300',
+  'text-emerald-600',
+  'bg-teal-300',
+  'text-teal-600',
+  'bg-cyan-300',
+  'text-cyan-600',
+  'bg-toss-blue-light',
+  'text-toss-blue',
+  'bg-blue-light-chip',
+  'text-blue-chip',
+  'bg-indigo-300',
+  'text-indigo-600',
+  'bg-purple-light-chip',
+  'text-purple-chip',
+  'bg-violet-300',
+  'text-violet-600',
+];
+
+const PROFILE_COLORS = [
+  'bg-[#ffc85a]',
+  'bg-[#fdd446]',
+  'bg-[#9dd7ed]',
+  'bg-[#c4b1a2]',
+  'bg-[#f4d7da]',
+  'bg-[#a3c4a2]',
+  'bg-teal-400',
+  'bg-violet-400',
+  'bg-blue-400',
+  'bg-red-400',
+];
+
 const config: Config = {
+  darkMode: 'class',
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
     './node_modules/react-tailwindcss-datepicker/dist/index.esm.js',
   ],
+  safelist: [...TAG_COLORS, ...PROFILE_COLORS],
   theme: {
     extend: {
       fontFamily: {
@@ -75,6 +124,13 @@ const config: Config = {
         md: { min: '744px' },
         lg: { min: '1200px' },
         landing: { min: '1200px', max: '1670px' },
+      },
+      noScrollbar: {
+        '&::-webkit-scrollbar': {
+          display: 'none',
+        },
+        '-ms-overflow-style': 'none', // IE and Edge
+        'scrollbar-width': 'none', // Firefox
       },
     },
   },

@@ -7,15 +7,17 @@ import {
   useState,
 } from 'react';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 import Tag from '../tag';
 
 type TagInputWrapperProps<T extends FieldValues> = Omit<
   InputHTMLAttributes<HTMLInputElement>,
-  'onChange'
+  'onChange' | 'defaultValue'
 > & {
   name: Path<T>;
   control: Control<T>;
+  defaultValue?: string[];
 };
 
 /**
@@ -25,6 +27,7 @@ type TagInputWrapperProps<T extends FieldValues> = Omit<
 export default function TagInputWrapper<T extends FieldValues>({
   name,
   control,
+  defaultValue,
   ...args
 }: TagInputWrapperProps<T>) {
   return (
@@ -32,19 +35,25 @@ export default function TagInputWrapper<T extends FieldValues>({
       name={name}
       control={control}
       render={({ field: { onChange } }) => (
-        <TagInput onChange={onChange} {...args} />
+        <TagInput defaultValue={defaultValue} onChange={onChange} {...args} />
       )}
     />
   );
 }
 
-type TagInputProps = InputHTMLAttributes<HTMLInputElement> & {
+type TagInputProps = Omit<
+  InputHTMLAttributes<HTMLInputElement>,
+  'onChange' | 'defaultValue'
+> & {
   onChange: (value: string[]) => void;
+  defaultValue?: string[];
 };
 
-function TagInput({ onChange, ...args }: TagInputProps) {
+const MAX_TAGS = 10;
+
+function TagInput({ onChange, defaultValue, ...args }: TagInputProps) {
   const [currentTag, setCurrentTag] = useState('');
-  const [tagList, setTagList] = useState<string[]>([]);
+  const [tagList, setTagList] = useState<string[]>(defaultValue || []);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setCurrentTag(e.target.value);
@@ -52,9 +61,14 @@ function TagInput({ onChange, ...args }: TagInputProps) {
 
   const addTag = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key !== 'Enter' || e.currentTarget.value.trim() === '') return;
+
+    if (tagList.length >= MAX_TAGS) {
+      toast.error('태그 개수는 최대 10개입니다.');
+      return;
+    }
+
     if (tagList.includes(currentTag)) {
-      // eslint-disable-next-line no-alert
-      alert('같은 태그가 있습니다');
+      toast.error('같은 태그가 있습니다');
       return;
     }
 
@@ -77,7 +91,7 @@ function TagInput({ onChange, ...args }: TagInputProps) {
         value={currentTag}
         onKeyUp={addTag}
         onChange={handleChange}
-        className="block h-42 w-full rounded-md border px-16 text-14 outline-none placeholder:text-gray-300 focus:border-[1.5px] focus:border-toss-blue md:h-48 md:text-16"
+        className="block h-42 w-full rounded-md border px-16 text-14 outline-none placeholder:text-gray-300 focus:border-[1.5px] focus:border-toss-blue dark:bg-gray-700 dark:text-white dark:placeholder:text-white md:h-48 md:text-16"
         {...args}
       />
       {tagList.length > 0 && (
@@ -85,14 +99,11 @@ function TagInput({ onChange, ...args }: TagInputProps) {
           {[...tagList].reverse().map((tag: string) => (
             <Tag
               key={tag}
-              size="lg"
-              color="toss"
+              text={tag}
               deleteTag={() => {
                 filterTagList(tag);
               }}
-            >
-              {tag}
-            </Tag>
+            />
           ))}
         </div>
       )}

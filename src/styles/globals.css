@@ -1,0 +1,91 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body,
+  input,
+  button,
+  select,
+  textarea {
+    font-family:
+      var(--nexonGothicFont),
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      'Segoe UI',
+      Roboto,
+      Oxygen,
+      Ubuntu,
+      Cantarell,
+      'Open Sans',
+      'Helvetica Neue',
+      sans-serif;
+  }
+
+  html {
+    scrollbar-width: none;
+    /* @apply overflow-; */
+  }
+
+  .custom-scrollbar {
+    -ms-overflow-style: auto; /* 인터넷 익스플로러 */
+    scrollbar-width: auto; /* 파이어폭스 */
+    overflow: auto; /* 스크롤바를 자동으로 표시 */
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 10px;
+    height: 0px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgb(218, 233, 254, 0.6);
+    opacity: 0.4;
+    border-radius: 14px;
+    scrollbar-width: auto; /* 파이어폭스 */
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: #fff;
+    border-radius: 10px;
+  }
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+  box-sizing: border-box;
+}
+
+label {
+  @apply block text-16 text-black-800;
+}
+
+input {
+  @apply w-full rounded-8 border border-solid border-gray-200 p-16;
+}
+
+button {
+  @apply select-none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.no-drag {
+  /*카드 드래그 시 이미지만 드래그되는 이슈 방지*/
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+}
