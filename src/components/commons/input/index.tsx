@@ -9,6 +9,7 @@ type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> & {
   type?: string;
   error?: boolean;
   size?: 'sm' | 'lg';
+  isAuth?: boolean;
   register: UseFormRegisterReturn;
 };
 
@@ -17,15 +18,17 @@ export default function Input({
   size = 'sm',
   error,
   register,
+  isAuth = false, // 로그인 페이지 여부를 확인하는 prop 추가
   ...args
 }: InputProps) {
   const classnames = classNames(
-    'block w-full rounded-md border pl-16 pr-40 outline-none placeholder:text-gray-300 text-14 md:text-16 dark:placeholder:text-white dark:bg-gray-700 dark:text-white',
+    'block w-full rounded-md border pl-16 pr-40 outline-none placeholder:text-gray-300 text-14 md:text-16',
     {
       'border-red-dashboard border-[1.5px] focus:border-red-dashboard': error,
       'border-gray-200 focus:border-toss-blue focus:border-[1.5px]': !error,
       'h-42 md:h-48': size === 'sm',
       'h-55': size === 'lg',
+      'dark:placeholder:text-white dark:bg-gray-700 dark:text-white': !isAuth, // 로그인 페이지가 아닐 때만 다크모드 클래스 추가
     },
   );
 

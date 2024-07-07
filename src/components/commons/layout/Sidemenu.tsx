@@ -238,7 +238,7 @@ export default function Sidemenu() {
         <div className="absolute bottom-12 left-1 px-9 md:bottom-10 md:left-12">
           <button
             type="button"
-            className="rounded-s-md border border-gray-200 px-8 py-6 md:px-14 md:py-11"
+            className="rounded-s-md border border-gray-200 px-6 py-6 md:px-14 md:py-11"
             onClick={handlePreviousPage}
             disabled={page <= 1}
           >
@@ -255,7 +255,7 @@ export default function Sidemenu() {
           </button>
           <button
             type="button"
-            className="rounded-e-md border border-gray-200 px-8 py-6 md:px-14 md:py-11"
+            className="rounded-e-md border border-gray-200 px-6 py-6 md:px-14 md:py-11"
             onClick={handleNextPage}
             disabled={page >= totalPages}
           >
