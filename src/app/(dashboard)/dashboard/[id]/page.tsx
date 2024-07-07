@@ -35,28 +35,25 @@ export default function DashboardPage({
 
   const pusherListener = () => {
     pusherClient.bind('enter', (message: string) => {
-      toast.success(message, { containerId: 'socket' });
+      toast.success(message, { containerId: 'pusher' });
     });
 
     pusherClient.bind('dashboards', (message: string) => {
       if (message.includes('삭제')) {
-        toast.error(message, { containerId: 'socket' });
+        toast.error(message, { containerId: 'pusher' });
         router.push('/mydashboard');
       } else {
-        toast.success(message, { containerId: 'socket' });
+        toast.success(message, { containerId: 'pusher' });
       }
     });
   };
 
   useEffect(() => {
     const unsubscribePusher = initializePusher(params.id);
+    pusherListener();
 
     return unsubscribePusher;
   }, [params.id]);
-
-  useEffect(() => {
-    pusherListener();
-  }, []);
 
   // emit
   useEffect(() => {

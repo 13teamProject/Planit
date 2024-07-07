@@ -16,6 +16,10 @@ export const usePusherStore = create<PusherState>((set) => ({
     });
 
     return () => {
+      pusherClient.unbind('enter');
+      pusherClient.unbind('cards');
+      pusherClient.unbind('dashboards');
+      pusherClient.unbind('columns');
       pusherClient.unsubscribe(dashboardId);
     };
   },

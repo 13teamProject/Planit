@@ -15,7 +15,7 @@ export default function ToastProvider({ children }: Props) {
       {children}
       <ToastContainer autoClose={2500} hideProgressBar newestOnTop />
       <ToastContainer
-        containerId="socket"
+        containerId="pusher"
         autoClose={2500}
         hideProgressBar
         position="bottom-center"

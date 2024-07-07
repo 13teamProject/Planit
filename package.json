@@ -23,8 +23,6 @@
     "react-hook-form": "^7.52.0",
     "react-spinners": "^0.14.1",
     "react-toastify": "^10.0.5",
-    "socket.io": "^4.7.5",
-    "socket.io-client": "^4.7.5",
     "yup": "^1.4.0",
     "zustand": "^4.5.2"
   },
