@@ -60,6 +60,7 @@ export default function LoginForm() {
           size="lg"
           register={{ ...register('email', { required: true }) }}
           error={'email' in errors}
+          isAuth
         />
         <span className="block pt-8 text-14 text-red-500">
           {errors.email?.message}
@@ -73,6 +74,7 @@ export default function LoginForm() {
           type="password"
           placeholder="비밀번호를 입력해 주세요"
           size="lg"
+          isAuth
           register={{ ...register('password', { required: true }) }}
           error={'password' in errors}
         />

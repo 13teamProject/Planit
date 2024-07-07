@@ -67,6 +67,7 @@ export default function SignUpForm() {
           type="text"
           placeholder="이메일을 입력해 주세요"
           size="lg"
+          isAuth
           register={{ ...register('email', { required: true }) }}
           error={'email' in errors}
         />
@@ -82,6 +83,7 @@ export default function SignUpForm() {
           type="text"
           placeholder="닉네임을 입력해 주세요"
           size="lg"
+          isAuth
           register={{ ...register('nickname', { required: true }) }}
           error={'nickname' in errors}
         />
@@ -97,6 +99,7 @@ export default function SignUpForm() {
           type="password"
           placeholder="8자 이상 입력해 주세요"
           size="lg"
+          isAuth
           register={{ ...register('password', { required: true }) }}
           error={'password' in errors}
         />
@@ -112,6 +115,7 @@ export default function SignUpForm() {
           type="password"
           placeholder="비밀번호를 한번 더 입력해 주세요"
           size="lg"
+          isAuth
           register={{ ...register('passwordConfirmation', { required: true }) }}
           error={'passwordConfirmation' in errors}
         />
