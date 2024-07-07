@@ -2,6 +2,7 @@
 
 import { getDashboards, postDashboards } from '@/app/api/dashboards';
 import ColorCircle from '@/components/commons/circle/ColorCircle';
+import { useDarkMode } from '@/context/DarkModeContext';
 import useDeviceState from '@/hooks/useDeviceState';
 import {
   ColorMapping,
@@ -38,6 +39,7 @@ const colors = [
 ];
 
 export default function NewDashboard() {
+  const { darkMode } = useDarkMode();
   const [dashboards, setDashboards] = useState<Dashboard[]>([]);
   const [page, setPage] = useState(1);
   const deviceState = useDeviceState();
@@ -154,17 +156,21 @@ export default function NewDashboard() {
               <Link href={`/dashboard/${dashboard.id}`}>
                 <button
                   type="button"
-                  className="flex w-full items-center justify-between gap-8 rounded-8 border border-gray-200 bg-white px-20 py-20 font-bold text-black-800 hover:border-gray-400 md:py-24 md:text-18"
+                  className="flex w-full items-center justify-between gap-8 rounded-8 border border-gray-200 bg-white px-20 py-20 font-bold text-black-800 hover:border-gray-400 dark:bg-gray-700 dark:text-white md:py-24 md:text-18"
                 >
                   <div className="flex items-center">
                     <ColorCircle
                       color={colorMapping[dashboard.color] || 'bg-gray-400'}
                       size="sm"
                     />
-                    <p className="ml-10">{dashboard.title}</p>
+                    <p className="ml-10 text-ellipsis">{dashboard.title}</p>
                   </div>
                   <Image
-                    src="/icon/arrow_forward.svg"
+                    src={
+                      darkMode
+                        ? '/icon/arrow_forward_gray.svg'
+                        : '/icon/arrow_forward.svg'
+                    }
                     width={20}
                     height={20}
                     alt="대쉬보드 바로가기 버튼"
@@ -205,92 +211,11 @@ export default function NewDashboard() {
       </section>
       <Modal isOpen={modalState.isOpen} onClose={handleCloseModal}>
         <div className="max-h-90vh md:max-h-95vh overflow-y-auto px-20 py-28 pt-32 md:w-540 md:px-28 md:pb-28">
-          <p className="black-800 mb-24 text-24 font-bold lg:mb-28">
+          <p className="black-800 mb-24 text-24 font-bold dark:text-white lg:mb-28">
             새로운 대시보드
           </p>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <label className="mb-10 text-18 font-medium">
-              대시보드 이름
-              <input
-                {...register('dashboardName', {
-                  required: '대시보드 이름은 필수 항목입니다.',
-                  maxLength: {
-                    value: 10,
-                    message: '대시보드 이름은 공백 포함 10자 이내여야 합니다.',
-                  },
-                })}
-                type="text"
-                className={`mt-12 block h-42 w-full rounded-md border pl-16 pr-40 text-14 outline-none md:h-48 md:text-16 ${
-                  errors.dashboardName ? 'border-red-dashboard' : ''
-                }`}
-              />
-              {errors.dashboardName && (
-                <span className="pt-8 text-14 text-red-500">
-                  {errors.dashboardName.message}
-                </span>
-              )}
-            </label>
-            <div className="mt-24 flex space-x-10 md:mt-28">
-              {colors.map((color) => (
-                <div
-                  key={color}
-                  onClick={() => setSelectedColor(color)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      setSelectedColor(color);
-                    }
-                  }}
-                  tabIndex={0}
-                  role="button"
-                  className="relative transform cursor-pointer transition-transform duration-200 ease-in-out hover:scale-110"
-                >
-                  <ColorCircle color={colorMapping[color]} size="lg" />
-                  {selectedColor === color && (
-                    <Image
-                      src="/icon/check-icon.svg"
-                      width={15}
-                      height={15}
-                      alt="대시보드 색상 선택"
-                      className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform"
-                    />
-                  )}
-                </div>
-              ))}
-            </div>
-            <div className="mt-18 flex justify-end md:mt-28">
-              <Button
-                text="취소"
-                type="button"
-                cancel
-                onClick={handleCloseModal}
-                styles="h-42 md:h-48 py-10 px-54 text-16 md:py-14 md:text-18 md:px-46 md:py-10 mr-12"
-              >
-                취소
-              </Button>
-              <Button
-                text="생성"
-                type="submit"
-                cancel={false}
-                disabled={!watch('dashboardName') || !selectedColor}
-                styles={`h-42 py-10 px-54 text-16 md:h-48 md:py-12 md:text-18 md:px-46 md:py-14 ${
-                  !watch('dashboardName') || !selectedColor
-                    ? 'bg-gray-300 cursor-not-allowed'
-                    : ''
-                }`}
-              >
-                생성
-              </Button>
-            </div>
-          </form>
-        </div>
-      </Modal>
-      <Modal isOpen={modalState.isOpen} onClose={handleCloseModal}>
-        <div className="max-h-90vh md:max-h-95vh overflow-y-auto px-20 py-28 pt-32 md:w-540 md:px-28 md:pb-28">
-          <p className="black-800 mb-24 text-24 font-bold lg:mb-28">
-            새로운 대시보드
-          </p>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <label className="mb-10 text-18 font-medium">
+            <label className="mb-10 text-18 font-medium dark:text-gray-200">
               대시보드 이름
               <input
                 {...register('dashboardName', {

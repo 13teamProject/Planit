@@ -93,16 +93,18 @@ export default function CreateColumnModal({
   return (
     <Modal isOpen={isOpen} onClose={() => {}}>
       <form
-        className="w-327 px-20 py-28 md:w-540 md:px-28 md:py-32"
+        className="w-327 rounded-8 px-20 py-28 dark:bg-gray-700 md:w-540 md:px-28 md:py-32"
         onSubmit={(e) => {
           e.preventDefault();
         }}
       >
-        <h1 className="text-20 font-bold md:text-24">새 컬럼 생성</h1>
+        <h1 className="text-20 font-bold dark:text-white md:text-24">
+          새 컬럼 생성
+        </h1>
 
         <label
           htmlFor="columnTitle"
-          className="mb-10 mt-24 block text-16 text-black-800 md:mt-32 md:text-18"
+          className="mb-10 mt-24 block text-16 text-black-800 dark:text-white md:mt-32 md:text-18"
         >
           이름
         </label>

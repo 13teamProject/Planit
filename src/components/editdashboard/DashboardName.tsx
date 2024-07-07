@@ -88,7 +88,7 @@ export default function DashboardName({ params }: { params: { id: number } }) {
   }, []);
 
   return (
-    <div className="w-full max-w-620 rounded-md bg-white px-28 pb-28 pt-32">
+    <div className="w-full max-w-620 rounded-md bg-white px-28 pb-28 pt-32 dark:bg-gray-700">
       <form className="overflow-hidden" onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-34 items-center justify-between md:flex">
           <div className="w-full md:max-w-320">
@@ -122,7 +122,7 @@ export default function DashboardName({ params }: { params: { id: number } }) {
 
         <label
           htmlFor="title"
-          className="mb-10 inline-block text-16 md:text-18"
+          className="mb-10 inline-block text-16 dark:text-white md:text-18"
         >
           대시보드 이름
         </label>

@@ -8,6 +8,7 @@ import Modal from '@/components/commons/modal';
 import EditCardModal from '@/components/dashboard/modals/EditCardModal';
 import CardDetails from '@/components/dashboard/modals/TodoDetailModal/CardDetails';
 import CommentSection from '@/components/dashboard/modals/TodoDetailModal/CommentSection';
+import { useDarkMode } from '@/context/DarkModeContext';
 import { useAuthStore } from '@/store/authStore';
 import { usePusherStore } from '@/store/pusherStore';
 import { CardResponse, ErrorMessage } from '@planit-types';
@@ -32,6 +33,7 @@ export default function TodoDetailModal({
   onCardDelete,
   onColumnUpdate,
 }: Props) {
+  const { darkMode } = useDarkMode();
   const [cardDetails, setCardDetails] = useState<CardResponse | null>(null);
   const [selectBoxIsOpen, setSelectBoxIsOpen] = useState(false);
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
@@ -101,21 +103,21 @@ export default function TodoDetailModal({
         <Modal isOpen={todoModalIsOpen} onClose={() => {}}>
           <div className="mb-28 flex max-h-730 w-327 flex-col overflow-hidden px-28 pt-30 md:w-680 md:gap-16 lg:w-730">
             <div className="grid md:flex md:justify-between md:pb-8 selection:md:flex-col">
-              <h1 className="order-2 py-10 text-20 font-bold md:order-1 md:text-24">
+              <h1 className="order-2 py-10 text-20 font-bold dark:text-white md:order-1 md:text-24">
                 {title}
               </h1>
               <div className="order-1 flex justify-end gap-24 md:order-2">
                 <Image
                   ref={kebabRef}
                   className="cursor-pointer"
-                  src="/icon/kebab.svg"
+                  src={darkMode ? '/icon/kebab_gray.svg' : '/icon/kebab.svg'}
                   width={28}
                   height={28}
                   alt="드롭다운 케밥"
                   onClick={handleKebabClick}
                 />
                 {selectBoxIsOpen && (
-                  <span className="absolute top-70">
+                  <span className="absolute top-70 md:top-80">
                     <DropDownSelectBox
                       items={dropdownList}
                       setSelectBoxIsOpen={setSelectBoxIsOpen}
@@ -125,7 +127,7 @@ export default function TodoDetailModal({
                 )}
                 <Image
                   className="cursor-pointer"
-                  src="/icon/close.svg"
+                  src={darkMode ? '/icon/close_gray.svg' : '/icon/close.svg'}
                   width={32}
                   height={32}
                   alt="창끄기"
@@ -158,7 +160,9 @@ export default function TodoDetailModal({
         onClose={handleModalClose(setDeleteModalIsOpen)}
       >
         <div className="modal-content m-auto px-54 pb-29 pt-26 text-right text-18 md:w-540 md:px-33">
-          <p className="pb-47 pt-50 text-center">삭제하시겠습니까?</p>
+          <p className="pb-47 pt-50 text-center dark:text-white">
+            삭제하시겠습니까?
+          </p>
           <span className="flex justify-center gap-5 md:justify-end">
             <Button
               styles="w-138 h-42 md:w-120 md:h-48"

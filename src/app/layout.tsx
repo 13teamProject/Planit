@@ -1,4 +1,5 @@
 import ToastProvider from '@/components/commons/toast';
+import { DarkModeProvider } from '@/context/DarkModeContext';
 import '@/styles/globals.css';
 import { Metadata } from 'next';
 import localFont from 'next/font/local';
@@ -52,10 +53,12 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
       <body suppressHydrationWarning className={`${customFont.variable}`}>
-        <ToastProvider>
-          {children}
-          <div id="modal-root" />
-        </ToastProvider>
+        <DarkModeProvider>
+          <ToastProvider>
+            {children}
+            <div id="modal-root" />
+          </ToastProvider>
+        </DarkModeProvider>
       </body>
     </html>
   );

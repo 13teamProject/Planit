@@ -12,6 +12,7 @@ import ImageInput from '@/components/commons/input/ImageInput';
 import TagInput from '@/components/commons/input/TagInput';
 import Textarea from '@/components/commons/input/Textarea';
 import Modal from '@/components/commons/modal';
+import { useDarkMode } from '@/context/DarkModeContext';
 import { useAuthStore } from '@/store/authStore';
 import { usePusherStore } from '@/store/pusherStore';
 import { formatDate } from '@/utils/date';
@@ -53,6 +54,7 @@ export default function CreateCardModal({
     reset,
     formState: { isValid },
   } = useForm<CreateCardInputs>();
+  const { darkMode } = useDarkMode();
 
   const onSubmit: SubmitHandler<CreateCardInputs> = async ({
     assignee,
@@ -111,9 +113,9 @@ export default function CreateCardModal({
     <Modal isOpen={isOpen} onClose={() => {}}>
       <form className="custom-scrollbar max-h-800 w-340 overflow-y-auto p-20 md:max-h-900 md:min-w-506 md:p-24">
         <div className="mb-18 flex items-center justify-between md:mb-22">
-          <h1 className="text-20 font-bold">할 일 생성</h1>
+          <h1 className="text-20 font-bold dark:text-white">할 일 생성</h1>
           <Image
-            src="/icon/close.svg"
+            src={darkMode ? '/icon/close_gray.svg' : '/icon/close.svg'}
             alt="close"
             width={32}
             height={32}
@@ -123,7 +125,7 @@ export default function CreateCardModal({
         </div>
         <label
           htmlFor="assignee"
-          className="mb-8 block text-14 text-black-800 md:text-16"
+          className="mb-8 block text-14 text-black-800 dark:text-white md:text-16"
         >
           담당자
         </label>
@@ -131,7 +133,9 @@ export default function CreateCardModal({
           name="assignee"
           control={control}
           defaultValue={
-            <span className="text-gray-300">이름을 입력해 주세요</span>
+            <span className="text-gray-300 dark:text-white">
+              이름을 입력해 주세요
+            </span>
           }
         >
           {members.map((member) => (
@@ -145,9 +149,9 @@ export default function CreateCardModal({
         </DropdownInput>
         <label
           htmlFor="title"
-          className="mb-8 mt-18 block text-14 text-black-800 md:mt-20 md:text-16"
+          className="mb-8 mt-18 block text-14 text-black-800 dark:text-white md:mt-20 md:text-16"
         >
-          제목 <span className="text-violet-dashboard">*</span>
+          제목 <span className="text-violet-dashboard dark:text-white">*</span>
         </label>
         <Input
           id="title"
@@ -157,9 +161,9 @@ export default function CreateCardModal({
         />
         <label
           htmlFor="description"
-          className="mb-8 mt-18 block text-14 text-black-800 md:mt-20 md:text-16"
+          className="mb-8 mt-18 block text-14 text-black-800 dark:text-white md:mt-20 md:text-16"
         >
-          설명 <span className="text-violet-dashboard">*</span>
+          설명 <span className="text-violet-dashboard dark:text-white">*</span>
         </label>
         <Textarea
           id="description"
@@ -168,7 +172,7 @@ export default function CreateCardModal({
         />
         <label
           htmlFor="dueDate"
-          className="mb-8 mt-18 block text-14 text-black-800 md:mt-20 md:text-16"
+          className="mb-8 mt-18 block text-14 text-black-800 dark:text-white md:mt-20 md:text-16"
         >
           마감일
         </label>
@@ -179,7 +183,7 @@ export default function CreateCardModal({
         />
         <label
           htmlFor="tags"
-          className="mb-8 mt-18 block text-14 text-black-800 md:mt-20 md:text-16"
+          className="mb-8 mt-18 block text-14 text-black-800 dark:text-white md:mt-20 md:text-16"
         >
           태그
         </label>
@@ -191,7 +195,7 @@ export default function CreateCardModal({
         />
         <label
           htmlFor="image"
-          className="mb-8 mt-18 block text-14 text-black-800 md:mt-20 md:text-16"
+          className="mb-8 mt-18 block text-14 text-black-800 dark:text-white md:mt-20 md:text-16"
         >
           이미지
         </label>

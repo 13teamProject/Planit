@@ -38,7 +38,9 @@ export default function Modal({ isOpen, onClose, children }: ModalProps) {
       onKeyDown={handleKeyDown}
       role="presentation"
     >
-      <div className="relative rounded-8 bg-white shadow-lg">{children}</div>
+      <div className="relative rounded-8 bg-white shadow-lg dark:bg-gray-700">
+        {children}
+      </div>
     </div>,
     document.getElementById('modal-root') as HTMLElement,
   );

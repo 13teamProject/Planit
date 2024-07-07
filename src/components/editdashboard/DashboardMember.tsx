@@ -62,11 +62,11 @@ export default function DashboardMember({
   }, [currentPage]);
 
   return (
-    <div className="mt-12 w-full max-w-620 rounded-md bg-white px-28 pb-28 pt-26">
+    <div className="mt-12 w-full max-w-620 rounded-md bg-white px-28 pb-28 pt-26 dark:bg-gray-700">
       <div className="mb-25 flex justify-between">
         <h3 className="text-20 font-bold md:text-24">구성원</h3>
         <div className="flex items-center">
-          <span className="mr-16 text-12 md:text-14">
+          <span className="mr-16 text-12 dark:text-white md:text-14">
             {totalPages} 페이지 중 {currentPage}
           </span>
 
@@ -113,7 +113,7 @@ export default function DashboardMember({
               }}
               styles="size-34 md:size-38"
             />
-            <p className="md:text- 16 text-14 text-black-800">
+            <p className="md:text- 16 text-14 text-black-800 dark:text-white">
               {member.nickname}
             </p>
           </div>

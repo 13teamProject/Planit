@@ -30,16 +30,18 @@ export default function Comment({
   };
 
   return (
-    <div className="flex w-full gap-8 pb-16 pt-2 md:max-w-420 lg:max-w-450">
+    <div className="flex w-full gap-8 pb-16 pl-4 pt-2 md:max-w-420 lg:max-w-450">
       <ProfileCircle data={author} styles="size-26 md:size-34" />
       <div className="flex flex-col">
         <div>
-          <span className="pr-6 text-12 font-semibold">{author.nickname}</span>
-          <time className="text-10 text-gray-300">
+          <span className="pr-6 text-12 font-semibold dark:text-gray-100">
+            {author.nickname}
+          </span>
+          <time className="text-10 text-gray-300 dark:text-gray-100">
             {formatDate(new Date(createdAt))}
           </time>
         </div>
-        {!isEdit && <div className="text-12">{content}</div>}
+        {!isEdit && <div className="text-12 dark:text-white">{content}</div>}
         {isEdit && (
           <div className="mt-4 flex justify-between gap-4 rounded-md border border-gray-200 p-4 selection:rounded-md focus:border-toss-blue">
             <textarea
@@ -59,7 +61,7 @@ export default function Comment({
           </div>
         )}
         {!isEdit && (
-          <div className="flex gap-8 pt-2 text-10 text-gray-300 underline underline-offset-2">
+          <div className="flex gap-8 pt-2 text-10 text-gray-100 underline underline-offset-2">
             <button type="button" onClick={() => setIsEdit((prev) => !prev)}>
               수정
             </button>

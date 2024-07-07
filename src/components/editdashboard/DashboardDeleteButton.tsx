@@ -52,17 +52,21 @@ export default function DashboardDeleteButton({
   return (
     <>
       <div className="mt-40 w-full max-w-320">
-        <Button
-          text="대시보드 삭제하기"
+        <button
+          type="button"
           onClick={handleOpenDashboardDeleteModal}
-          styles="w-full border border-gray-200 !bg-transparent !text-black-800 py-20"
-        />
+          className="w-full rounded-8 border border-gray-200 bg-white py-20 text-black-800 dark:bg-gray-700 dark:text-white"
+        >
+          대시보드 삭제하기
+        </button>
       </div>
       <Modal isOpen={modalState.isOpen} onClose={handleClose}>
         <div className="m-auto px-54 pb-29 pt-26 text-center text-18 md:w-540 md:px-33">
           {modalState.isContent ? (
             <div>
-              <p className="pb-47 pt-50">대시보드를 삭제하실건가요?</p>
+              <p className="pb-47 pt-50 dark:text-white">
+                대시보드를 삭제하실건가요?
+              </p>
               <div className="flex justify-end gap-12">
                 <Button
                   text="취소"
