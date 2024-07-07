@@ -6,6 +6,7 @@ import Button from '@/components/commons/button';
 import DropDownSelectBox from '@/components/commons/dropdown';
 import Input from '@/components/commons/input';
 import Modal from '@/components/commons/modal';
+import { useDarkMode } from '@/context/DarkModeContext';
 import { handleLogout } from '@/service/authService';
 import { useAuthStore } from '@/store/authStore';
 import { useDashboardNameChange } from '@/store/dashBoardName';
@@ -17,6 +18,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { HiMoon, HiSun } from 'react-icons/hi';
+import Switch from 'react-switch';
 import { toast } from 'react-toastify';
 
 import ProfileCircle from '../circle/ProfileCircle';
@@ -56,6 +59,7 @@ export default function DashBoardHeader({
     handleSubmit,
     formState: { errors, isValid },
   } = useForm<EmailRequest>({ resolver, mode: 'onChange' });
+  const { darkMode, toggleDarkMode } = useDarkMode();
 
   // 대시보드 정보 불러오기
   const fetchDashboards = async () => {
@@ -162,9 +166,9 @@ export default function DashBoardHeader({
 
   return (
     <>
-      <nav className="fixed right-0 top-0 z-[998] flex h-70 w-full items-center justify-end border-1 border-l-0 border-b-gray-200 bg-white py-25 pr-12 md:pr-40 lg:justify-between lg:pe-80 lg:ps-40">
+      <nav className="fixed right-0 top-0 z-[998] flex h-70 w-full items-center justify-end border-b-1 border-l-0 border-b-gray-200 bg-white py-25 pr-12 dark:border-white dark:bg-gray-900 md:pr-40 lg:justify-between lg:ps-40">
         {!isDashboard && isClient && (
-          <p className="ml-30 text-20 font-bold sm:hidden lg:block">
+          <p className="ml-30 text-20 font-bold dark:text-white sm:hidden lg:block">
             {window.location.pathname.startsWith('/mypage')
               ? '계정 관리'
               : '내 대시보드'}
@@ -173,7 +177,7 @@ export default function DashBoardHeader({
         {isDashboard && (
           <div className="flex">
             {isClient && (
-              <p className="ml-30 mr-8 text-20 font-bold sm:hidden lg:block">
+              <p className="ml-30 mr-8 text-20 font-bold dark:text-white sm:hidden lg:block">
                 {dashboardName}
               </p>
             )}
@@ -198,7 +202,7 @@ export default function DashBoardHeader({
                 <Link href={`/edit/${selectedDashboardId}`}>
                   <button
                     type="button"
-                    className="flex h-40 w-88 items-center justify-center rounded-8 border-1 border-gray-200 text-16 font-medium text-gray-400 hover:border-black-700"
+                    className="flex h-40 w-50 items-center justify-center rounded-8 border-1 border-gray-200 text-16 font-medium text-gray-400 hover:border-black-700 dark:text-white md:w-88"
                   >
                     <Image
                       src="/icon/settings.svg"
@@ -218,7 +222,7 @@ export default function DashBoardHeader({
               <li>
                 <button
                   type="button"
-                  className="ml-16 mr-16 flex h-40 w-116 items-center justify-center rounded-8 border-1 border-gray-200 text-16 font-medium text-gray-400 hover:border-black-700 md:mr-32 lg:mr-40"
+                  className="ml-16 mr-16 flex h-40 w-80 items-center justify-center rounded-8 border-1 border-gray-200 text-16 font-medium text-gray-400 hover:border-black-700 dark:text-white md:mr-32 md:w-116 lg:mr-40"
                   onClick={handleOpenInvitation}
                 >
                   <Image
@@ -284,13 +288,13 @@ export default function DashBoardHeader({
             </li>
             <li className="pl-12">
               {userInfo && (
-                <p className="text-16 font-medium sm:hidden md:block lg:block">
+                <p className="text-16 font-medium dark:text-white sm:hidden md:block lg:block">
                   {userInfo.nickname}
                 </p>
               )}
             </li>
             {selectBoxIsOpen && (
-              <span className="absolute right-20 top-60 md:right-36 md:top-63 lg:right-70">
+              <span className="absolute right-20 top-60 md:right-90 md:top-63 lg:right-120 lg:right-80">
                 <DropDownSelectBox
                   items={dropdownList}
                   setSelectBoxIsOpen={setSelectBoxIsOpen}
@@ -300,16 +304,41 @@ export default function DashBoardHeader({
               </span>
             )}
           </button>
+          <span className="pt-4 md:pl-10">
+            <Switch
+              onChange={toggleDarkMode}
+              checked={darkMode}
+              onColor="#424242"
+              offColor="#F5F5F5"
+              activeBoxShadow="0 0 0 0"
+              handleDiameter={25}
+              height={24}
+              width={50}
+              borderRadius={12}
+              uncheckedIcon={
+                <span className="flex h-[100%] items-center justify-end pr-6">
+                  <HiSun color="#fcc419" size={16} />
+                </span>
+              }
+              checkedIcon={
+                <span className="flex h-[100%] items-center justify-start pl-6">
+                  <HiMoon color="white" size={16} />
+                </span>
+              }
+              onHandleColor="#9E9E9E"
+              offHandleColor="#ffe066"
+            />
+          </span>
         </ul>
       </nav>
 
       <Modal isOpen={modalState.isOpen} onClose={handleClose}>
         <div className="m-auto w-330 px-20 pb-29 pt-26 text-right text-18 md:w-540 md:px-33">
           <div className="text-left">
-            <h3 className="mb-24 text-20 font-bold md:mb-30 md:text-24">
+            <h3 className="mb-24 text-20 font-bold dark:text-white md:mb-30 md:text-24">
               초대하기
             </h3>
-            <p className="mb-10 text-16 md:text-18">이메일</p>
+            <p className="mb-10 text-16 dark:text-white md:text-18">이메일</p>
             <form onSubmit={handleSubmit(onSubmit)}>
               <Input
                 id="email"

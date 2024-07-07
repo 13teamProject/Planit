@@ -110,7 +110,7 @@ export default function DashboardInvitation({
   }, [currentPage]);
 
   return (
-    <div className="mt-12 w-full max-w-620 rounded-md bg-white px-28 pb-28 pt-26">
+    <div className="mt-12 w-full max-w-620 rounded-md bg-white px-28 pb-28 pt-26 dark:bg-gray-700">
       <div className="mb-25 flex items-center justify-between">
         <h3 className="text-20 font-bold md:text-24">초대 내역</h3>
         <div className="flex items-center gap-12 md:gap-16">

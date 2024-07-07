@@ -91,7 +91,7 @@ function TagInput({ onChange, defaultValue, ...args }: TagInputProps) {
         value={currentTag}
         onKeyUp={addTag}
         onChange={handleChange}
-        className="block h-42 w-full rounded-md border px-16 text-14 outline-none placeholder:text-gray-300 focus:border-[1.5px] focus:border-toss-blue md:h-48 md:text-16"
+        className="block h-42 w-full rounded-md border px-16 text-14 outline-none placeholder:text-gray-300 focus:border-[1.5px] focus:border-toss-blue dark:bg-gray-700 dark:text-white dark:placeholder:text-white md:h-48 md:text-16"
         {...args}
       />
       {tagList.length > 0 && (

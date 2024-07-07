@@ -47,7 +47,7 @@ export default function Edit({ params }: { params: { id: number } }) {
             height={20}
             className="mr-5 rotate-180"
           />
-          <span>돌아가기</span>
+          <span className="dark:text-white">돌아가기</span>
         </button>
       </div>
       <DashboardName params={params} />

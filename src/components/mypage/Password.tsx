@@ -44,12 +44,15 @@ export default function Password() {
     }
   };
   return (
-    <div className="mt-12 w-full max-w-620 rounded-md bg-white p-20 md:px-28 md:pb-28 md:pt-32">
-      <h3 className="mb-24 text-20 font-bold md:mb-32 md:text-24">
+    <div className="mt-12 w-full max-w-620 rounded-md bg-white p-20 dark:bg-gray-700 md:px-28 md:pb-28 md:pt-32">
+      <h3 className="mb-24 text-20 font-bold dark:text-white md:mb-32 md:text-24">
         비밀번호 변경
       </h3>
       <form className="overflow-hidden" onSubmit={handleSubmit(onSubmit)}>
-        <label htmlFor="password" className="mb-10 text-16 md:text-18">
+        <label
+          htmlFor="password"
+          className="mb-10 text-16 dark:text-white md:text-18"
+        >
           현재 비밀번호
         </label>
         <Input
@@ -66,7 +69,7 @@ export default function Password() {
 
         <label
           htmlFor="newPassword"
-          className="mb-10 mt-16 text-16 md:mt-20 md:text-18"
+          className="mb-10 mt-16 text-16 dark:text-white md:mt-20 md:text-18"
         >
           새 비밀번호
         </label>
@@ -83,7 +86,7 @@ export default function Password() {
 
         <label
           htmlFor="passwordConfirmation"
-          className="mb-10 mt-16 text-16 md:mt-20 md:text-18"
+          className="mb-10 mt-16 text-16 dark:text-white md:mt-20 md:text-18"
         >
           새 비밀번호 확인
         </label>

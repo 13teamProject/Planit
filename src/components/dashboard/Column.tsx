@@ -186,7 +186,7 @@ export default function Column({ dashboardId, onColumnUpdate }: ColumnProps) {
           <div className="mb-20 flex w-full items-center justify-between">
             <div className="flex items-center gap-4">
               <ColorCircle size="sm" color="bg-toss-blue" />
-              <h1 className="max-w-120 overflow-hidden text-ellipsis whitespace-nowrap text-16 font-bold md:text-18">
+              <h1 className="max-w-120 overflow-hidden text-ellipsis whitespace-nowrap text-16 font-bold dark:text-white md:text-18">
                 {column.title}
               </h1>
               <span className="inline-flex h-20 w-20 items-center justify-center rounded-4 bg-gray-200 text-12 text-gray-400">

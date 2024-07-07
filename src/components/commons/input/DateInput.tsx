@@ -61,7 +61,7 @@ const DateInput = memo(
     };
 
     return (
-      <div className="block h-42 w-full text-14 md:h-48 md:text-16">
+      <div className="block h-42 w-full text-14 dark:text-white md:h-48 md:text-16">
         <DatePicker
           selected={selectedDate}
           onChange={handleChange}
@@ -103,9 +103,9 @@ const CustomInput = forwardRef<HTMLButtonElement, CustomInputProps>(
       type="button"
       onClick={onClick}
       ref={ref}
-      className="block size-full rounded-md border border-gray-200 bg-white focus:border-[1.5px] focus:border-toss-blue"
+      className="block size-full rounded-md border border-gray-200 bg-white focus:border-[1.5px] focus:border-toss-blue dark:bg-gray-700 dark:text-white"
     >
-      <div className="flex items-center justify-start gap-10 px-16">
+      <div className="flex items-center justify-start gap-10 px-16 dark:text-white">
         <Image
           src={value ? '/icon/calendar.svg' : '/icon/calendar_gray.svg'}
           alt="calendar"
@@ -113,9 +113,11 @@ const CustomInput = forwardRef<HTMLButtonElement, CustomInputProps>(
           height={22}
         />
         {value ? (
-          <span className="text-black-800">{value}</span>
+          <span className="text-black-800 dark:text-white">{value}</span>
         ) : (
-          <span className="text-gray-300">{placeholderText}</span>
+          <span className="text-gray-300 dark:text-white">
+            {placeholderText}
+          </span>
         )}
       </div>
     </button>

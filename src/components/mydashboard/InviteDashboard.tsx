@@ -75,9 +75,9 @@ export default function InviteDashboard() {
   return (
     <>
       {isInvited && (
-        <div className="mb-120 ml-40 mt-24 h-830 w-260 overflow-hidden rounded-8 bg-white pl-24 pr-24 md:mt-40 md:h-600 md:w-504 md:pl-28 md:pr-28 lg:w-1022">
+        <div className="mb-120 ml-40 mt-24 h-830 w-260 overflow-hidden rounded-8 bg-white pl-24 pr-24 dark:bg-gray-700 md:mt-40 md:h-600 md:w-504 md:pl-28 md:pr-28 lg:w-1022">
           <div className="sticky top-0 z-10 bg-white">
-            <p className="pt-24 text-20 font-bold text-black-800 md:pt-32 md:text-24">
+            <p className="pt-24 text-20 font-bold text-black-800 dark:text-white md:pt-32 md:text-24">
               초대받은 대시보드
             </p>
             <div className="relative">
@@ -201,8 +201,8 @@ export default function InviteDashboard() {
         </div>
       )}
       {!isInvited && (
-        <div className="mb-120 ml-40 mt-24 h-400 w-260 rounded-8 bg-white md:mt-40 md:h-400 md:w-504 lg:w-1022">
-          <p className="pl-16 pt-24 text-20 font-bold text-black-800 md:pl-28 md:pt-32 md:text-24">
+        <div className="mb-120 ml-40 mt-24 h-400 w-260 rounded-8 bg-white dark:bg-gray-700 md:mt-40 md:h-400 md:w-504 lg:w-1022">
+          <p className="pl-16 pt-24 text-20 font-bold text-black-800 dark:text-white md:pl-28 md:pt-32 md:text-24">
             초대받은 대시보드
           </p>
           <div className="flex w-full flex-col items-center justify-center pt-100 md:pt-66">

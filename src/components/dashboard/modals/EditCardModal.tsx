@@ -13,6 +13,7 @@ import TagInput from '@/components/commons/input/TagInput';
 import Textarea from '@/components/commons/input/Textarea';
 import Modal from '@/components/commons/modal';
 import Tag from '@/components/commons/tag';
+import { useDarkMode } from '@/context/DarkModeContext';
 import { useAuthStore } from '@/store/authStore';
 import { useSocketStore } from '@/store/socketStore';
 import { formatDate } from '@/utils/date';
@@ -48,6 +49,7 @@ export default function EditCardModal({
   currentCardData,
   onColumnUpdate,
 }: Props) {
+  const { darkMode } = useDarkMode();
   const [isLoaded, setIsLoaded] = useState(false);
   const [currentStatus, setCurrentStatus] = useState<Column | null>(null);
   const [statusList, setStatusList] = useState<Column[]>([]);
@@ -151,9 +153,9 @@ export default function EditCardModal({
       {isLoaded && (
         <form className="custom-scrollbar max-h-900 w-340 overflow-y-auto p-20 md:min-w-506 md:p-24">
           <div className="mb-18 flex items-center justify-between md:mb-22">
-            <h1 className="text-20 font-bold">할 일 수정</h1>
+            <h1 className="text-20 font-bold dark:text-white">할 일 수정</h1>
             <Image
-              src="/icon/close.svg"
+              src={darkMode ? '/icon/close_gray.svg' : '/icon/close.svg'}
               alt="close"
               width={32}
               height={32}
@@ -166,7 +168,7 @@ export default function EditCardModal({
             <div>
               <label
                 htmlFor="columnId"
-                className="mb-8 block text-14 text-black-800 md:mt-0 md:text-16"
+                className="mb-8 block text-14 text-black-800 dark:text-white md:mt-0 md:text-16"
               >
                 상태
               </label>
@@ -188,7 +190,7 @@ export default function EditCardModal({
             <div>
               <label
                 htmlFor="assignee"
-                className="mb-8 mt-18 block text-14 text-black-800 md:mt-0 md:text-16"
+                className="mb-8 mt-18 block text-14 text-black-800 dark:text-white md:mt-0 md:text-16"
               >
                 담당자
               </label>
@@ -223,9 +225,10 @@ export default function EditCardModal({
 
           <label
             htmlFor="title"
-            className="mb-8 mt-18 block text-14 text-black-800 md:mt-20 md:text-16"
+            className="mb-8 mt-18 block text-14 text-black-800 dark:text-white md:mt-20 md:text-16"
           >
-            제목 <span className="text-violet-dashboard">*</span>
+            제목{' '}
+            <span className="text-violet-dashboard dark:text-white">*</span>
           </label>
           <Input
             id="title"
@@ -236,9 +239,10 @@ export default function EditCardModal({
 
           <label
             htmlFor="description"
-            className="mb-8 mt-18 block text-14 text-black-800 md:mt-20 md:text-16"
+            className="mb-8 mt-18 block text-14 text-black-800 dark:text-white md:mt-20 md:text-16"
           >
-            설명 <span className="text-violet-dashboard">*</span>
+            설명{' '}
+            <span className="text-violet-dashboard dark:text-white">*</span>
           </label>
           <Textarea
             id="description"
@@ -248,7 +252,7 @@ export default function EditCardModal({
 
           <label
             htmlFor="dueDate"
-            className="mb-8 mt-18 block text-14 text-black-800 md:mt-20 md:text-16"
+            className="mb-8 mt-18 block text-14 text-black-800 dark:text-white md:mt-20 md:text-16"
           >
             마감일
           </label>
@@ -263,7 +267,7 @@ export default function EditCardModal({
 
           <label
             htmlFor="tags"
-            className="mb-8 mt-18 block text-14 text-black-800 md:mt-20 md:text-16"
+            className="mb-8 mt-18 block text-14 text-black-800 dark:text-white md:mt-20 md:text-16"
           >
             태그
           </label>
@@ -277,7 +281,7 @@ export default function EditCardModal({
 
           <label
             htmlFor="image"
-            className="mb-8 mt-18 block text-14 text-black-800 md:mt-20 md:text-16"
+            className="mb-8 mt-18 block text-14 text-black-800 dark:text-white md:mt-20 md:text-16"
           >
             이미지
           </label>
