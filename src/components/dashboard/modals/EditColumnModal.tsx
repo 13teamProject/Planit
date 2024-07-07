@@ -5,7 +5,6 @@ import Input from '@/components/commons/input';
 import Modal from '@/components/commons/modal';
 import { useAuthStore } from '@/store/authStore';
 import { usePusherStore } from '@/store/pusherStore';
-import { useSocketStore } from '@/store/socketStore';
 import { Column, EditColumnRequest } from '@planit-types';
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
