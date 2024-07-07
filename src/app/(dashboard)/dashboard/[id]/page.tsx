@@ -1,14 +1,16 @@
 'use client';
 
 import { getDashboardId } from '@/app/api/dashboards';
-import { getUsers } from '@/app/api/users';
+import enterRoom from '@/app/api/pusher/enter/emit';
 import BarButton from '@/components/commons/button/BarButton';
 import DashBoardHeader from '@/components/commons/layout/DashboardHeader';
 import Sidemenu from '@/components/commons/layout/Sidemenu';
 import Spinner from '@/components/commons/spinner';
 import Column from '@/components/dashboard/Column';
 import CreateColumnModal from '@/components/dashboard/modals/CreateColumnModal';
-import { useSocketStore } from '@/store/socketStore';
+import { useAuthStore } from '@/store/authStore';
+import { usePusherStore } from '@/store/pusherStore';
+import { pusherClient } from '@/utils/pusher';
 import { GetDashboardIdResponse } from '@planit-types';
 import { useRouter } from 'next/navigation';
 import { Suspense, useCallback, useEffect, useState } from 'react';
@@ -28,68 +30,36 @@ export default function DashboardPage({
   const [dashboard, setDashboard] = useState<GetDashboardIdResponse | null>(
     null,
   );
-  const { socket, initializeSocket } = useSocketStore();
+  const { userInfo } = useAuthStore();
+  const { socketId, initializePusher } = usePusherStore();
 
-  const fetchUser = async () => {
-    try {
-      const userData = await getUsers();
-      return userData;
-    } catch (error) {
-      console.error('Failed to fetch user:', error);
-      return null;
-    }
-  };
-
-  const socketListener = () => {
-    if (!socket) return;
-
-    socket.on('enter', (message) => {
-      toast.success(message, { containerId: 'socket' });
+  const pusherListener = () => {
+    pusherClient.bind('enter', (message: string) => {
+      toast.success(message, { containerId: 'pusher' });
     });
 
-    socket.on('dashboard', (message) => {
+    pusherClient.bind('dashboards', (message: string) => {
       if (message.includes('삭제')) {
-        toast.error(message, { containerId: 'socket' });
+        toast.error(message, { containerId: 'pusher' });
         router.push('/mydashboard');
       } else {
-        toast.success(message, { containerId: 'socket' });
+        toast.success(message, { containerId: 'pusher' });
       }
     });
   };
 
   useEffect(() => {
-    let cleanup: () => void | undefined;
+    const unsubscribePusher = initializePusher(params.id);
+    pusherListener();
 
-    initializeSocket(params.id)
-      .then((cleanUpFn) => {
-        cleanup = cleanUpFn;
-      })
-      .catch((error) => {
-        console.error('Failed to initialize socket:', error);
-      });
-
-    return () => {
-      if (cleanup) {
-        cleanup();
-      }
-    };
+    return unsubscribePusher;
   }, [params.id]);
 
+  // emit
   useEffect(() => {
-    socketListener();
-  }, [socket, params.id]);
-
-  useEffect(() => {
-    if (!socket) return;
-
-    (async () => {
-      const userData = await fetchUser();
-      socket.emit('enter', {
-        member: userData?.nickname,
-        room: params.id,
-      });
-    })();
-  }, [socket]);
+    if (!userInfo || !socketId) return;
+    enterRoom({ member: userInfo.nickname, roomId: params.id, socketId });
+  }, [params.id, userInfo, socketId]);
 
   const fetchDashboardData = useCallback(async () => {
     try {

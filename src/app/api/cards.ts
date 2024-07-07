@@ -59,7 +59,7 @@ export async function getCards({
     const searchParams = new URLSearchParams({
       columnId: columnId.toString(),
     });
-    const url = `${API_URL}/cards?${searchParams.toString()}`;
+    const url = `${API_URL}/cards?size=50&${searchParams.toString()}`;
     const response = await fetch(url, {
       headers: { Authorization: `Bearer ${token}` },
     });

@@ -3,7 +3,7 @@ import { getColumns } from '@/app/api/columns';
 import BarButton from '@/components/commons/button/BarButton';
 import ColorCircle from '@/components/commons/circle/ColorCircle';
 import { useDragAndDrop } from '@/hooks/useDragAndDrop';
-import { useSocketStore } from '@/store/socketStore';
+import { pusherClient } from '@/utils/pusher';
 import { Column as ColumnType, GetCardResponse } from '@planit-types';
 import Image from 'next/image';
 import React, {
@@ -43,7 +43,6 @@ export default function Column({ dashboardId, onColumnUpdate }: ColumnProps) {
   );
   const [selectedColumnTitle, setSelectedColumnTitle] = useState<string>('');
   const [isTodoDetailsCardOpen, setIsTodoDetailsCardOpen] = useState(false);
-  const { socket } = useSocketStore();
   const {
     draggingCard,
     dropTarget,
@@ -54,24 +53,22 @@ export default function Column({ dashboardId, onColumnUpdate }: ColumnProps) {
     indicatorsRef,
   } = useDragAndDrop({ columns, setColumns, dashboardId });
 
-  const socketListener = () => {
-    if (!socket) return;
-
-    socket.on('card', (message: string) => {
+  const pusherListener = () => {
+    pusherClient.bind('cards', (message: string) => {
       if (message.includes('삭제')) {
-        toast.error(message, { containerId: 'socket' });
+        toast.error(message, { containerId: 'pusher' });
       } else {
-        toast.success(message, { containerId: 'socket' });
+        toast.success(message, { containerId: 'pusher' });
       }
 
       fetchColumnsAndCards();
     });
 
-    socket.on('column', (message: string) => {
+    pusherClient.bind('columns', (message: string) => {
       if (message.includes('삭제')) {
-        toast.error(message, { containerId: 'socket' });
+        toast.error(message, { containerId: 'pusher' });
       } else {
-        toast.success(message, { containerId: 'socket' });
+        toast.success(message, { containerId: 'pusher' });
       }
 
       fetchColumnsAndCards();
@@ -79,8 +76,8 @@ export default function Column({ dashboardId, onColumnUpdate }: ColumnProps) {
   };
 
   useEffect(() => {
-    socketListener();
-  }, [socket]);
+    pusherListener();
+  }, []);
 
   const openTodoDetailCardModal = (
     card: GetCardResponse,
