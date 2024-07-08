@@ -1,6 +1,6 @@
 export default function Terms() {
   return (
-    <div className="custom-scrollbar flex h-250 flex-col gap-20 overflow-auto rounded-8 border border-gray-200 p-10 after:mt-15 md:h-420">
+    <div className="custom-scrollbar flex h-250 flex-col gap-20 overflow-auto rounded-8 border border-gray-200 bg-white p-10 after:mt-15 md:h-420">
       <section className="pt-10">
         <h3 className="mb-10 text-16 font-bold md:text-20">환영합니다! 🎉</h3>
         <p className="mb-10 text-justify text-14 font-medium md:text-18">
