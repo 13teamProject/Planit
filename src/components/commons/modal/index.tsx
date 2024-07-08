@@ -45,7 +45,7 @@ export default function Modal({
       role="presentation"
     >
       <div
-        className={`relative rounded-8 bg-white shadow-lg ${!isAuth ? 'dark:bg-gray-700' : ''}`}
+        className={`relative rounded-8 bg-white shadow-lg ${isAuth ? 'dark:bg-gray-700' : ''}`}
       >
         {children}
       </div>
