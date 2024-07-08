@@ -75,7 +75,7 @@ export default function Home() {
             alt="메인 배너 이미지"
             width={1920}
             height={312}
-            className="mt-60 md:mt-100 lg:mt-135"
+            className="mt-60 w-full md:mt-100 lg:mt-135"
           />
         </section>
         <section className="h-fit overflow-hidden bg-[#F9FAFB] py-60 lg:flex lg:items-center lg:overflow-auto lg:py-100">

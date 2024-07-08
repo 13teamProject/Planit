@@ -38,11 +38,11 @@ export default function CardDetails({ data, columnTitle }: Props) {
 
       <div className="flex w-full flex-col gap-10 md:order-1 md:max-w-420 md:gap-16 lg:max-w-450">
         <div className="flex gap-12">
-          <div className="flex max-h-22 min-w-60 items-center justify-center rounded-11 bg-toss-blue-light/40 px-6 text-10 text-toss-blue first-line:bg-toss-blue-light/40 dark:text-white">
+          <div className="flex max-h-22 w-fit items-center justify-center whitespace-nowrap rounded-11 bg-toss-blue-light/40 px-6 text-10 text-toss-blue first-line:bg-toss-blue-light/40 dark:text-white">
             <span className="mr-6 inline-block h-6 w-6 rounded-full bg-toss-blue dark:bg-white" />
             {columnTitle}
           </div>
-          <span className="h-20 w-1 bg-gray-700" />
+          <span className="h-20 w-1 bg-gray-700 dark:bg-white" />
           <div className="flex flex-wrap gap-5 text-10 md:gap-10">
             {tags.map((tag) => (
               <Tag text={tag} key={tag} />

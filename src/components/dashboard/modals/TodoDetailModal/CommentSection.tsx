@@ -82,7 +82,7 @@ export default function CommentSection({
           </button>
         </div>
       </form>
-      <div className="custom-scrollbar h-60 min-h-58 w-full overflow-auto md:h-110">
+      <div className="custom-scrollbar h-60 min-h-58 w-full overflow-auto md:min-h-90">
         {loading && (
           <div className="flex h-50 items-center justify-center md:h-100 md:w-420 lg:w-450">
             <Spinner size={25} />
