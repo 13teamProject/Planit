@@ -22,7 +22,7 @@ export default function Input({
   ...args
 }: InputProps) {
   const classnames = classNames(
-    'block w-full rounded-md border pl-16 pr-40 outline-none placeholder:text-gray-300 text-14 md:text-16',
+    'block w-full rounded-md border pl-16 pr-40 outline-none placeholder:text-gray-300 text-14 md:text-16 dark:placeholder:text-white dark:bg-gray-700 dark:text-white',
     {
       'border-red-dashboard border-[1.5px] focus:border-red-dashboard': error,
       'border-gray-200 focus:border-toss-blue focus:border-[1.5px]': !error,
