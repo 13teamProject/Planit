@@ -6,10 +6,16 @@ import ReactDOM from 'react-dom';
 type ModalProps = {
   isOpen: boolean;
   onClose: () => void;
+  isAuth?: boolean;
   children: React.ReactNode;
 };
 
-export default function Modal({ isOpen, onClose, children }: ModalProps) {
+export default function Modal({
+  isOpen,
+  onClose,
+  isAuth = false,
+  children,
+}: ModalProps) {
   const [isMounted, setIsMounted] = useState(false);
 
   const handleBackgroundClick = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -38,7 +44,9 @@ export default function Modal({ isOpen, onClose, children }: ModalProps) {
       onKeyDown={handleKeyDown}
       role="presentation"
     >
-      <div className="relative rounded-8 bg-white shadow-lg dark:bg-gray-700">
+      <div
+        className={`relative rounded-8 bg-white shadow-lg ${!isAuth ? 'dark:bg-gray-700' : ''}`}
+      >
         {children}
       </div>
     </div>,

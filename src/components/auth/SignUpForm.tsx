@@ -154,7 +154,7 @@ export default function SignUpForm() {
           </span>
         </div>
       </Modal>
-      <Modal isOpen={termsModalState} onClose={handleTermsOpenClose}>
+      <Modal isAuth isOpen={termsModalState} onClose={handleTermsOpenClose}>
         <div className="h-400 w-340 px-28 py-28 text-center text-18 md:h-600 md:w-600">
           <div className="pb-10 md:pb-30">
             <h2 className="mb-10 text-20 font-bold md:text-23">

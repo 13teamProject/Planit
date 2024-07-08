@@ -61,7 +61,7 @@ export default function Comment({
           </div>
         )}
         {!isEdit && (
-          <div className="flex gap-8 pt-2 text-10 text-gray-100 underline underline-offset-2">
+          <div className="flex gap-8 pt-2 text-10 text-gray-300 underline underline-offset-2 dark:text-gray-100">
             <button type="button" onClick={() => setIsEdit((prev) => !prev)}>
               수정
             </button>
